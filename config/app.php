@@ -186,6 +186,8 @@ return [
         vanhenry\search\SearchServiceProvider::class,
         vanhenry\mail\CustomMailServiceProvider::class,
         vanhenry\minify\MinifyServiceProvider::class,
+
+        crawlmodule\basecrawler\Providers\BasecrawlerServiceProvider::class,
         /*
          * Application Service Providers...
          */

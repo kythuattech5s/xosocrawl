@@ -1,14 +1,12 @@
 <?php
 namespace App\Http\Controllers;
-
-use App\Models\Product;
 use Illuminate\Http\Request;
-use vanhenry\manager\model\Media;
 
 class HomeController extends Controller
 {
     public function index(Request $request){
-        return view('home');
+        $isHome = 1;
+        return view('home',compact('isHome'));
     }
 
     public function direction(Request $request, $link)
