@@ -1,19 +1,23 @@
 <?php
+
 namespace App\Http\Controllers;
+
 use Illuminate\Http\Request;
+use Lotto\LottoServiceProvider;
 
 class HomeController extends Controller
 {
-    public function index(Request $request){
+    public function index(Request $request)
+    {
         $isHome = 1;
-        return view('home',compact('isHome'));
+        return view('home', compact('isHome'));
     }
 
     public function direction(Request $request, $link)
     {
         $lang = \App::getLocale();
         $link = \FCHelper::getSegment($request, 1);
-        $route = \DB::table('v_routes')->select('*')->where($lang.'_link', $link)->first();
+        $route = \DB::table('v_routes')->select('*')->where($lang . '_link', $link)->first();
         if ($route == null) {
             abort(404);
         }

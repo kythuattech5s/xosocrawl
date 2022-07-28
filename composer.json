@@ -49,6 +49,7 @@
             "vanhenry\\mail\\": "packages/vanhenry/mail/src",
             "vanhenry\\minify\\": "packages/vanhenry/minify/src",
             "crawlmodule\\basecrawler\\": "packages/crawlmodule/basecrawler/src",
+            "Lotto\\": "packages/Lotto/src",
             "CustomTable\\": "packages/table_customs/src"
         }
     },
@@ -82,7 +83,10 @@
     },
     "extra": {
         "laravel": {
-            "dont-discover": []
+            "dont-discover": [],
+            "providers": [
+                "Lotto\\LottoServiceProvider"
+            ]
         }
     },
     "config": {
