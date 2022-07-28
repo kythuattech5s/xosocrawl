@@ -1,0 +1,192 @@
+html, body, div, span, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+abbr, address, cite, code,
+del, dfn, em, img, ins, kbd, q, samp,
+small, strong, sub, sup, var,
+b, i,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section, summary,
+time, mark, audio, video {
+    margin:0;
+    padding:0;
+    border:0;
+    outline:0;
+    font-size:100%;
+    vertical-align:baseline;
+    background:transparent;
+    line-height: inherit;
+    color: inherit;
+    font-family: inherit;
+    font-style: inherit;
+}
+
+body {
+    line-height:1;
+}
+
+article,aside,details,figcaption,figure,
+footer,header,hgroup,menu,nav,section { 
+    display:block;
+}
+
+nav ul {
+    list-style:none;
+}
+
+blockquote, q {
+    quotes:none;
+}
+
+blockquote:before, blockquote:after,
+q:before, q:after {
+    content:'';
+    content:none;
+}
+
+a {
+    margin:0;
+    padding:0;
+    font-size:100%;
+    vertical-align:baseline;
+    background:transparent;
+}
+
+/* change colours to suit your needs */
+ins {
+    background-color:#ff9;
+    color:#000;
+    text-decoration:none;
+}
+
+/* change colours to suit your needs */
+mark {
+    background-color:#ff9;
+    color:#000; 
+    font-style:italic;
+    font-weight:bold;
+}
+
+del {
+    text-decoration: line-through;
+}
+
+abbr[title], dfn[title] {
+    border-bottom:1px dotted;
+    cursor:help;
+}
+
+table {
+    border-collapse:collapse;
+    border-spacing:0;
+}
+
+/* change border colour to suit your needs */
+hr {
+    display:block;
+    height:1px;
+    border:0;   
+    border-top:1px solid #cccccc;
+    margin:1em 0;
+    padding:0;
+}
+
+input, select {
+    vertical-align:middle;
+}
+
+a, a:hover, a:focus, a:active{text-decoration: none;color: inherit;outline: none;}
+ol, ul, li{padding: 0;list-style: none;margin: 0;}
+label{font-weight: normal;}
+input[type="text"], input[type="email"], input[type="password"]{padding-left: 12px;padding-right: 12px;}
+select{padding-left: 5px;padding-right: 8px;}
+input[type="number"]{padding-left: 5px;}
+textarea{padding:5px 12px;}
+input, textarea, select, button, a{outline: none;}
+button{border: none;padding: 0;}
+.s-content ol {
+    list-style: decimal;
+    margin-left: 15px;
+    margin-bottom: 10px;
+  }
+  .s-content ul {
+    list-style: initial;
+    margin-left: 15px;
+    margin-bottom: 10px;
+  }
+  .s-content li {
+    list-style: inherit;
+    margin-bottom: 5px;
+  }
+  .s-content p {
+    margin-bottom: 10px;
+  }
+  .s-content img {
+    display: block;
+    max-width: 100%;
+    margin: 10px auto;
+    -o-object-fit: contain;
+       object-fit: contain;
+    height: auto !important;
+  }
+  .s-content table,
+  .s-content iframe {
+    max-width: 100%;
+    width: 100%;
+  }
+  .s-content table {
+    border-collapse: collapse;
+    width: 100%;
+    border: solid 1px #0000006e;
+  }
+  .s-content table td {
+    border-collapse: collapse;
+    border: solid 1px #0000006e;
+    padding: 3px;
+  }
+  .s-content h1,
+  .s-content h2,
+  .s-content h3,
+  .s-content h4,
+  .s-content h5,
+  .s-content h6 {
+    display: block;
+    margin-left: 0;
+    margin-right: 0;
+    font-weight: bold;
+  }
+  .s-content h1 {
+    font-size: 2em;
+    margin-top: 0.67em;
+    margin-bottom: 0.67em;
+  }
+  .s-content h2 {
+    font-size: 1.5em;
+    margin-top: 0.3em;
+    margin-bottom: 0.3em;
+  }
+  .s-content h3 {
+    font-size: 1.17em;
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+  }
+  .s-content h4 {
+    font-size: 1em;
+    margin-top: 0.6em;
+    margin-bottom: 0.6em;
+  }
+  .s-content h5 {
+    font-size: 0.83em;
+    margin-top: 0.8em;
+    margin-bottom: 0.8em;
+  }
+  .s-content h6 {
+    font-size: 0.67em;
+    margin-top: 0.8em;
+    margin-bottom: 0.8em;
+  }
+  .s-content{
+    line-height: 1.6;
+  }

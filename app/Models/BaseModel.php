@@ -128,9 +128,6 @@ class BaseModel extends Model
     }
     public function updateCountView()
     {
-        if (!isset($this->count)) {
-            return;
-        }
         $this->count = $this->count+1;
         $this->save();
     }

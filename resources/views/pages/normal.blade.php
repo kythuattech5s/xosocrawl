@@ -1,6 +1,6 @@
 @extends('index')
 @section('main')
-    <div class="container">
-        {{Support::show($currentItem,'content')}}
+    <div class="box box-detail pad10 s-content">
+        {!!Support::show($currentItem,'content')!!}
     </div>
 @endsection

@@ -6,11 +6,11 @@ class PageController extends Controller
 {
     public function view($request, $route, $link)
     {
-        $page = Page::slug($link)->act()->first();
-        if (!isset($page)) {
+        $currentItem = Page::slug($link)->act()->first();
+        if (!isset($currentItem)) {
             abort(404);
         }
-        $page->updateCountView();
-        return view('pages.'.$page->layout_show, compact('page'));
+        $currentItem->updateCountView();
+        return view('pages.'.$currentItem->layout_show, compact('currentItem'));
     }
 }

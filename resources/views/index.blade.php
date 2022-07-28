@@ -8,6 +8,7 @@
 	<meta name="csrf-token" content="{{ csrf_token() }}">
 	{!! SEOHelper::HEADER_SEO(@$currentItem ? $currentItem : null) !!}
 	@yield('cssl')
+	<link rel="stylesheet" href="theme/frontend/css/reset.css">
 	<link rel="stylesheet" href="theme/frontend/css/style.css">
 	@yield('css')
 	<script type="text/javascript">
@@ -21,7 +22,13 @@
 <body>
 	{[CMS_BODY]}
 	@include('header')
-	@yield('main')
+	<section class="content main clearfix">
+		<div class="col-l">
+			@yield('main')
+		</div>
+		@include('base_left_sidebar')
+		@include('base_right_sidebar')
+	</section>
 	@include('footer')
 	{[CMS_FOOTER]}
 	@yield('jsl')
