@@ -18,6 +18,7 @@ class Media
     			return $media->id;
     		}
     		else{
+				mkdir($pathAbsolute.$uploadDir.'/', 0777, true);
     			return self::insertMediaDir($uploadDir,$parent,$uploadRootDir,$pathAbsolute,$pathRelative);
     		}
     	}

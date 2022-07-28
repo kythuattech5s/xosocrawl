@@ -40,7 +40,7 @@ class MenuCrawler extends BaseCrawler
         $listCrawlMenuMobile = $htmlDom->find('#nav .nav-mobi a');
         foreach ($listCrawlMenuMobile as $key => $itemCrawlMenuPcMobile) {
             $menuMobile = new Menu;
-            $menuMobile->name = $itemCrawlMenuPcMobile->innertext;
+            $menuMobile->name = $itemCrawlMenuPcMobile->plaintext;
             $menuMobile->link = $this->clearLink($itemCrawlMenuPcMobile->href);
             $menuMobile->act = 1;
             $menuMobile->ord = $key + 1;

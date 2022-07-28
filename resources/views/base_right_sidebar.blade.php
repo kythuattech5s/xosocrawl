@@ -94,7 +94,7 @@
     </div>
     <div class="content-right">
         <div class="title-r">
-            <a href="https://xoso.me/so-mo-lo-de-mien-bac-so-mo-giai-mong.html" title="Sổ mơ"> Sổ mơ </a>
+            <a href="so-mo-lo-de-mien-bac-so-mo-giai-mong" title="Sổ mơ"> Sổ mơ </a>
         </div>
         <ul class="list-news">
             <li class="clearfix">
