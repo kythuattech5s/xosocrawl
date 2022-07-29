@@ -9,6 +9,7 @@ class MenuCrawler extends BaseCrawler
         Menu::truncate();
         $html = $this->exeCurl($this->linkCrawlMenu);
         $htmlDom = str_get_html($html);
+        if (!$htmlDom) return false;
         $listCrawlMenuPcLv1 = $htmlDom->find('#nav .main li.fl');
         foreach ($listCrawlMenuPcLv1 as $key => $itemCrawlMenuPcLv1) {
             $mainLinks = $itemCrawlMenuPcLv1->find('a.fl');

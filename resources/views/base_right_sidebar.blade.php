@@ -1,17 +1,4 @@
 <div class="col-right">
-    <div class="content-right txt-center">
-        <div class="title-r">
-            <span>
-                <img alt="hot" class="" src="theme/frontend/images/hot2.gif" height="11" src="theme/frontend/images/hot2.gif" title="hot" width="22" />
-            </span>
-            <a class="" href="https://ngoche.com/hom-nay-danh-con-gi-dep-nhat-xin-so-lo-de-hom-nay.html" rel="nofollow" target="_blank" title="Bình chọn cặp số đẹp">
-                <b class=""> Bình chọn cặp số đẹp </b>
-            </a>
-        </div>
-        <a href="https://ngoche.com/hom-nay-danh-con-gi-dep-nhat-xin-so-lo-de-hom-nay.html" rel="nofollow" target="_blank" title="Bình chọn cặp số đẹp hôm nay">
-            <img alt="ngoche.com" class="" src="theme/frontend/images/ngoche_300x100.gif" src="theme/frontend/images/ngoche_300x100.gif" style="width:300px;height:100px" />
-        </a>
-    </div>
     <div class="content-right bullet">
         <div class="title-r">
             <strong> Kết quả xổ số hôm qua </strong>
@@ -92,41 +79,32 @@
             </li>
         </ul>
     </div>
-    <div class="content-right">
-        <div class="title-r">
-            <a href="so-mo-lo-de-mien-bac-so-mo-giai-mong" title="Sổ mơ"> Sổ mơ </a>
+    @php
+        $listDreamNumber = App\Models\DreamNumberDecoding::inRandomOrder()
+                                                        ->limit(4)
+                                                        ->get();
+    @endphp
+    @if (count($listDreamNumber) > 0)
+        <div class="content-right">
+            <div class="title-r">
+                <a href="so-mo-lo-de-mien-bac-so-mo-giai-mong" title="Sổ mơ"> Sổ mơ </a>
+            </div>
+            <ul class="list-news">
+                @if (count($listDreamNumber) > 0)
+                    @foreach ($listDreamNumber as $itemDreamNumber)
+                        <li class="clearfix">
+                            <a class="fl" href="{{Support::show($itemDreamNumber,'slug')}}" title="{{Support::show($itemDreamNumber,'name')}}">
+                                <img src="{%IMGV2.itemDreamNumber.img.-1%}" title="{{Support::show($itemDreamNumber,'name')}}" alt="{{Support::show($itemDreamNumber,'name')}}" height="33" width="60" class="mag-r5 fl"/>
+                            </a>
+                            <a href="{{Support::show($itemDreamNumber,'slug')}}" title="{{Support::show($itemDreamNumber,'name')}}">
+                                {{Support::show($itemDreamNumber,'name')}}
+                            </a>
+                        </li>
+                    @endforeach
+                @endif
+            </ul>
         </div>
-        <ul class="list-news">
-            <li class="clearfix">
-                <a class="fl" href="https://xoso.me/mo-thay-con-chay-d338.html" title="Mơ thấy con chấy – Chiêm bao thấy con chấy đánh con gì?">
-                    <img alt="Mơ thấy con chấy – Chiêm bao thấy con chấy đánh con gì?" class="mag-r5 fl" src="https://images.xoso.me/news_xosome/2016/12/14/BZ/mo-thay-con-chay--120x120.jpg" height="33" onerror="this.onerror=null;this.src='/images/xosome_120.png'" src="theme/frontend/images/xosome_120.png" title="Mơ thấy con chấy – Chiêm bao thấy con chấy đánh con gì?" width="60" />
-                </a>
-                <a href="https://xoso.me/mo-thay-con-chay-d338.html" title="Mơ thấy con chấy – Chiêm bao thấy con chấy đánh con gì?"> Mơ thấy con chấy – Chiêm
-                    bao thấy con chấy đánh con gì? </a>
-            </li>
-            <li class="clearfix">
-                <a class="fl" href="https://xoso.me/mo-thay-chay-nha-d268.html" title="Mơ thấy cháy nhà – Chiêm bao thấy cháy nhà đánh con gì?">
-                    <img alt="Mơ thấy cháy nhà – Chiêm bao thấy cháy nhà đánh con gì?" class="mag-r5 fl" src="https://images.xoso.me/news_xosome/2016/07/11/gM/mo-thay-chay-nha--120x120.PNG" height="33" onerror="this.onerror=null;this.src='/images/xosome_120.png'" src="theme/frontend/images/mo-thay-chay-nha--120x120.PNG" title="Mơ thấy cháy nhà – Chiêm bao thấy cháy nhà đánh con gì?" width="60" />
-                </a>
-                <a href="https://xoso.me/mo-thay-chay-nha-d268.html" title="Mơ thấy cháy nhà – Chiêm bao thấy cháy nhà đánh con gì?"> Mơ thấy cháy nhà – Chiêm
-                    bao thấy cháy nhà đánh con gì? </a>
-            </li>
-            <li class="clearfix">
-                <a class="fl" href="https://xoso.me/mo-thay-mo-thay-bo-d762.html" title="Mơ thấy bố – Chiêm bao thấy bố đánh con gì chuẩn nhất?">
-                    <img alt="Mơ thấy bố – Chiêm bao thấy bố đánh con gì chuẩn nhất?" class="mag-r5 fl" src="https://images.xoso.me/news_xosome/2016/10/07/Ii/mo-thay-bo_2--120x120.jpg" height="33" onerror="this.onerror=null;this.src='/images/xosome_120.png'" src="theme/frontend/images/xosome_120.png" title="Mơ thấy bố – Chiêm bao thấy bố đánh con gì chuẩn nhất?" width="60" />
-                </a>
-                <a href="https://xoso.me/mo-thay-mo-thay-bo-d762.html" title="Mơ thấy bố – Chiêm bao thấy bố đánh con gì chuẩn nhất?"> Mơ thấy bố – Chiêm bao thấy
-                    bố đánh con gì chuẩn nhất? </a>
-            </li>
-            <li class="clearfix">
-                <a class="fl" href="https://xoso.me/mo-thay-ran-can-d961.html" title="Mơ thấy rắn cắn – Chiêm bao thấy rắn cắn đánh con gì?">
-                    <img alt="Mơ thấy rắn cắn – Chiêm bao thấy rắn cắn đánh con gì?" class="mag-r5 fl" src="" height="33" onerror="this.onerror=null;this.src='/images/xosome_120.png'" src="theme/frontend/images/xosome_120.png" title="Mơ thấy rắn cắn – Chiêm bao thấy rắn cắn đánh con gì?" width="60" />
-                </a>
-                <a href="https://xoso.me/mo-thay-ran-can-d961.html" title="Mơ thấy rắn cắn – Chiêm bao thấy rắn cắn đánh con gì?"> Mơ thấy rắn cắn – Chiêm bao
-                    thấy rắn cắn đánh con gì? </a>
-            </li>
-        </ul>
-    </div>
+    @endif
     @php
         $listAdvertisingLink = App\Models\AdvertisingLink::act()->ord()->get();
     @endphp

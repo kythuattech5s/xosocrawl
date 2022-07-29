@@ -11,7 +11,7 @@ class Media
 			$mediaParent  = MediaModel::where('id', $parent)->first();
 		}
 		$pathRelative = isset($mediaParent)?$mediaParent->path.$mediaParent->name.'/':$uploadRootDir.'/';
-		$pathAbsolute = base_path($pathRelative);
+		$pathAbsolute = public_path($pathRelative);
     	if (file_exists($pathAbsolute)) {
     		$media = MediaModel::where('name', $uploadDir)->where('path', $pathRelative)->where('parent', $parent)->first();
     		if ($media != null) {
@@ -24,6 +24,7 @@ class Media
     	}
     	else{
     		mkdir($pathAbsolute, 0777, true);
+			mkdir($pathAbsolute.$uploadDir.'/', 0777, true);
     		return self::insertMediaDir($uploadDir,$parent,$uploadRootDir,$pathAbsolute,$pathRelative);
     	}
     }

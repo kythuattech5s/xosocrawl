@@ -53,6 +53,9 @@ a {
     vertical-align:baseline;
     background:transparent;
 }
+img{
+  max-width: 100%;
+}
 
 /* change colours to suit your needs */
 ins {
@@ -189,4 +192,7 @@ button{border: none;padding: 0;}
   }
   .s-content{
     line-height: 1.6;
+  }
+  .s-content em{
+    font-style: italic;
   }

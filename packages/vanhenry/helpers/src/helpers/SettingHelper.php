@@ -84,6 +84,17 @@ class SettingHelper
         }
         return $def;
     }
+    public static function getSettingFile($key, $def = "")
+    {
+        $value = static::getSetting($key, $def);
+        if ($value != $def) {
+            $json = json_decode($value, true);
+            if (is_array($json) && array_key_exists("path", $json)) {
+                return $json["path"] . $json["file_name"];
+            }
+        }
+        return $def;
+    }
 
     public static function getSettingChooseLanguage($key, $lang)
     {

@@ -1,4 +1,11 @@
 @extends('index')
+@section('breadcrumb')
+<div class="linkway">
+    <div class="main">
+        {{Breadcrumbs::render('dream_number_decodings', $currentItem)}}
+    </div>
+</div>
+@endsection
 @section('main')
 <div class="box-detail box">
     <div class="search-dream bg_f9">
@@ -24,8 +31,8 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td>3 con rắn</td>
-                        <td>13, 31, 40</td>
+                        <td>{{Support::show($currentItem,'key_name')}}</td>
+                        <td>{{Support::show($currentItem,'number_decoding')}}</td>
                     </tr>
                 </tbody>
             </table>
@@ -34,120 +41,61 @@
             </div>
         </div>
     </div>
-    <div class="see-more ">
-        <h3 class="tit-mien">
-            <strong>Các giấc mơ xem nhiều</strong>
-        </h3>
-        <ul class="list-html-link two-column">
-            <li>
-                <a href="https://xoso.me/mo-thay-con-bo-d335.html" title="Mơ thấy con bò – Chiêm bao thấy con bò đánh con gì?">Mơ thấy con bò – Chiêm bao thấy con bò đánh con gì?</a>
-            </li>
-            <li>
-                <a href="https://xoso.me/mo-thay-nguoi-chet-d829.html" title="Mơ thấy người chết - Chiêm bao thấy người chết đánh con gì?">Mơ thấy người chết - Chiêm bao thấy người chết đánh con gì?</a>
-            </li>
-            <li>
-                <a href="https://xoso.me/mo-thay-noi-chuyen-voi-nguoi-da-chet-d891.html" title="Mơ thấy nói chuyện với người chết - Chiêm bao nói chuyện với người chết">Mơ thấy nói chuyện với người chết - Chiêm bao nói chuyện với người chết</a>
-            </li>
-            <li>
-                <a href="https://xoso.me/mo-thay-xe-o-to-d1169.html" title="Nằm mơ thấy ô tô đánh con gì? Chiêm bao thấy xe ô tô báo điềm gì?">Nằm mơ thấy ô tô đánh con gì? Chiêm bao thấy xe ô tô báo điềm gì?</a>
-            </li>
-            <li>
-                <a href="https://xoso.me/mo-thay-dam-cuoi-d432.html" title="Mơ thấy đám cưới – Chiêm bao thấy đám cưới đánh con gì?">Mơ thấy đám cưới – Chiêm bao thấy đám cưới đánh con gì?</a>
-            </li>
-            <li>
-                <a href="https://xoso.me/mo-thay-trung-d1224.html" title="Mơ thấy trứng -  Chiêm bao thấy trứng đánh con gì?">Mơ thấy trứng - Chiêm bao thấy trứng đánh con gì?</a>
-            </li>
-            <li>
-                <a href="https://xoso.me/mo-thay-ngu-voi-gai-d821.html" title="Mơ thấy ngủ với gái – Chiêm bao thấy ngủ với gái đánh con gì?">Mơ thấy ngủ với gái – Chiêm bao thấy ngủ với gái đánh con gì?</a>
-            </li>
-            <li>
-                <a href="https://xoso.me/mo-thay-so-de-d1244.html" title="Mơ thấy số đề - Chiêm bao số đề đánh con gì?">Mơ thấy số đề - Chiêm bao số đề đánh con gì?</a>
-            </li>
-            <li>
-                <a href="https://xoso.me/mo-thay-chay-nha-d268.html" title="Mơ thấy cháy nhà – Chiêm bao thấy cháy nhà đánh con gì?">Mơ thấy cháy nhà – Chiêm bao thấy cháy nhà đánh con gì?</a>
-            </li>
-            <li>
-                <a href="https://xoso.me/mo-thay-mo-thay-bo-d762.html" title="Mơ thấy bố – Chiêm bao thấy bố đánh con gì chuẩn nhất?">Mơ thấy bố – Chiêm bao thấy bố đánh con gì chuẩn nhất?</a>
-            </li>
-        </ul>
-    </div>
-    <div class="box sugges-dream">
-        <h2 class="tit-mien">
-            <strong>Gợi ý mơ thấy</strong>
-        </h2>
-        <table class="">
-            <tbody>
-                <tr>
-                    <td>
-                        <a href="https://xoso.me/mo-thay-am-ho-d7.html" title="âm hộ">
-                            <strong class="clred">âm hộ</strong>
-                        </a>
-                    </td>
-                    <td>
-                        <strong class="cl-green">17, 71, 21</strong>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <a href="https://xoso.me/mo-thay-an-ai-d8.html" title="ân ái">
-                            <strong class="clred">ân ái</strong>
-                        </a>
-                    </td>
-                    <td>
-                        <strong class="cl-green">25, 75</strong>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <a href="https://xoso.me/mo-thay-an-cap-xe-dap-d10.html" title="ăn cắp xe đạp">
-                            <strong class="clred">ăn cắp xe đạp</strong>
-                        </a>
-                    </td>
-                    <td>
-                        <strong class="cl-green">34</strong>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <a href="https://xoso.me/mo-thay-an-chay-d11.html" title="ăn chay">
-                            <strong class="clred">ăn chay</strong>
-                        </a>
-                    </td>
-                    <td>
-                        <strong class="cl-green">86, 85</strong>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <a href="https://xoso.me/mo-thay-an-chua-d12.html" title="ăn chua">
-                            <strong class="clred">ăn chua</strong>
-                        </a>
-                    </td>
-                    <td>
-                        <strong class="cl-green">93, 39</strong>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+    @if (count($listMostView) > 0)
+        <div class="see-more ">
+            <h3 class="tit-mien">
+                <strong>Các giấc mơ xem nhiều</strong>
+            </h3>
+            <ul class="list-html-link two-column">
+                @foreach ($listMostView as $itemMostView)
+                    <li>
+                        <a href="{{Support::show($itemMostView,'slug')}}" title="{{Support::show($itemMostView,'name')}}">{{Support::show($itemMostView,'name')}}</a>
+                    </li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+    @if (count($listSuggestion) > 0)
+        <div class="box sugges-dream">
+            <h2 class="tit-mien">
+                <strong>Gợi ý mơ thấy</strong>
+            </h2>
+            <table class="">
+                <tbody>
+                    @foreach ($listSuggestion as $itemSuggestion)
+                        <tr>
+                            <td>
+                                <a href="{{Support::show($itemSuggestion,'slug')}}" title="{{Support::show($itemSuggestion,'key_name')}}">
+                                    <strong class="clred">{{Support::show($itemSuggestion,'key_name')}}</strong>
+                                </a>
+                            </td>
+                            <td>
+                                <strong class="cl-green">{{Support::show($itemSuggestion,'number_decoding')}}</strong>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+    @endif
     <div class="see-more">
         <h3 class="tit-mien">
             <strong>Xem thêm tiện ích dưới đây</strong>
         </h3>
         <ul class="list-html-link two-column">
-            <li>Xem thêm <a href="/xsmb-sxmb-xstd-xshn-kqxsmb-ket-qua-xo-so-mien-bac.html" title="Kết quả xổ số miền Bắc hôm nay">kết quả xổ số miền Bắc hôm nay</a>
+            <li>Xem thêm <a href="xsmb-sxmb-xstd-xshn-kqxsmb-ket-qua-xo-so-mien-bac" title="Kết quả xổ số miền Bắc hôm nay">kết quả xổ số miền Bắc hôm nay</a>
             </li>
-            <li>Xem thêm <a href="/thong-ke-lo-gan-xo-so-mien-bac-xsmb.html" title="Thống kê lô gan">thống kê lô gan miền Bắc</a>
+            <li>Xem thêm <a href="thong-ke-lo-gan-xo-so-mien-bac-xsmb" title="Thống kê lô gan">thống kê lô gan miền Bắc</a>
             </li>
-            <li>Xem cao thủ <a href="https://xoso.me/du-doan-ket-qua-xo-so-mien-bac-xsmb-c228.html" title="Dự đoán XSMB">dự đoán XSMB</a> hôm nay chính xác nhất </li>
-            <li>Xem thêm <a href="/thong-ke-giai-dac-biet-xo-so-mien-bac-xsmb.html" title="thống kê giải đặc biệt miền Bắc">thống kê giải đặc biệt miền Bắc</a>
+            <li>Xem cao thủ <a href="du-doan-ket-qua-xo-so-mien-bac-xsmb-c228" title="Dự đoán XSMB">dự đoán XSMB</a> hôm nay chính xác nhất </li>
+            <li>Xem thêm <a href="thong-ke-giai-dac-biet-xo-so-mien-bac-xsmb" title="thống kê giải đặc biệt miền Bắc">thống kê giải đặc biệt miền Bắc</a>
             </li>
-            <li>Xem thêm <a href="https://xoso.me/quay-thu-xsmb-quay-thu-xo-so-mien-bac.html" title="quay thử xổ số miền Bắc">quay thử xổ số miền Bắc</a>
+            <li>Xem thêm <a href="quay-thu-xsmb-quay-thu-xo-so-mien-bac" title="quay thử xổ số miền Bắc">quay thử xổ số miền Bắc</a>
             </li>
         </ul>
     </div>
 </div>
 <div class="box box-comment">
-    
+    <div class="fb-comments" data-href="{{url()->to($currentItem->slug)}}" data-width="100%" data-numposts="5"></div>
 </div>
 @endsection

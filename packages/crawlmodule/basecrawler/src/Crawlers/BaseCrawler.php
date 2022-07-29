@@ -1,8 +1,12 @@
 <?php
+
 namespace crawlmodule\basecrawler\Crawlers;
+
 use crawlmodule\basecrawler\Crawlers\Contracts\CrawlerInterface;
 use App\Helpers\Media;
 use vanhenry\manager\model\VRoute as ModelVRoute;
+use vanhenry\manager\model\Media as ModelMedia;
+use Google\Cloud\Vision\V1\ImageAnnotatorClient;
 
 class BaseCrawler implements CrawlerInterface
 {
@@ -13,11 +17,12 @@ class BaseCrawler implements CrawlerInterface
     ];
     protected $clearContentCharacters = [
         'https://xoso.me',
-        '.html'
+        'xoso.me',
+        'Xoso.me'
     ];
     public function __construct()
     {
-        @include_once ('simple_html_dom.php');
+        @include_once('simple_html_dom.php');
     }
     public function exeCurl($url, $type = 'GET', $data = null, $headers = [])
     {
@@ -64,69 +69,143 @@ class BaseCrawler implements CrawlerInterface
         $slug = \Str::slug($string);
         $total = 0;
         $count = count(\DB::table('v_routes')->where('vi_link', $slug)->get());
-        $total +=$count;
+        $total += $count;
         $ext = $slug;
-        while ($count>0) {
-            $ext  = $slug.($count>0?"-".($total+1):"");
+        while ($count > 0) {
+            $ext  = $slug . ($count > 0 ? "-" . ($total + 1) : "");
             $count = count(\DB::table('v_routes')->where('vi_link', $ext)->get());
-            $total +=1;
+            $total += 1;
         }
         return $ext;
     }
     public function clearLink($link)
     {
         foreach ($this->clearLinkCharacters as $itemClearCharacter) {
-            $link = str_replace($itemClearCharacter,'',$link);
+            $link = str_replace($itemClearCharacter, '', $link);
         }
         $link = trim($link);
-        $link = trim($link,'/');
+        $link = trim($link, '/');
         return $link;
     }
-    public function renameIfExist($path, $filename)
+    public function clearContent($content)
     {
-        $img_name = \Str::slug(strtolower(pathinfo($filename, PATHINFO_FILENAME)));
-        $img_ext = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
-        $filename = $img_name . '.' . $img_ext;
-        $filecounter = 1;
-        $filename = $img_name . '.' . $img_ext;
-        $destinationPath = $path . $filename;
-        while (file_exists($destinationPath)) {
-            $filename = $img_name . '_' . ++$filecounter . '.' . $img_ext;
-            $destinationPath = $path . $filename;
+        foreach ($this->clearContentCharacters as $itemClearCharacter) {
+            $link = str_replace($itemClearCharacter, '', $content);
         }
-        return strtolower($filename);
+        $content = trim($content);
+        return $content;
     }
-    public function saveImg($linkImg, $saveFrom ,$returnPath = false)
-    {
-        $uploadRootDir = 'public/uploads';
-        $uploadDir = $saveFrom;
-        $pathRelative = $uploadRootDir . '/' . $uploadDir . '/';
-        $pathAbsolute = base_path($pathRelative);
-        $dirs = explode('/', $uploadDir);
-        $parentId = 0;
-        foreach ($dirs as $item) {
-            $parentId = Media::createDir($uploadRootDir, $item, $pathRelative, $pathAbsolute, $parentId);
+    public function blockTextImage($imagePath){
+
+        $visionClient = new ImageAnnotatorClient([
+            'projectId' => \SettingHelper::getSetting('gg_vision_project_id',0),
+            'keyFilePath' => \SettingHelper::getSettingFile('gg_vision_credential_file'),
+            'credentials' => \SettingHelper::getSettingFile('gg_vision_credential_file')
+        ]);
+        $textNeedBlockInImage = \SettingHelper::getSetting('block_text_crawl_image_word');
+        $arrTextNeedBlockInImage = explode(',',$textNeedBlockInImage);
+        foreach ($arrTextNeedBlockInImage as $key => $item) {
+            $arrTextNeedBlockInImage[$key] = trim($item);
         }
-        if (is_bool($parentId)) {
+
+        $response = $visionClient->textDetection(
+            fopen($imagePath, 'r'),
+            ['TEXT_DETECTION']
+        );
+        $annotation = $response->getTextAnnotations();
+        for ($i=0; $i < $annotation->count(); $i++) { 
+            $container = $annotation->offsetGet($i);
+            if (in_array($container->getDescription(),$arrTextNeedBlockInImage) && $container->hasBoundingPoly()) {
+                $boundingPoly = $container->getBoundingPoly();
+                $vertices = $boundingPoly->getVertices();
+                if ($vertices->count() == 4) {
+                    $arrPositonText = [
+                        'top-left' => [
+                            'x' => $vertices->offsetGet(0)->getX(),
+                            'y' => $vertices->offsetGet(0)->getY()
+                        ],
+                        'top-right' => [
+                            'x' => $vertices->offsetGet(1)->getX(),
+                            'y' => $vertices->offsetGet(1)->getY()
+                        ],
+                        'bottom-right' => [
+                            'x' => $vertices->offsetGet(2)->getX(),
+                            'y' => $vertices->offsetGet(2)->getY()
+                        ],
+                        'bottom-left' => [
+                            'x' => $vertices->offsetGet(3)->getX(),
+                            'y' => $vertices->offsetGet(3)->getY()
+                        ]
+                    ];
+                    $itemPosition = [
+                        'x' => $arrPositonText['top-left']['x'] >= 10 ? $arrPositonText['top-left']['x'] - 10:0,
+                        'y' => $arrPositonText['top-left']['y'] >= 10 ? $arrPositonText['top-left']['y'] - 10:0,
+                        'width'=> $arrPositonText['top-right']['x'] - $arrPositonText['top-left']['x'] + 20,
+                        'height'=> $arrPositonText['bottom-left']['y'] - $arrPositonText['top-left']['y'] + 20
+                    ];
+                    $img = \Image::make($imagePath);
+                    $watermark = \Image::make(\SettingHelper::getSettingFile('block_text_crawl_image_image'));
+                    if ($itemPosition['width']/$itemPosition['height'] <= $watermark->width()/$watermark->height()) {
+                        $watermark->resize(null,$itemPosition['height'], function ($constraint) {
+                            $constraint->aspectRatio();
+                        });
+                    }else{
+                        $watermark->resize($itemPosition['width'], null, function ($constraint) {
+                            $constraint->aspectRatio();
+                        });
+                    }
+                    $img->insert($watermark,'top-left',$itemPosition['x'],$itemPosition['y']);
+                    $img->save($imagePath);
+                }
+            }
+        }
+    }
+    public function saveImg($linkImg, $saveFrom, $returnPath = false)
+    {
+        try {
+            $uploadRootDir = 'uploads';
+            $uploadDir = $saveFrom;
+            $pathRelative = $uploadRootDir . '/' . $uploadDir . '/';
+            $pathAbsolute = public_path($pathRelative);
+            $dirs = explode('/', $uploadDir);
+            $parentId = 0;
+            foreach ($dirs as $item) {
+                $parentId = Media::createDir($uploadRootDir, $item, $pathRelative, $pathAbsolute, $parentId);
+            }
+            if (is_bool($parentId)) {
+                return '';
+            }
+            $imgInfo = pathinfo($linkImg);
+            $fileName = $imgInfo['basename'] ?? 'old-image';
+            if (file_exists($pathAbsolute . $fileName)) {
+                if ($returnPath) {
+                    return $pathRelative . $fileName;
+                }
+                $itemMedia = ModelMedia::where('file_name',$fileName)->where('parent',$parentId)->first();
+                if (isset($itemMedia)) {
+                    return Media::img($itemMedia->id);
+                }
+            }
+            file_put_contents($pathAbsolute . $fileName, file_get_contents($linkImg));
+            // if (\SettingHelper::getSetting('block_text_crawl_image',0) == 1) {
+            //     $this->blockTextImage($pathAbsolute . $fileName);
+            // }
+            $itemMediaId = Media::insertImageMedia($uploadRootDir, $pathAbsolute, $pathRelative, $fileName, $parentId);
+            \DB::table('custom_media_images')->insert([
+                'name' => $pathRelative . $fileName,
+                'media_id' => $itemMediaId,
+                'act' => 0,
+            ]);
+            if ($returnPath) {
+                return $pathRelative . $fileName;
+            }
+            return Media::img($itemMediaId);
+        } catch (\Throwable $th) {
             return '';
         }
-        $imgInfo = pathinfo($linkImg);
-        $fileName = $imgInfo['basename'] ?? 'old-image';
-        $fileName = $this->renameIfExist($pathAbsolute,$fileName);
-        file_put_contents($pathAbsolute.$fileName, file_get_contents($linkImg));
-        $itemMediaId = Media::insertImageMedia($uploadRootDir, $pathAbsolute, $pathRelative, $fileName, $parentId);
-
-        \DB::table('custom_media_images')->insert([
-            'name' => $pathRelative . $fileName,
-            'media_id' => $itemMediaId,
-            'act' => 0,
-        ]);
-        if ($returnPath) {
-            return str_replace('public/','',$pathRelative . $fileName);
-        }
-        return Media::img($itemMediaId);
     }
-    public function inserVRouter($item,$controller){
+    public function inserVRouter($item, $controller)
+    {
         $vRouter = new ModelVRoute();
         $vRouter->vi_name = $item->name ?? '';
         $vRouter->controller = $controller;
@@ -147,19 +226,33 @@ class BaseCrawler implements CrawlerInterface
         foreach ($widgetTocs as $itemWidgetTocs) {
             $itemWidgetTocs->outertext = '';
         }
+        // remove script
+        $scripts = $contentDom->find('script');
+        foreach ($scripts as $itemScript) {
+            $itemScript->outertext = '';
+        }
         // clear Link
         $listATag = $contentDom->find('a');
         foreach ($listATag as $itemA) {
             $itemA->href = $this->clearLink($itemA->href);
-	    }
+        }
 
         // Save img In content
         $listImgs = $contentDom->find('img');
         foreach ($listImgs as $itemImg) {
-            $itemImg->removeAttribute('data-src');
-            $itemImg->src = $this->saveImg($itemImg->src,$this->imageSaveDir,true);
+            $imgSrc = $itemImg->attr['src'] ?? '';
+            if (!\Str::contains($imgSrc,'http')) {
+                $imgSrc = $itemImg->attr['data-src'] ?? '';
+            }
+            if (\Str::contains($imgSrc,'http')) {
+                $itemImg->src = $this->saveImg($imgSrc, $this->imageSaveDir, true);
+                $itemImg->removeAttribute('data-src');
+            }else{
+                $itemImg->outertext = '';
+            }
         }
-        return trim($contentDom->innertext);
+        $content = $this->clearContent($contentDom->innertext);
+        return $content;
     }
     public function startCrawl()
     {

@@ -4462,12 +4462,15 @@ h3 .date {
 .box-search .bor-1 {
   -webkit-border-radius: 0;
   border-radius: 0;
-  height: 35px;
+  height: 37px;
   width: 75%;
   background: #fff;
   padding: 0 1%;
   border: 1px solid #d9d3cb;
   border-right: 0
+}
+.box-search .bor-1 input{
+  height: 100%;
 }
 
 .box-search button {
