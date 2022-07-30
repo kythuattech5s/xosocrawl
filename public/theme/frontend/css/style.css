@@ -5878,3 +5878,9 @@ img.emoji {
 .ats-overlay-bottom-wrapper-unrendered {
   display: none
 }
+table.kqmb td.number{
+  font-size: 0 !important;
+}
+.kqmb td.v-giai span[class^=v-g]{
+  font-size: 23px;;
+}

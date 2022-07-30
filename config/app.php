@@ -199,6 +199,7 @@ return [
         App\Providers\MailConfigServiceProvider::class,
         App\Providers\LoginSocialServiceProvider::class,
         Maatwebsite\Excel\ExcelServiceProvider::class,
+        Lotto\LottoServiceProvider::class
     ],
 
     /*
