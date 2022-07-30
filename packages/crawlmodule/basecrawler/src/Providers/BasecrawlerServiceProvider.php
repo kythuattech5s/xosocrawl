@@ -10,6 +10,9 @@ class BasecrawlerServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        $this->commands([
+            \crawlmodule\basecrawler\Commands\Crawler::class
+        ]);
     }
     /**
      * Bootstrap services.
@@ -18,6 +21,5 @@ class BasecrawlerServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->loadRoutesFrom(__DIR__.'/../Routes/routes.php');
     }
 }

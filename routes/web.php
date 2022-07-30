@@ -28,8 +28,8 @@ Route::group([
     'middleware' => ['web', 'localeSessionRedirect', 'localizationRedirect', 'localeViewPath'],
     'namespace' => 'App\Http\Controllers'
 ], function () {
-    //ENDCOMMENT
     Route::get('/', 'HomeController@index')->name('home');
+    Route::get('convert-thu-cong-du-lieu-crawl', 'HomeController@convertThuCongDuLieuCrawl');
     Route::get('cronimg', array('uses' => 'CronImgController@convertImg'));
     Route::get('cronmail', 'CronMailController@cronmail');
     Route::match(['get', 'post'], '/{link}', array('uses' => 'HomeController@direction'))->where('link', '^((?!esystem)[0-9a-zA-Z\?\.\-/])*$');

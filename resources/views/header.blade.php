@@ -2,10 +2,16 @@
 </div>
 <header>
     <div class="main">
-        @if (isset($currentItem) && is_object($currentItem) && isset($currentItem->name))
-            <h1 class="taskbar">{{Support::show($currentItem,'name')}}</h1>
+        @if (isset($currentItem) && is_object($currentItem))
+            @if (isset($currentItem->seo_title) && $currentItem->seo_title != '')
+                <h1 class="taskbar">{{Support::show($currentItem,'seo_title')}}</h1>
+            @else
+                @if (isset($currentItem->name) && $currentItem->name != '')
+                    <h1 class="taskbar">{{Support::show($currentItem,'name')}}</h1>
+                @endif
+            @endif
         @else
-            <h1 class="taskbar"> KQXS - XS - Xổ Số Kiến Thiết 3 miền hôm nay - XS3M </h1>
+            <h1 class="taskbar">KQXS - XS - Xổ Số Kiến Thiết 3 miền hôm nay - XS3M</h1>
         @endif
         <div class="top-info clearfix pad5" id="top-info">
             <button aria-label="navbar" class="navbar-toggle collapsed fl" onclick="showDrawerMenu()" type="button">

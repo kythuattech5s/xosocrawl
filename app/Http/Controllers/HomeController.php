@@ -1,5 +1,8 @@
 <?php
 namespace App\Http\Controllers;
+
+use App\Models\Page;
+use crawlmodule\basecrawler\Crawlers\BaseCrawler;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -21,5 +24,18 @@ class HomeController extends Controller
         $controller = $controllers[0];
         $method = $controllers[1];
         return (new $controller)->$method($request, $route, $link);
+    }
+    public function convertThuCongDuLieuCrawl()
+    {
+        $baseCrawler = new BaseCrawler;
+        $pages = Page::where('layout_show','dream_number_decodings')->where('convert_contented',0)->get();
+        foreach ($pages as $page) {
+            $page->content = $baseCrawler->convertContent(str_get_html($page->content));
+            $page->seo_title = $baseCrawler->clearContent($page->seo_title);
+            $page->seo_key = $baseCrawler->clearContent($page->seo_key);
+            $page->seo_des = $baseCrawler->clearContent($page->seo_des);
+            $page->convert_contented = 1;
+            $page->save();
+        }
     }
 }

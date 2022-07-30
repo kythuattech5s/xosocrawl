@@ -21,7 +21,11 @@
 <body>
 	{[CMS_BODY]}
 	@include('header')
-	@yield('breadcrumb')
+	<div class="linkway">
+    	<div class="main">
+			@yield('breadcrumb')
+		</div>
+	</div>
 	@include('banner_ads_header')
 	<section class="content main clearfix">
 		<div class="col-l">

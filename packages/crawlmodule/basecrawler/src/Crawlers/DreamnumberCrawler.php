@@ -2,7 +2,7 @@
 namespace crawlmodule\basecrawler\Crawlers;
 use App\Models\DreamNumberDecoding;
 use vanhenry\manager\model\VRoute as ModelVRoute;
-class DreamnumberCrawler extends BaseCrawler
+class DreamNumberCrawler extends BaseCrawler
 {
     protected $imageSaveDir = 'old/dreamnumber';
     protected $linkCrawlListDreamNumberDecoding = "https://xoso.me/so-mo-lo-de-mien-bac-so-mo-giai-mong.html";
@@ -80,6 +80,11 @@ class DreamnumberCrawler extends BaseCrawler
         $itemDreamNumberDecoding->seo_title = count($itemTitles) > 0 ? $itemTitles[0]->plaintext:$itemDreamNumberDecoding->name;
         $itemDreamNumberDecoding->seo_key = count($itemMetaKeywords) > 0 ? $itemMetaKeywords[0]->content:$itemDreamNumberDecoding->name;
         $itemDreamNumberDecoding->seo_des = count($itemMetaDescriptions) > 0 ? $itemMetaDescriptions[0]->content:$itemDreamNumberDecoding->name;
+
+        $itemDreamNumberDecoding->seo_title = $this->clearContent($itemDreamNumberDecoding->seo_title);
+        $itemDreamNumberDecoding->seo_key = $this->clearContent($itemDreamNumberDecoding->seo_key);
+        $itemDreamNumberDecoding->seo_des = $this->clearContent($itemDreamNumberDecoding->seo_des);
+
         $itemDreamNumberDecoding->save();
 
         $this->inserVRouter($itemDreamNumberDecoding,'App\Http\Controllers\DreamNumberDecodingController@view');

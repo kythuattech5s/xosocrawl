@@ -18,7 +18,13 @@ class BaseCrawler implements CrawlerInterface
     protected $clearContentCharacters = [
         'https://xoso.me',
         'xoso.me',
-        'Xoso.me'
+        'Xoso.me',
+        'xosome',
+        'Xosome'
+    ];
+    protected $fileNameReplaceCharacters = [
+        'xosome' => 'xosovnme',
+        'Xosome' => 'Xosovnme'
     ];
     public function __construct()
     {
@@ -90,13 +96,15 @@ class BaseCrawler implements CrawlerInterface
     public function clearContent($content)
     {
         foreach ($this->clearContentCharacters as $itemClearCharacter) {
-            $link = str_replace($itemClearCharacter, '', $content);
+            $content = str_replace($itemClearCharacter, '', $content);
         }
         $content = trim($content);
         return $content;
     }
     public function blockTextImage($imagePath){
-
+        // if (\SettingHelper::getSetting('block_text_crawl_image',0) == 1) {
+        //     $this->blockTextImage($pathAbsolute . $fileName);
+        // }
         $visionClient = new ImageAnnotatorClient([
             'projectId' => \SettingHelper::getSetting('gg_vision_project_id',0),
             'keyFilePath' => \SettingHelper::getSettingFile('gg_vision_credential_file'),
@@ -175,8 +183,13 @@ class BaseCrawler implements CrawlerInterface
             if (is_bool($parentId)) {
                 return '';
             }
+            
             $imgInfo = pathinfo($linkImg);
             $fileName = $imgInfo['basename'] ?? 'old-image';
+            foreach ($this->fileNameReplaceCharacters as $key => $itemFileNameReplaceCharacters) {
+                $fileName = str_replace($key,$itemFileNameReplaceCharacters,$fileName);
+            }
+
             if (file_exists($pathAbsolute . $fileName)) {
                 if ($returnPath) {
                     return $pathRelative . $fileName;
@@ -187,9 +200,6 @@ class BaseCrawler implements CrawlerInterface
                 }
             }
             file_put_contents($pathAbsolute . $fileName, file_get_contents($linkImg));
-            // if (\SettingHelper::getSetting('block_text_crawl_image',0) == 1) {
-            //     $this->blockTextImage($pathAbsolute . $fileName);
-            // }
             $itemMediaId = Media::insertImageMedia($uploadRootDir, $pathAbsolute, $pathRelative, $fileName, $parentId);
             \DB::table('custom_media_images')->insert([
                 'name' => $pathRelative . $fileName,
