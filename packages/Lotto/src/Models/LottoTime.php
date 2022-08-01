@@ -16,4 +16,21 @@ class LottoTime extends BaseModel
         }
         return static::$ALLTIMES;
     }
+    public function formatByType()
+    {
+        $type = $this->type;
+        if ($type == 'thu-dow') {
+            return str_replace('dow', $this->getCurrentDateOfWeek(), $type);
+        } else {
+            $now = now();
+            return $now->format($this->type);
+        }
+    }
+    private function getCurrentDateOfWeek()
+    {
+        $now = now();
+        $currentDayOfWeek = $now->dayOfWeek;
+        $currentDayOfWeek = $currentDayOfWeek == 0 ? $currentDayOfWeek + 8 : $currentDayOfWeek + 1;
+        return $currentDayOfWeek;
+    }
 }
