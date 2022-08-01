@@ -45,38 +45,26 @@
     </div>
     <div class="content-right">
         <div class="title-r">
-            <a href="https://xoso.me/du-doan-ket-qua-xo-so-kqxs-c229.html" title="Dự đoán xổ số"> Dự đoán xổ số
+            <a href="du-doan-ket-qua-xo-so-kqxs-c229" title="Dự đoán xổ số"> Dự đoán xổ số
             </a>
         </div>
+        @php
+            $listPredictLotteryResultCategory = App\Models\PredictLotteryResultCategory::get();
+        @endphp
         <ul class="list-news">
-            <li class="clearfix">
-                <a class="fl" href="https://xoso.me/soi-cau-du-doan-xo-so-mien-bac-ngay-20-7-2022-du-doan-xsmb-20-7-a34172.html" title="Soi cầu dự đoán Xổ Số Miền Bắc ngày 20/7/2022 - Dự đoán XSMB 20/7">
-                    <img alt="Soi cầu dự đoán Xổ Số Miền Bắc ngày 20/7/2022 - Dự đoán XSMB 20/7" class="mag-r5 fl" src="https://images.xoso.me/news_xosome/2022-07/06/xI/du-doan-xo-so-mien-bac-20-7-2022--60x60.png" height="33" src="theme/frontend/images/du-doan-xo-so-mien-bac-20-7-2022--60x60.png" title="Soi cầu dự đoán Xổ Số Miền Bắc ngày 20/7/2022 - Dự đoán XSMB 20/7" width="60" />
-                </a>
-                <a href="https://xoso.me/soi-cau-du-doan-xo-so-mien-bac-ngay-20-7-2022-du-doan-xsmb-20-7-a34172.html" title="Soi cầu dự đoán Xổ Số Miền Bắc ngày 20/7/2022 - Dự đoán XSMB 20/7"> Soi cầu dự đoán
-                    Xổ Số Miền Bắc ngày 20/7/2022 - Dự đoán XSMB 20/7 </a>
-            </li>
-            <li class="clearfix">
-                <a class="fl" href="https://xoso.me/soi-cau-du-doan-xo-so-mien-trung-ngay-20-7-2022-du-doan-xsmt-20-7-a34171.html" title="Soi cầu dự đoán Xổ Số Miền Trung ngày 20/7/2022 - Dự đoán XSMT 20/7">
-                    <img alt="Soi cầu dự đoán Xổ Số Miền Trung ngày 20/7/2022 - Dự đoán XSMT 20/7" class="mag-r5 fl" src="https://images.xoso.me/news_xosome/2022-07/06/bd/du-doan-xo-so-mien-trung-20-7-2022--60x60.png" height="33" src="theme/frontend/images/du-doan-xo-so-mien-trung-20-7-2022--60x60.png" title="Soi cầu dự đoán Xổ Số Miền Trung ngày 20/7/2022 - Dự đoán XSMT 20/7" width="60" />
-                </a>
-                <a href="https://xoso.me/soi-cau-du-doan-xo-so-mien-trung-ngay-20-7-2022-du-doan-xsmt-20-7-a34171.html" title="Soi cầu dự đoán Xổ Số Miền Trung ngày 20/7/2022 - Dự đoán XSMT 20/7"> Soi cầu dự đoán
-                    Xổ Số Miền Trung ngày 20/7/2022 - Dự đoán XSMT 20/7 </a>
-            </li>
-            <li class="clearfix">
-                <a class="fl" href="https://xoso.me/soi-cau-du-doan-xo-so-mien-nam-ngay-20-7-2022-du-doan-xsmn-20-7-a34170.html" title="Soi cầu dự đoán Xổ Số Miền Nam ngày 20/7/2022 - Dự đoán XSMN 20/7">
-                    <img alt="Soi cầu dự đoán Xổ Số Miền Nam ngày 20/7/2022 - Dự đoán XSMN 20/7" class="mag-r5 fl" src="https://images.xoso.me/news_xosome/2022-07/06/QH/du-doan-xo-so-mien-nam-20-7-2022--60x60.png" height="33" src="theme/frontend/images/du-doan-xo-so-mien-nam-20-7-2022--60x60.png" title="Soi cầu dự đoán Xổ Số Miền Nam ngày 20/7/2022 - Dự đoán XSMN 20/7" width="60" />
-                </a>
-                <a href="https://xoso.me/soi-cau-du-doan-xo-so-mien-nam-ngay-20-7-2022-du-doan-xsmn-20-7-a34170.html" title="Soi cầu dự đoán Xổ Số Miền Nam ngày 20/7/2022 - Dự đoán XSMN 20/7"> Soi cầu dự đoán
-                    Xổ Số Miền Nam ngày 20/7/2022 - Dự đoán XSMN 20/7 </a>
-            </li>
-            <li class="clearfix">
-                <a class="fl" href="https://xoso.me/tin-tuc/cach-chen-ma-code-nhung-ket-qua-truc-tiep-xo-so-dua-vao-website-blog-n7417.html" title="Cách chèn link nhúng HTML kết quả trực tiếp xổ số đưa vào website, blog">
-                    <img alt="Cách chèn link nhúng HTML kết quả trực tiếp xổ số đưa vào website, blog" class="mag-r5 fl" src="https://images.xoso.me/news_xosome/2019/03/01/Nv/cach-chen-ma-code-nhung-ket-qua-truc-tiep-xo-so-dua-vao-website-blog_60x60.JPG" height="33" src="theme/frontend/images/cach-chen-ma-code-nhung-ket-qua-truc-tiep-xo-so-dua-vao-website-blog_60x60.JPG" title="Cách chèn link nhúng HTML kết quả trực tiếp xổ số đưa vào website, blog" width="60" />
-                </a>
-                <a href="https://xoso.me/tin-tuc/cach-chen-ma-code-nhung-ket-qua-truc-tiep-xo-so-dua-vao-website-blog-n7417.html" title="Cách chèn link nhúng HTML kết quả trực tiếp xổ số đưa vào website, blog"> Cách chèn
-                    link nhúng HTML kết quả trực tiếp xổ số đưa vào website, blog </a>
-            </li>
+            @foreach ($listPredictLotteryResultCategory as $itemPredictLotteryResultCategory)
+                @php
+                    $itemPredictLotteryResult = $itemPredictLotteryResultCategory->predictLotteryResult()->act()->orderBy('id','desc')->first();
+                @endphp
+                @if (isset($itemPredictLotteryResult))
+                    <li class="clearfix">
+                        <a class="fl" href="{{Support::show($itemPredictLotteryResult,'slug')}}" title="{{Support::show($itemPredictLotteryResult,'name')}}">
+                            <img alt="{{Support::show($itemPredictLotteryResult,'name')}}" class="mag-r5 fl" src="{%IMGV2.itemPredictLotteryResult.img.-1%}" height="33" width="60" />
+                        </a>
+                        <a href="{{Support::show($itemPredictLotteryResult,'slug')}}" title="{{Support::show($itemPredictLotteryResult,'name')}}">{{Support::show($itemPredictLotteryResult,'name')}}</a>
+                    </li>
+                @endif
+            @endforeach
         </ul>
     </div>
     @php

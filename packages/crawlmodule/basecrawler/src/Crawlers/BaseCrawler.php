@@ -10,6 +10,7 @@ use Google\Cloud\Vision\V1\ImageAnnotatorClient;
 
 class BaseCrawler implements CrawlerInterface
 {
+    protected $typeModal;
     protected $imageSaveDir = 'old';
     protected $clearLinkCharacters = [
         'https://xoso.me',
@@ -236,6 +237,13 @@ class BaseCrawler implements CrawlerInterface
         foreach ($widgetTocs as $itemWidgetTocs) {
             $itemWidgetTocs->outertext = '';
         }
+
+        // remove table-sms
+        $tableSmses = $contentDom->find('.table-sms');
+        foreach ($tableSmses as $itemtableSms) {
+            $itemtableSms->outertext = '';
+        }
+
         // remove script
         $scripts = $contentDom->find('script');
         foreach ($scripts as $itemScript) {
@@ -244,8 +252,20 @@ class BaseCrawler implements CrawlerInterface
         // clear Link
         $listATag = $contentDom->find('a');
         foreach ($listATag as $itemA) {
-            $itemA->href = $this->clearLink($itemA->href);
+            if (\Str::contains($itemA->href,'youtube')) {
+                $itemA->outertext = '';
+            }else{
+                $itemA->href = $this->clearLink($itemA->href);
+            }
         }
+        // Clear list h3 của link youtube
+        $listH3 = $contentDom->find('h3');
+        foreach ($listH3 as $key => $itemH3) {
+            if (\Str::contains($itemH3->id,'quay_thu_dai_')) {
+                $itemH3->outertext = '';
+            }
+        }
+        $contentDom = str_get_html($contentDom->innertext);
 
         // Save img In content
         $listImgs = $contentDom->find('img');

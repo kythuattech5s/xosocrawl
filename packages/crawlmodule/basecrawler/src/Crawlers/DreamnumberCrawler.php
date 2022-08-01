@@ -4,6 +4,8 @@ use App\Models\DreamNumberDecoding;
 use vanhenry\manager\model\VRoute as ModelVRoute;
 class DreamNumberCrawler extends BaseCrawler
 {
+    const CRAWL_DUPLICATE = 150;
+    const CRAWL_SUCCESS = 200;
     protected $imageSaveDir = 'old/dreamnumber';
     protected $linkCrawlListDreamNumberDecoding = "https://xoso.me/so-mo-lo-de-mien-bac-so-mo-giai-mong.html";
     public function startCrawl()
@@ -11,38 +13,53 @@ class DreamNumberCrawler extends BaseCrawler
         // DreamNumberDecoding::truncate();
         // ModelVRoute::where('table','dream_number_decodings')->delete();
         set_time_limit(-1);
-
-        $html = $this->exeCurl($this->linkCrawlListDreamNumberDecoding);
-        $htmlDom = str_get_html($html);
-        if (!$htmlDom) return false;
-        $listItem = $htmlDom->find('.box-dream table tr');
-        $this->crawItems($listItem);
-        $nextLink = $htmlDom->find('.loading-page a.primary');
-        while (count($nextLink) > 0) {
-            $html = $this->exeCurl($nextLink[0]->href);
+        try {
+            $html = $this->exeCurl($this->linkCrawlListDreamNumberDecoding);
             $htmlDom = str_get_html($html);
             if (!$htmlDom) return false;
-            $listItem = $htmlDom->find('.box-dream table tr');
-            $this->crawItems($listItem);
+            $listItems = $htmlDom->find('.box-dream table tr');
+            $arrItemsInfo = $arrInfo = $this->getItemsInfo($listItems);
             $nextLink = $htmlDom->find('.loading-page a.primary');
+            while (count($nextLink) > 0 && count($arrInfo) > 0) {
+                $html = $this->exeCurl($nextLink[0]->href);
+                $htmlDom = str_get_html($html);
+                if (!$htmlDom) return false;
+                $listItems = $htmlDom->find('.box-dream table tr');
+                $arrInfo = $this->getItemsInfo($listItems);
+                foreach ($arrInfo as $itemInfo) {
+                    array_push($arrItemsInfo,$itemInfo);
+                }
+                $nextLink = $htmlDom->find('.loading-page a.primary');
+            }
+            foreach (array_reverse($arrItemsInfo) as $item) {
+                $this->crawItem($item['item_link'],$item['item_number']);
+            }
+        } catch (\Throwable $th) {
+            return false;
         }
         return true;
     }
-    public function crawItems($listItem)
+    public function getItemsInfo($listItems)
     {
-        foreach ($listItem as $key => $item) {
+        $ret = [];
+        foreach ($listItems as $key => $item) {
             if ($key == 0) continue;
             $itemInfo = $item->find('td');
             if (count($itemInfo) != 3) continue;
             $itemLinks = $itemInfo[1]->find('a');
             if (count($itemLinks) == 0) continue;
-            $this->crawItem($itemLinks[0],$itemInfo[2]->plaintext);
+            $itemOld = DreamNumberDecoding::where('slug',$this->clearLink($itemLinks[0]->href))->first();
+            if (isset($itemOld)) return $ret;
+            $dataAdd = [
+                'item_link' => $itemLinks[0],
+                'item_number' => $itemInfo[2]->plaintext
+            ];
+            array_push($ret,$dataAdd);
         }
+        return $ret;
     }
     public function crawItem($itemLink,$itemNumber)
     {
-        $itemOld = DreamNumberDecoding::where('slug',$this->clearLink($itemLink->href))->first();
-        if (isset($itemOld)) return;
         $html = $this->exeCurl($itemLink->href);
         $htmlDom = str_get_html($html);
         if (!$htmlDom) return false;
@@ -88,5 +105,6 @@ class DreamNumberCrawler extends BaseCrawler
         $itemDreamNumberDecoding->save();
 
         $this->inserVRouter($itemDreamNumberDecoding,'App\Http\Controllers\DreamNumberDecodingController@view');
+        return true;
     }
 }

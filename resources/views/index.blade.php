@@ -9,6 +9,7 @@
 	@yield('cssl')
 	<link rel="stylesheet" href="theme/frontend/css/reset.css">
 	<link rel="stylesheet" href="theme/frontend/css/style.css">
+	<link rel="stylesheet" href="theme/frontend/css/add.css">
 	@yield('css')
 	<script type="text/javascript">
         var showNotify = "";

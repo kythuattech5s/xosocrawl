@@ -13,8 +13,8 @@ class PredictLotteryResultCategoryCrawler extends BaseCrawler
     ];
     public function startCrawl()
     {
-        PredictLotteryResultCategory::truncate();
-        ModelVRoute::where('table','predict_lottery_result_categories')->delete();
+        // PredictLotteryResultCategory::truncate();
+        // ModelVRoute::where('table','predict_lottery_result_categories')->delete();
         foreach ($this->linkCrawls as $key => $linkItem) {
             $this->crawItem($linkItem);
         }
@@ -33,6 +33,7 @@ class PredictLotteryResultCategoryCrawler extends BaseCrawler
         $itemMetaKeywords = $htmlDom->find('meta[name=keywords]');
         $itemContents = $htmlDom->find('.box.pad10.mag10');
         $itemShortContents = $htmlDom->find('.cate-news ul div.pad5 p');
+        $itemRelatedLink = $htmlDom->find('.cate-news .tit-mien');
 
         $itemPredictLotteryResultCategory = new PredictLotteryResultCategory;
         $itemPredictLotteryResultCategory->name = count($itemNames) > 0 ? $itemNames[0]->plaintext:$this->clearLink($linkItem);
@@ -40,6 +41,7 @@ class PredictLotteryResultCategoryCrawler extends BaseCrawler
 
         $itemPredictLotteryResultCategory->content = count($itemContents) > 0 ? $this->convertContent($itemContents[0]):'';
         $itemPredictLotteryResultCategory->short_content = count($itemShortContents) > 0 ? $this->convertContent($itemShortContents[0]):'';
+        $itemPredictLotteryResultCategory->related_link = count($itemRelatedLink) > 0 ? $this->convertContent($itemRelatedLink[0]):'';
         $itemPredictLotteryResultCategory->act = 1;
         $itemPredictLotteryResultCategory->count = 0;
         $itemPredictLotteryResultCategory->seo_title = count($itemTitles) > 0 ? $itemTitles[0]->plaintext:$itemPredictLotteryResultCategory->name;
@@ -49,6 +51,7 @@ class PredictLotteryResultCategoryCrawler extends BaseCrawler
         $itemPredictLotteryResultCategory->seo_title = $this->clearContent($itemPredictLotteryResultCategory->seo_title);
         $itemPredictLotteryResultCategory->seo_key = $this->clearContent($itemPredictLotteryResultCategory->seo_key);
         $itemPredictLotteryResultCategory->seo_des = $this->clearContent($itemPredictLotteryResultCategory->seo_des);
+        $itemPredictLotteryResultCategory->real_link = $linkItem;
 
         $itemPredictLotteryResultCategory->save();
 
