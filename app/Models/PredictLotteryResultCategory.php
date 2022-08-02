@@ -8,4 +8,8 @@ class PredictLotteryResultCategory extends BaseModel
     {
         return $this->hasMany(PredictLotteryResult::class,'predict_lottery_result_category_id');
     }
+    public function predictLotteryProvinceResult()
+    {
+        return $this->hasMany(PredictLotteryProvinceResult::class,'predict_lottery_result_category_id');
+    }
 }

@@ -88,10 +88,11 @@ class SEOHelper
         $ret .= '<meta name="description" content="' . addslashes($desSEO) . '">';
         $ret .= '<meta name="keywords" content="' . addslashes($keySEO) . '">';
         $tmp = SettingHelper::getSetting('site_name');
-        $ret .= '<meta property="og:site_name" content="' . (StringHelper::isNull($tmp) ? $titleSEO : $tmp) . '">';
+        $ret .= '<meta property="og:site_name" content="' . SettingHelper::getSetting('site_name') . '">';
         $ret .= '<meta property="og:url" content="' . request()->url() . '">';
-        $ret .= '<meta property="og:type" content="article">';
+        $ret .= '<meta property="og:type" content="website">';
         $ret .= '<meta property="og:title" content="' . addslashes($titleSEO) . '">';
+        $ret .= '<meta property="og:description" content="Xem ngay cho nóng !!!">';
         if (request()->url() == asset('/')) {
             $img = SettingHelper::getSetting('fbshare');
             $img = json_decode($img, true);
@@ -138,6 +139,12 @@ class SEOHelper
         }
         $ret .= '<meta property="og:image" content="' . $img . '">';
         $ret .= '<meta property="og:locale" content="vi_vn">';
+        $ret .= '<meta name="twitter:card" content="summary_large_image">';
+        $ret .= '<meta name="twitter:site" content="'.SettingHelper::getSetting('site_name').'">';
+        $ret .= '<meta name="twitter:creator" content="'.SettingHelper::getSetting('site_name').'">';
+        $ret .= '<meta name="twitter:title" content="'.addslashes($titleSEO).'">';
+        $ret .= '<meta name="twitter:description" content="Trang xổ số may mắn nhất Việt Nam">';
+        $ret .= '<meta name="twitter:image" content="'.$img.'">';
         $wmt = SettingHelper::getSetting('wmt');
         if (!StringHelper::isNull($wmt) && $wmt != "value") {
             $ret .= '<meta name="google-site-verification" content="' . SettingHelper::getSetting('wmt') . '" />';

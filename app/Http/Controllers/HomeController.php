@@ -28,7 +28,7 @@ class HomeController extends Controller
     public function convertThuCongDuLieuCrawl()
     {
         $baseCrawler = new BaseCrawler;
-        $pages = Page::where('layout_show','dream_number_decodings')->where('convert_contented',0)->get();
+        $pages = Page::whereIn('layout_show',['dream_number_decodings','all_predict_the_outcome'])->where('convert_contented',0)->get();
         foreach ($pages as $page) {
             $page->content = $baseCrawler->convertContent(str_get_html($page->content));
             $page->seo_title = $baseCrawler->clearContent($page->seo_title);

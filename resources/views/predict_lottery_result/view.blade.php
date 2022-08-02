@@ -6,7 +6,7 @@
 <div class="box box-detail pad10">
     <h1 class="s20"><strong>{{Support::show($currentItem,'name')}}</strong></h1>
     <div class="txt-center magb10"></div>
-    <div class="cont-detail paragraph s-content" id="article-content">
+    <div class="cont-detail paragraph" id="article-content">
         {!!Support::show($currentItem,'content')!!}
     </div>
     {{-- <div class="box list-chot-so">

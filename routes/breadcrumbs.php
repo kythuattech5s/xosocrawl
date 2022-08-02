@@ -24,14 +24,32 @@ Breadcrumbs::for('predict_lottery_results', function ($trail,$currentItem,$paren
     if ($parent == null) {
         $trail->parent('home');
         $trail->push('Dự đoán KQXS','du-doan-ket-qua-xo-so-kqxs-c229');
-        $trail->push(Support::show($currentItem,'name'), Support::show($currentItem,'slug'));
     }else{
         $trail->parent('predict_lottery_result_categories',$parent);
-        $itemNameInfo = explode('-',$currentItem->name);
-        if (is_array($itemNameInfo) && count($itemNameInfo) > 0) {
-            $trail->push(trim($itemNameInfo[0]), Support::show($currentItem, 'slug'));
-        }else{
-            $trail->push($currentItem->name, Support::show($currentItem, 'slug'));
-        }
+    }
+    $itemNameInfo = explode('-',$currentItem->name);
+    if (is_array($itemNameInfo) && count($itemNameInfo) > 0) {
+        $trail->push(trim($itemNameInfo[0]), Support::show($currentItem, 'slug'));
+    }else{
+        $trail->push($currentItem->name, Support::show($currentItem, 'slug'));
+    }
+});
+Breadcrumbs::for('predict_lottery_province_results', function ($trail,$currentItem,$parent) {
+    if ($parent == null) {
+        $trail->parent('home');
+        $trail->push('Dự đoán KQXS','du-doan-ket-qua-xo-so-kqxs-c229');
+    }else{
+        $trail->parent('predict_lottery_result_categories',$parent);
+    }
+    $trail->push('Dự đoán xổ số '.$currentItem->province_name, Support::show($currentItem, 'slug'));
+});
+Breadcrumbs::for('test_spin_categories', function ($trail,$currentItem) {
+    $trail->parent('home');
+    $trail->push('Quay thử KQXS','quay-thu-kqxs-quay-thu-ket-qua-xo-so');
+    $itemNameInfo = explode('-',$currentItem->name);
+    if (is_array($itemNameInfo) && count($itemNameInfo) > 0) {
+        $trail->push(trim($itemNameInfo[0]), Support::show($currentItem, 'slug'));
+    }else{
+        $trail->push($currentItem->name, Support::show($currentItem, 'slug'));
     }
 });

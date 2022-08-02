@@ -3,11 +3,11 @@
 <header>
     <div class="main">
         @if (isset($currentItem) && is_object($currentItem))
-            @if (isset($currentItem->seo_title) && $currentItem->seo_title != '')
-                <h1 class="taskbar">{{Support::show($currentItem,'seo_title')}}</h1>
+            @if (isset($currentItem->name) && $currentItem->name != '')
+                <h1 class="taskbar">{{Support::show($currentItem,'name')}}</h1>
             @else
-                @if (isset($currentItem->name) && $currentItem->name != '')
-                    <h1 class="taskbar">{{Support::show($currentItem,'name')}}</h1>
+                @if (isset($currentItem->seo_title) && $currentItem->seo_title != '')
+                    <h1 class="taskbar">{{Support::show($currentItem,'seo_title')}}</h1>
                 @endif
             @endif
         @else

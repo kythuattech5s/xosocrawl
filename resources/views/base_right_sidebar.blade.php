@@ -6,43 +6,36 @@
         <div>
             <ul class="stastic-lotery two-column">
                 <li class="nobor">
-                    <a href="https://xoso.me/xsmn-hom-qua-ket-qua-xo-so-mien-nam-hom-qua.html" title="XSMN hôm qua"> XSMN hôm qua </a>
+                    <a href="xsmn-hom-qua-ket-qua-xo-so-mien-nam-hom-qua" title="XSMN hôm qua"> XSMN hôm qua </a>
                 </li>
                 <li>
-                    <a href="https://xoso.me/xsmb-hom-qua-ket-qua-xo-so-mien-bac-hom-qua.html" title="XSMB hôm qua"> XSMB hôm qua </a>
+                    <a href="xsmb-hom-qua-ket-qua-xo-so-mien-bac-hom-qua" title="XSMB hôm qua"> XSMB hôm qua </a>
                 </li>
                 <li>
-                    <a href="https://xoso.me/xsmt-hom-qua-ket-qua-xo-so-mien-trung-hom-qua.html" title="XSMT hôm qua"> XSMT hôm qua </a>
+                    <a href="xsmt-hom-qua-ket-qua-xo-so-mien-trung-hom-qua" title="XSMT hôm qua"> XSMT hôm qua </a>
                 </li>
             </ul>
         </div>
     </div>
-    <div class="content-right bullet">
-        <div class="title-r">
-            <strong> Dự đoán các tỉnh hôm nay </strong>
+    @php
+        $listPredictLotteryProvinceResult = App\Models\PredictLotteryProvinceResult::act()->get();
+    @endphp
+    @if (count($listPredictLotteryProvinceResult) > 0)
+        <div class="content-right bullet">
+            <div class="title-r">
+                <strong> Dự đoán các tỉnh hôm nay </strong>
+            </div>
+            <div>
+                <ul class="stastic-lotery two-column">
+                    @foreach ($listPredictLotteryProvinceResult as $itemPredictLotteryProvinceResult)
+                        <li class="nobor">
+                            <a href="{{Support::show($itemPredictLotteryProvinceResult,'slug')}}" title="Dự đoán {{Support::show($itemPredictLotteryProvinceResult,'province_name')}}">Dự đoán {{Support::show($itemPredictLotteryProvinceResult,'province_name')}}</a>
+                        </li>
+                    @endforeach
+                </ul>
+            </div>
         </div>
-        <div>
-            <ul class="stastic-lotery two-column">
-                <li class="nobor">
-                    <a href="https://xoso.me/du-doan-xsdn.html" title="Dự đoán Đồng Nai"> Dự đoán Đồng Nai </a>
-                </li>
-                <li class="nobor">
-                    <a href="https://xoso.me/du-doan-xsct.html" title="Dự đoán Cần Thơ"> Dự đoán Cần Thơ </a>
-                </li>
-                <li class="nobor">
-                    <a href="https://xoso.me/du-doan-xsst.html" title="Dự đoán Sóc Trăng"> Dự đoán Sóc Trăng
-                    </a>
-                </li>
-                <li class="nobor">
-                    <a href="https://xoso.me/du-doan-xsdng.html" title="Dự đoán Đà Nẵng"> Dự đoán Đà Nẵng </a>
-                </li>
-                <li class="nobor">
-                    <a href="https://xoso.me/du-doan-xskh.html" title="Dự đoán Khánh Hòa"> Dự đoán Khánh Hòa
-                    </a>
-                </li>
-            </ul>
-        </div>
-    </div>
+    @endif
     <div class="content-right">
         <div class="title-r">
             <a href="du-doan-ket-qua-xo-so-kqxs-c229" title="Dự đoán xổ số"> Dự đoán xổ số

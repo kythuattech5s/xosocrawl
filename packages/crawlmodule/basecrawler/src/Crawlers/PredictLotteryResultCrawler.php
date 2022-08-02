@@ -11,7 +11,6 @@ class PredictLotteryResultCrawler extends BaseCrawler
         // PredictLotteryResult::truncate();
         // ModelVRoute::where('table','predict_lottery_results')->delete();
         set_time_limit(-1);
-        ini_set("memory_limit",-1);
         $listPredictLotteryResultCategory = PredictLotteryResultCategory::get();
         foreach ($listPredictLotteryResultCategory as $key => $itemPredictLotteryResultCategory) {
             $html = $this->exeCurl($itemPredictLotteryResultCategory->real_link);

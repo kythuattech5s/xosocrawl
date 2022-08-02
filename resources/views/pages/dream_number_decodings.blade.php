@@ -66,7 +66,7 @@
 </div>
 <div class="box">
     <div class="box-nd">
-        <div class="pad10 s-content">
+        <div class="pad10">
             {!!$currentItem->content!!}
         </div>
     </div>

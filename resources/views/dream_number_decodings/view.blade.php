@@ -22,7 +22,7 @@
                     </tr>
                 </tbody>
             </table>
-            <div class="cont-dream s-content pad10-5 cont-detail paragraph">
+            <div class="cont-dream pad10-5 cont-detail paragraph">
                 {!!Support::show($currentItem,'content')!!}
             </div>
         </div>

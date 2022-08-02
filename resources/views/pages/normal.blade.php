@@ -3,7 +3,7 @@
     {{Breadcrumbs::render('page', $currentItem)}}
 @endsection
 @section('main')
-    <div class="box box-detail pad10 s-content">
+    <div class="box box-detail pad10">
         {!!Support::show($currentItem,'content')!!}
     </div>
 @endsection

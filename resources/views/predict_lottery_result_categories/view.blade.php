@@ -55,7 +55,7 @@
             </a>
         </div>
     @endif
-    <div class="box pad10 mag10 s-content">
+    <div class="box pad10 mag10">
         {!!Support::show($currentItem,'content')!!}
     </div>
 </div>
