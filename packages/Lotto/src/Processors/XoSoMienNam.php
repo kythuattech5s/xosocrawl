@@ -5,12 +5,12 @@ namespace Lotto\Processors;
 use Lotto\Dtos\ResultObject;
 use Lotto\Enums\CrawlStatus;
 
-class XoSoMienBac extends AbstractXoSo
+class XoSoMienNam extends AbstractXoSo
 {
     protected function parsePrizes($dom): ResultObject
     {
         $result = new ResultObject();
-        $tables = $dom->find('.kqmb.extendable');
+        $tables = $dom->find('.kqmb.extendable.kqtinh');
         $datas = [];
         if (count($tables) == 0) return $result;
         $table = $tables[0];
@@ -18,12 +18,7 @@ class XoSoMienBac extends AbstractXoSo
 
         for ($i = 0; $i < count($trs); $i++) {
             $tr = $trs[$i];
-            if ($i == 0) {
-                $description = $tr->plaintext;
-                $result->setDescription($description);
-            } else {
-                $datas[$i - 1] = $this->parseSinglePrize($tr);
-            }
+            $datas[count($trs) - $i] = $this->parseSinglePrize($tr);
         }
         $result->setDatas($datas);
         if (count($datas) > 0) {

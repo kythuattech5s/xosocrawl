@@ -1402,6 +1402,15 @@ table th {
   background: #fff;
   margin-bottom: 2px
 }
+.box.mo-thuong-ngay>table,
+.box.mo-thuong-ngay>table>tbody>tr,
+.box.mo-thuong-ngay>table>tbody>tr>td
+{
+  border: none;
+}
+.box.mo-thuong-ngay>table>tbody>tr>td{
+  padding:0
+}
 
 .box-html {
   padding: 5px

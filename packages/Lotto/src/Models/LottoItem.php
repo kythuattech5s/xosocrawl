@@ -4,6 +4,7 @@ namespace Lotto\Models;
 
 use App\Models\BaseModel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Lotto\Helpers\LottoHelper;
 
 class LottoItem extends BaseModel
 {
@@ -11,10 +12,7 @@ class LottoItem extends BaseModel
 
     public function hasResultToday()
     {
-        $now = now();
-        $currentDayOfWeek = $now->dayOfWeek;
-
-        $currentDayOfWeek = $currentDayOfWeek == 0 ? $currentDayOfWeek + 8 : $currentDayOfWeek + 1;
+        $currentDayOfWeek = LottoHelper::getCurrentDateOfWeek(now());
         $times = LottoTime::allLottoTimes();
         $dayOfWeeks = $times[$this->id] ?? [];
         $days = array_filter($dayOfWeeks, function ($item) use ($currentDayOfWeek) {
@@ -25,5 +23,17 @@ class LottoItem extends BaseModel
     public function lottoTimes()
     {
         return $this->hasMany(LottoTime::class);
+    }
+    public function lottoTime()
+    {
+        return $this->hasOne(LottoTime::class);
+    }
+    public function currentLottoTime()
+    {
+        return $this->lottoTimeByDate(now());
+    }
+    public function lottoTimeByDate($date)
+    {
+        return $this->lottoTimes()->where('dayofweek', LottoHelper::getCurrentDateOfWeek($date));
     }
 }

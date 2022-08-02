@@ -76,40 +76,50 @@
             <strong> Các tỉnh mở thưởng hôm nay </strong>
         </div>
         <table class="table-fixed">
-            <tbody>
                 <tr>
                     <td>
-                        <a href="https://xoso.me/mien-nam/xsdn-ket-qua-xo-so-dong-nai-p11.html" title="XSDN"> Đồng Nai </a>
+                        <table>
+                            <?php $mns = \Lotto\Models\LottoCategory::find(3)->lottoTodayItems(); ?>
+                            @foreach($mns as $item)
+                            <tr>
+                                <td>
+                                    <a href="{{$item->slug}}" title="Xổ Số {{$item->name}}"> {{$item->name}} </a>
+                                </td>
+                            </tr>
+                            @endforeach
+                        </table>
                     </td>
                     <td>
-                        <a href="https://xoso.me/mien-trung/xsdng-ket-qua-xo-so-da-nang-p24.html" title="XSDNG"> Đà Nẵng </a>
+                        <table>
+                            <?php $mts = \Lotto\Models\LottoCategory::find(4)->lottoTodayItems(); ?>
+                            @foreach($mts as $item)
+                            <tr>
+                                <td>
+                                    <a href="{{$item->slug}}" title="Xổ Số {{$item->name}}"> {{$item->name}} </a>
+                                </td>
+                            </tr>
+                            @endforeach
+                        </table>
                     </td>
                     <td>
-                        <a href="https://xoso.me/xsmb-sxmb-xstd-xshn-kqxsmb-ket-qua-xo-so-mien-bac.html" title="KQXSMB"> Miền Bắc </a>
+                        <table>
+                            <tr>
+                                <?php $mb = \Lotto\Models\LottoCategory::find(1); ?>
+                                <td>
+                                    <a href="{{$mb->slug}}" title="{{$mb->name}}"> Miền Bắc </a>
+                                </td>
+                            </tr>
+                            <?php $dts = \Lotto\Models\LottoCategory::find(2)->lottoTodayItems(); ?>
+                            @foreach($dts as $item)
+                            <tr>
+                                <td>
+                                    <a href="{{$item->slug}}" title="Xổ Số {{$item->name}}"> {{$item->name}} </a>
+                                </td>
+                            </tr>
+                            @endforeach
+                        </table>
                     </td>
                 </tr>
-                <tr>
-                    <td>
-                        <a href="" title="XSCT"> Cần Thơ </a>
-                    </td>
-                    <td>
-                        <a href="https://xoso.me/mien-trung/xskh-ket-qua-xo-so-khanh-hoa-p28.html" title="XSKH"> Khánh Hòa </a>
-                    </td>
-                    <td>
-                        <a href="https://xoso.me/kqxs-mega-645-ket-qua-xo-so-mega-6-45-vietlott-ngay-hom-nay.html" title="XS Mega 6/45"> Mega 6/45 </a>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <a href="https://xoso.me/mien-nam/xsst-ket-qua-xo-so-soc-trang-p17.html" title="XSST"> Sóc Trăng </a>
-                    </td>
-                    <td>
-                    </td>
-                    <td>
-                        <a href="https://xoso.me/kqxs-max3d-ket-qua-xo-so-max-3d-vietlott.html" title="XS Max 3D"> Max 3D </a>
-                    </td>
-                </tr>
-            </tbody>
         </table>
     </div>
     <div class="box">

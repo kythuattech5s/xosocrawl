@@ -4,6 +4,7 @@ namespace Lotto\Models;
 
 use App\Models\BaseModel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Lotto\Helpers\LottoHelper;
 
 class LottoTime extends BaseModel
 {
@@ -16,21 +17,14 @@ class LottoTime extends BaseModel
         }
         return static::$ALLTIMES;
     }
-    public function formatByType()
+    public function formatByType($date)
     {
+        $date = isset($date) ? $date : now();
         $type = $this->type;
         if ($type == 'thu-dow') {
-            return str_replace('dow', $this->getCurrentDateOfWeek(), $type);
+            return str_replace('dow', LottoHelper::getCurrentDateOfWeek($date), $type);
         } else {
-            $now = now();
-            return $now->format($this->type);
+            return $date->format($this->type);
         }
-    }
-    private function getCurrentDateOfWeek()
-    {
-        $now = now();
-        $currentDayOfWeek = $now->dayOfWeek;
-        $currentDayOfWeek = $currentDayOfWeek == 0 ? $currentDayOfWeek + 8 : $currentDayOfWeek + 1;
-        return $currentDayOfWeek;
     }
 }

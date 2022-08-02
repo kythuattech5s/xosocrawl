@@ -3,6 +3,8 @@
 namespace Lotto\Console\Commands;
 
 use Illuminate\Console\Command;
+use Lotto\Models\LottoItem;
+use Lotto\Processors\XoSoMienBac;
 
 class CrawlResult extends Command
 {
@@ -37,7 +39,13 @@ class CrawlResult extends Command
      */
     public function handle()
     {
-        var_dump(__FILE__);
-        die;
+        $lottoItem = LottoItem::find(1);
+
+        $xsmb = new XoSoMienBac($lottoItem);
+        $date = now()->addDays(-1);
+        $xsmb->setDateCrawl($date);
+
+        $result = $xsmb->parseTableResult();
+        dd($result);
     }
 }

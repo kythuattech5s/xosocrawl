@@ -4,13 +4,14 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Lotto\LottoServiceProvider;
+use Lotto\Models\LottoCategory;
 
 class HomeController extends Controller
 {
     public function index(Request $request)
     {
         $isHome = 1;
-        
+        // dump(LottoCategory::find(1)->lottoTodayItems());
         return view('home', compact('isHome'));
     }
 

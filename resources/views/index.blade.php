@@ -16,6 +16,8 @@
         var messageNotify = "{{ Session::get('messageNotify', '') }}";
         var typeNotify = "{{ Session::get('typeNotify', '') }}";
 	</script>
+	<link href="https://cdn.jsdelivr.net/npm/mc-datepicker/dist/mc-calendar.min.css" rel="stylesheet" />
+	<script src="https://cdn.jsdelivr.net/npm/mc-datepicker/dist/mc-calendar.min.js"></script>
 	{[CMS_HEADER]}
 </head>
 
