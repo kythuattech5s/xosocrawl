@@ -1,4 +1,4 @@
-<div data-id="kq" class="one-city" data-region="1" data-zoom="0" data-sub="0" data-sound="1">
+<div data-id="kq" class="one-city" data-region="1" data-zoom=0 data-sub=0 data-sound=1>
     <table class="kqmb extendable">
         <tbody>
             <tr>
@@ -55,16 +55,17 @@
     <div class="control-panel">
         <form class="digits-form">
             <label class="radio" data-value="0">
-                <input type="radio" name="showed-digits" checked value="0">
-                <b></b><span></span>
+            <input type="radio" name="showed-digits" checked value="0">
+            <b></b>
+            <span></span>
             </label>
             <label class="radio" data-value="2">
-                <input type="radio" name="showed-digits" value="2">
-                <b></b><span></span>
+            <input type="radio" name="showed-digits" value="2">
+            <b></b><span></span>
             </label>
             <label class="radio" data-value="3">
-                <input type="radio" name="showed-digits" value="3">
-                <b></b><span></span>
+            <input type="radio" name="showed-digits" value="3">
+            <b></b><span></span>
             </label>
         </form>
         <div class="buttons-wrapper">

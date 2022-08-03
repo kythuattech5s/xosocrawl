@@ -1,5 +1,7 @@
 <?php
 namespace App\Http\Controllers;
+
+use App\Models\TestSpin;
 use App\Models\TestSpinCategory;
 
 class TestSpinCategoryController extends Controller
@@ -15,6 +17,7 @@ class TestSpinCategoryController extends Controller
         $listItems = $currentItem->testSpin()
                                 ->act()
                                 ->get();
+        $dataTestSpin = TestSpin::buildDataSpinCate($currentItem);
         return view('test_spin_categories.view',compact('currentItem','listItems','listItemTestSpinCategory','listActiveTestSpinToday'));
     }
 }

@@ -8,4 +8,12 @@ class TestSpin extends BaseModel
     {
         return $this->belongsTo(TestSpinCategory::class,'test_spin_category_id');
     }
+    public static function buildDataSpinCate($testSpinCate)
+    {
+        if ($testSpinCate->id == 1) {
+            $dataSpin =TestSpinData::getOrCreateDataByCode('mien-bac',now());
+            $dataRet = [];
+            $dataRet['provinceCode'] = 'MB';
+        }
+    }
 }
