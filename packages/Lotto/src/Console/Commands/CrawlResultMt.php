@@ -8,13 +8,13 @@ use Lotto\Models\LottoRecord;
 use Lotto\Processors\XoSoMienBac;
 use Lotto\Processors\XoSoMienNam;
 
-class CrawlResultMn extends CrawlResultMb
+class CrawlResultMt extends CrawlResultMb
 {
-    protected $signature = 'lotto:crawl-mn';
-    protected $year = 2009;
+    protected $signature = 'lotto:crawl-mt';
+    protected $year = 2008;
     public function handle()
     {
-        $lottoItems = LottoItem::where('lotto_category_id', 3)->where('id', '>', 18)->get();
+        $lottoItems = LottoItem::where('lotto_category_id', 4)->get();
         $this->info('Start');
         foreach ($lottoItems as $lottoItem) {
             $this->info('Start ' . $lottoItem->name);

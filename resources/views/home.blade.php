@@ -1,69 +1,15 @@
 @extends('index')
 @section('main')
-<div class="link-du-doan">
-    <span>
-        <img alt="hot" height="11" src="theme/frontend/images/hot2.gif" width="22" />
-    </span>
-    <a class="text-link-ads bold clnote" href="https://xoso.me/redirect/out?token=I%2FZxoQFsuUjDev87POoC9PSveDZOsQOylNFoAc3oAoA%3D" rel="nofollow" target="_blank" title="Loto chuẩn xác"> Loto chuẩn xác </a>
-    <span>
-        <img alt="hot" height="11" src="theme/frontend/images/hot2.gif" width="22" />
-    </span>
-    <a class="text-link-ads bold clnote" href="https://xoso.me/redirect/out?token=I%2FZxoQFsuUjDev87POoC9PSveDZOsQOylNFoAc3oAoA%3D" rel="nofollow" target="_blank" title="Lấy số chuẩn"> Lấy số chuẩn </a>
-    <span>
-        <img alt="hot" height="11" src="theme/frontend/images/hot2.gif" width="22" />
-    </span>
-    <a class="text-link-ads bold clnote" href="https://xoso.me/redirect/out?token=I%2FZxoQFsuUjDev87POoC9PSveDZOsQOylNFoAc3oAoA%3D" rel="nofollow" target="_blank" title="Cầu chuẩn mb"> Cầu chuẩn mb </a>
-    <span>
-        <img alt="hot" height="11" src="theme/frontend/images/hot2.gif" width="22" />
-    </span>
-    <a class="text-link-ads bold clnote" href="https://xoso.me/redirect/out?token=I%2FZxoQFsuUjDev87POoC9PSveDZOsQOylNFoAc3oAoA%3D" rel="nofollow" target="_blank" title="XSMB bao nổ"> XSMB bao nổ </a>
-    <span>
-        <img alt="hot" height="11" src="theme/frontend/images/hot2.gif" width="22" />
-    </span>
-    <a class="text-link-ads bold clnote" href="https://xoso.me/redirect/out?token=I%2FZxoQFsuUjDev87POoC9PSveDZOsQOylNFoAc3oAoA%3D" rel="nofollow" target="_blank" title="Số chuẩn hội đồng"> Số chuẩn hội đồng </a>
-    <span>
-        <img alt="hot" height="11" src="theme/frontend/images/hot2.gif" width="22" />
-    </span>
-    <a class="text-link-ads bold clnote" href="https://xoso.me/redirect/out?token=I%2FZxoQFsuUjDev87POoC9PSveDZOsQOylNFoAc3oAoA%3D" rel="nofollow" target="_blank" title="Số chuẩn k phí"> Số chuẩn k phí </a>
-    <span>
-        <img alt="hot" height="11" src="theme/frontend/images/hot2.gif" width="22" />
-    </span>
-    <a class="text-link-ads bold clblue" href="https://xoso.me/redirect/out?token=I%2FZxoQFsuUjDev87POoC9PSveDZOsQOylNFoAc3oAoA%3D" rel="nofollow" target="_blank" title="Độc thủ lô"> Độc thủ lô </a>
-    <span>
-        <img alt="hot" height="11" src="theme/frontend/images/hot2.gif" width="22" />
-    </span>
-    <a class="text-link-ads bold clnote" href="https://xoso.me/redirect/out?token=I%2FZxoQFsuUjDev87POoC9PSveDZOsQOylNFoAc3oAoA%3D" rel="nofollow" target="_blank" title="Cho số miễn phí"> Cho số miễn phí </a>
-    <span>
-        <img alt="hot" height="11" src="theme/frontend/images/hot2.gif" width="22" />
-    </span>
-    <a class="text-link-ads bold clnote" href="https://xoso.me/redirect/out?token=I%2FZxoQFsuUjDev87POoC9PSveDZOsQOylNFoAc3oAoA%3D" rel="nofollow" target="_blank" title="kích vào trúng lớn"> kích vào trúng lớn </a>
-    <span>
-        <img alt="hot" height="11" src="theme/frontend/images/hot2.gif" width="22" />
-    </span>
-    <a class="text-link-ads bold clnote" href="https://xoso.me/redirect/out?token=I%2FZxoQFsuUjDev87POoC9PSveDZOsQOylNFoAc3oAoA%3D" rel="nofollow" target="_blank" title="Cầu chuẩn tuyệt mật"> Cầu chuẩn tuyệt mật </a>
-    <span>
-        <img alt="hot" height="11" src="theme/frontend/images/hot2.gif" width="22" />
-    </span>
-    <a class="text-link-ads bold clblue" href="https://xsmn.me/xsmn-sxmn-kqxsmn-kqsxmn-ket-qua-xo-so-mien-nam.html" rel="dofollow" target="_blank" title="XSMN"> XSMN </a>
-    <span>
-        <img alt="hot" height="11" src="theme/frontend/images/hot2.gif" width="22" />
-    </span>
-    <a class="text-link-ads bold clblue" href="https://xsmb.me/xsmt-xsmtr-sxmt-xo-so-mien-trung.html" rel="dofollow" target="_blank" title="SXMT"> SXMT </a>
-    <span>
-        <img alt="hot" height="11" src="theme/frontend/images/hot2.gif" width="22" />
-    </span>
-    <a class="text-link-ads bold clblue" href="https://xsmn.me/xsmb-sxmb-kqxsmb-xstd-xshn-ket-qua-xo-so-mien-bac.html" rel="dofollow" target="_blank" title="XSMB"> XSMB </a>
-</div>
+@include('partials.link_du_doan')
 <div class="box">
     <div class="bg_gray">
         <div class=" opt_date_full clearfix">
             <a class="ic-pre fl" href="https://xoso.me/kqxs-19-7-2022-ket-qua-xo-so-ngay-19-7-2022.html" title="Kết quả xổ số ngày 19/07/2022">
             </a>
             <label>
-                <strong> Thứ tư </strong> - <input class="nobor hasDatepicker" id="searchDate" type="text" value="20/07/2022">
+                <strong> Thứ tư </strong> - <input class="nobor hasDatepicker" id="searchDate" type="text" value="20/07/2022"/>
                 <span class="ic ic-calendar">
                 </span>
-                </input>
             </label>
             <a class="ic-next" href="https://xoso.me/kqxs-21-7-2022-ket-qua-xo-so-ngay-21-7-2022.html" title="Kết quả xổ số ngày 21/07/2022">
             </a>

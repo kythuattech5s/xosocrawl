@@ -50,4 +50,29 @@ class LottoRecord extends BaseModel
             }
         }
     }
+    public function lottoResultDetails()
+    {
+        return $this->hasMany(LottoResultDetail::class);
+    }
+    public function lottoItem()
+    {
+        return $this->belongsTo(LottoItem::class);
+    }
+    public function prev()
+    {
+        return static::where('id', '<', $this->id)->where('lotto_item_id', $this->lotto_item_id)->orderBy('id', 'desc')->limit(1)->first();
+    }
+    public function next()
+    {
+        return static::where('id', '>', $this->id)->where('lotto_item_id', $this->lotto_item_id)->orderBy('id', 'asc')->limit(1)->first();
+    }
+    public function link($prefix)
+    {
+        $lottoTime = $this->lottoItem->lottoTime;
+        $slugDate = $this->lottoItem->slug_date;
+        $count = substr_count($slugDate, "%s");
+        $params = array_fill(0, $count, $lottoTime->formatByType($this->created_at));
+        $link = vsprintf($slugDate, $params);
+        return implode('/', [$prefix, $link]);
+    }
 }

@@ -5,6 +5,7 @@ namespace Lotto\Models;
 use App\Models\BaseModel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Lotto\Helpers\LottoHelper;
+use Carbon\Carbon;
 
 class LottoTime extends BaseModel
 {
@@ -16,6 +17,10 @@ class LottoTime extends BaseModel
             static::$ALLTIMES = static::select('lotto_item_id', 'dayofweek', 'type')->get()->groupBy('lotto_item_id')->toArray();
         }
         return static::$ALLTIMES;
+    }
+    public function getDateFromString($string)
+    {
+        return Carbon::createFromFormat($this->type, $string);
     }
     public function formatByType($date)
     {

@@ -36,4 +36,16 @@ class LottoItem extends BaseModel
     {
         return $this->lottoTimes()->where('dayofweek', LottoHelper::getCurrentDateOfWeek($date));
     }
+    public function lottoResultDetails()
+    {
+        return $this->hasMany(LottoResultDetail::class);
+    }
+    public function lottoRecords()
+    {
+        return $this->hasMany(LottoRecord::class);
+    }
+    public function lottoCategory()
+    {
+        return $this->belongsTo(LottoCategory::class);
+    }
 }

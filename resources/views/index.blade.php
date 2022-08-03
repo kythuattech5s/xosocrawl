@@ -16,8 +16,7 @@
         var messageNotify = "{{ Session::get('messageNotify', '') }}";
         var typeNotify = "{{ Session::get('typeNotify', '') }}";
 	</script>
-	<link href="https://cdn.jsdelivr.net/npm/mc-datepicker/dist/mc-calendar.min.css" rel="stylesheet" />
-	<script src="https://cdn.jsdelivr.net/npm/mc-datepicker/dist/mc-calendar.min.js"></script>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vanillajs-datepicker@1.2.0/dist/css/datepicker.min.css">
 	{[CMS_HEADER]}
 </head>
 
@@ -54,6 +53,9 @@
 			elm.style.display = elm.style.display == 'block' ? 'none' : 'block'
 		}
 	</script>
+	<script src="https://cdn.jsdelivr.net/npm/vanillajs-datepicker@1.2.0/dist/js/datepicker.min.js" defer></script>
+	<script src="https://cdn.jsdelivr.net/npm/vanillajs-datepicker@1.2.0/dist/js/locales/vi.js" defer></script>
+	<script src="theme/frontend/js/main.js" defer></script>
 	@yield('js')
 </body>
 </html>

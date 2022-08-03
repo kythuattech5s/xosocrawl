@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Helpers;
 
 use App\Helpers\Media;
@@ -13,10 +14,34 @@ class Support
         return \DateTime::createFromFormat($format, $string);
     }
 
-    public static function showDateTime($string, $format = 'H:i d-m-Y')
+    public static function showDateTime($string, $format = 'd/m/Y')
     {
         if (self::isDateTime($string)) {
             return Carbon::parse($string)->format($format);
+        }
+    }
+    public static function format($date, $format = 'd/m/Y')
+    {
+        return $date->format($format);
+    }
+    public static function getDayOfWeek($date)
+    {
+        $dow = $date->dayOfWeek;
+        switch ($dow) {
+            case 0:
+                return 'Chủ Nhật';
+            case 1:
+                return 'Thứ 2';
+            case 2:
+                return 'Thứ 3';
+            case 3:
+                return 'Thứ 4';
+            case 4:
+                return 'Thứ 5';
+            case 5:
+                return 'Thứ 6';
+            case 6:
+                return 'Thứ 7';
         }
     }
 
