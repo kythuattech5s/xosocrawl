@@ -10,15 +10,25 @@ use Lotto\Processors\XoSoMienNam;
 
 class CrawlResultMn extends CrawlResultMb
 {
-    protected $signature = 'lotto:crawl-mn {id}';
+    protected $signature = 'lotto:crawl-mn';
     protected $year = 2009;
     public function handle()
     {
-        $lottoItem = LottoItem::find($this->argument('id'));
+        $lottoItems = LottoItem::where('lotto_category_id', 3)->where('id', '>', 13)->get();
+        $this->info('Start');
+        foreach ($lottoItems as $lottoItem) {
+            $this->info('Start ' . $lottoItem->name);
+            $this->crawlOne($lottoItem);
+            $this->info('End ' . $lottoItem->name);
+        }
+        $this->info('End');
+    }
+    public function crawlOne($lottoItem)
+    {
         $dates = $this->getDates($lottoItem);
         $dates = array_reverse($dates);
         $xsmb = new XoSoMienNam($lottoItem);
-        $this->info('Start');
+
         foreach ($dates as $date) {
             $this->info($date);
             $xsmb->setDateCrawl($date);
@@ -32,6 +42,5 @@ class CrawlResultMn extends CrawlResultMb
 
             $record->insertResults($result->getDatas(), $date);
         }
-        $this->info('End');
     }
 }
