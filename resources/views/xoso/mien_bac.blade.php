@@ -18,13 +18,18 @@
           </div>
        </div>
     </div>
-    
+    <ul class="tab-panel">
+        <li class="active"><a href="{{$lottoCategory->slug}}">{{$lottoCategory->name}}</a></li>
+        @for ($i=2;$i<9;$i++)
+            <li><a href="{{$lottoCategory->linkDayOfWeek($lottoRecord,$i)}}" title="{{$lottoCategory->short_name}} {{Support::getLottoDayOfWeek(null,$i)}}">{{Support::getLottoDayOfWeek(null,$i)}}</a></li>
+        @endfor
+        
+        </li>
+    </ul>
     <div class="box">
-       @include('xoso.breadcrumbs.base')
+       @include('xoso.breadcrumbs.mien_bac')
        <div id="load_kq_tinh_0">
-          
             @include('xoso.result_table')
-          
           <div class="txt-center">
              <div class="center">
                 <a class="ban-link" href="/redirect/out?token=I%2FZxoQFsuUjDev87POoC9PSveDZOsQOylNFoAc3oAoA%3D" title="" rel="nofollow" target="_blank" data-pos="ban_square"><img src="theme/frontend/images/tuvan.png"></a> 

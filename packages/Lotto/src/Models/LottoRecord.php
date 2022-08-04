@@ -4,6 +4,7 @@ namespace Lotto\Models;
 
 use App\Models\BaseModel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Lotto\Dtos\HeadTail;
 use Lotto\Enums\CrawlStatus;
 
 class LottoRecord extends BaseModel
@@ -25,7 +26,7 @@ class LottoRecord extends BaseModel
             $record = new static;
             $record->code = $code;
             $record->fullcode = $fullcode;
-            $record->created_at = $now;
+            $record->created_at = $date;
             $record->updated_at = $now;
             $record->lotto_item_id = $lottoItem->id;
             $record->lotto_time_id = $lottoTime->id;
@@ -74,5 +75,9 @@ class LottoRecord extends BaseModel
         $params = array_fill(0, $count, $lottoTime->formatByType($this->created_at));
         $link = vsprintf($slugDate, $params);
         return implode('/', [$prefix, $link]);
+    }
+    public function headTail()
+    {
+        return new HeadTail($this->lottoResultDetails);
     }
 }

@@ -24,9 +24,14 @@ class Support
     {
         return $date->format($format);
     }
-    public static function getDayOfWeek($date)
+    public static function getDayOfWeek($date, $forceDate = -1)
     {
-        $dow = $date->dayOfWeek;
+        if ($forceDate < 0) {
+            $dow = $date->dayOfWeek;
+        } else {
+            $dow = $forceDate;
+        }
+
         switch ($dow) {
             case 0:
                 return 'Chủ Nhật';
@@ -41,6 +46,31 @@ class Support
             case 5:
                 return 'Thứ 6';
             case 6:
+                return 'Thứ 7';
+        }
+    }
+    public static function getLottoDayOfWeek($date, $forceDate = -1)
+    {
+        if ($forceDate < 0) {
+            $dow = $date->dayOfWeek;
+        } else {
+            $dow = $forceDate;
+        }
+
+        switch ($dow) {
+            case 8:
+                return 'Chủ Nhật';
+            case 2:
+                return 'Thứ 2';
+            case 3:
+                return 'Thứ 3';
+            case 4:
+                return 'Thứ 4';
+            case 5:
+                return 'Thứ 5';
+            case 6:
+                return 'Thứ 6';
+            case 7:
                 return 'Thứ 7';
         }
     }

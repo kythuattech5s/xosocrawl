@@ -1,3 +1,4 @@
+<div data-id="kq" class="one-city" data-region="1">
 <table class="kqmb extendable">
     <tbody>
        <tr>
@@ -17,3 +18,26 @@
        @endforeach
     </tbody>
  </table>
+ <div class="control-panel">
+   <form class="digits-form">
+      <label class="radio" data-value="0">
+      <input type="radio" name="showed-digits" value="0">
+      <b></b>
+      <span></span>
+      </label>
+      <label class="radio" data-value="2">
+      <input type="radio" name="showed-digits" value="2">
+      <b></b><span></span>
+      </label>
+      <label class="radio" data-value="3">
+      <input type="radio" name="showed-digits" value="3">
+      <b></b><span></span>
+      </label>
+   </form>
+   <div class="buttons-wrapper">
+      <span class="zoom-in-button"><i class="icon zoom-in-icon"></i>
+      <span></span>
+      </span>
+   </div>
+</div>
+</div>

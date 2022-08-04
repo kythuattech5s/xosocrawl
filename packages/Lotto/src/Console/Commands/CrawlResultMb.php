@@ -3,6 +3,7 @@
 namespace Lotto\Console\Commands;
 
 use Illuminate\Console\Command;
+use Lotto\Enums\CrawlStatus;
 use Lotto\Models\LottoItem;
 use Lotto\Models\LottoRecord;
 use Lotto\Processors\XoSoMienBac;
@@ -38,7 +39,7 @@ class CrawlResultMb extends Command
      *
      * @return int
      */
-    protected $year = 2001;
+    protected $year = 2021;
     public function handle()
     {
         $lottoItem = LottoItem::find($this->argument('id'));
@@ -48,10 +49,14 @@ class CrawlResultMb extends Command
         $this->info('Start');
         foreach ($dates as $date) {
             $this->info($date);
+            $record = LottoRecord::getRecordByDate($lottoItem, $date);
+            if ($record && $record->status == CrawlStatus::SUCCESS) {
+                continue;
+            }
+
             $xsmb->setDateCrawl($date);
             $result = $xsmb->parseTableResult();
 
-            $record = LottoRecord::getRecordByDate($lottoItem, $date);
             $record->description = $result->getDescription();
             $record->status = $result->getStatus();
             $record->crawl_response = $result->getNote();
