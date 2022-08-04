@@ -4,6 +4,8 @@ use App\Http\Controllers\Controller;
 use App\Models\DreamNumberDecoding;
 use App\Models\Page;
 use App\Models\PredictLotteryResultCategory;
+use App\Models\TestSpin;
+use App\Models\TestSpinCategory;
 use DB;
 use Cache;
 
@@ -21,6 +23,9 @@ class PageController extends Controller
         }
         if ($currentItem->layout_show == 'all_predict_the_outcome') {
             return $this->viewPageAllRredictTheOutCome($request,$currentItem);
+        }
+        if ($currentItem->layout_show == 'all_spin_test') {
+            return $this->viewPageAllSpinTest($request,$currentItem);
         }
         return view('pages.'.$currentItem->layout_show, compact('currentItem'));
     }
@@ -58,5 +63,18 @@ class PageController extends Controller
         }
         $listItems = $arrDb[$totalCate-1]->orderBy('RowNo')->paginate(10);
         return view('pages.'.$currentItem->layout_show, compact('currentItem','listItems'));
+    }
+    public function viewPageAllSpinTest($request,$currentItem)
+    {
+        $listItemTestSpinCategory = TestSpinCategory::act()->get();
+        $activeCate = TestSpinCategory::find(1);
+        $listActiveTestSpinToday = $activeCate->testSpin()
+                                                ->whereRaw('FIND_IN_SET(?, day_of_week)', [now()->dayOfWeek])
+                                                ->get();
+        $listItems = $activeCate->testSpin()
+                                ->act()
+                                ->get();
+        $dataTestSpin = TestSpin::buildDataSpinCate($activeCate,$listActiveTestSpinToday);
+        return view('pages.'.$currentItem->layout_show, compact('currentItem','listItemTestSpinCategory','listActiveTestSpinToday','listItems','dataTestSpin','activeCate'));
     }
 }

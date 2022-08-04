@@ -1,3 +1,50 @@
 a.item_sublink{
     padding: 0.25rem 1rem;
 }
+.login-button {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.login-button img {
+    display: block;
+}
+
+.login-button.login-fb img {
+    width: 20px;
+    margin: 8px
+}
+
+.login-button.login-gg img {
+    width: 34px;
+}
+
+.login-fb {
+    background-color: #1877f2;
+    border: none
+}
+
+.login-fb .solid,
+.login-gg .solid {
+    display: inline-block;
+    vertical-align: middle;
+
+}
+
+.login-fb .text {
+    color: #fff
+}
+
+.login-gg .text {
+    color: #6f6f6f
+}
+
+.login-fb .text,
+.login-gg .text {
+    display: inline-block;
+    white-space: nowrap;
+    vertical-align: middle;
+    padding-right: 1rem;
+    border-radius: 4px;
+    font-weight: bold;
+}

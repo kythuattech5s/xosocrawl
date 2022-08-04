@@ -7,8 +7,9 @@
 	<meta name="csrf-token" content="{{ csrf_token() }}">
 	{!! SEOHelper::HEADER_SEO(@$currentItem ? $currentItem : null) !!}
 	@yield('cssl')
-	<link rel="stylesheet" href="theme/frontend/css/style.css">
-	<link rel="stylesheet" href="theme/frontend/css/add.css">
+	<link rel="stylesheet" href="{{Support::asset('theme/frontend/css/toastify.css')}}">
+	<link rel="stylesheet" href="{{Support::asset('theme/frontend/css/style.css')}}">
+	<link rel="stylesheet" href="{{Support::asset('theme/frontend/css/add.css')}}">
 	@yield('css')
 	<script type="text/javascript">
         var showNotify = "";
@@ -17,7 +18,6 @@
 	</script>
 	{[CMS_HEADER]}
 </head>
-
 <body>
 	{[CMS_BODY]}
 	@include('header')
@@ -36,29 +36,11 @@
 	</section>
 	@include('footer')
 	{[CMS_FOOTER]}
+	@include('facebook_base')
 	@yield('jsl')
-	<div id="fb-root"></div>
-	<script async defer crossorigin="anonymous" src="https://connect.facebook.net/vi_VN/sdk.js#xfbml=1&version=v14.0&appId=480194903000973&autoLogAppEvents=1" nonce="AaViEngJ"></script>
-	<script>
-		function showmnc2(id_mnu2) {
-			if (document.getElementById(id_mnu2).style.visibility == 'visible') {
-				document.getElementById(id_mnu2).style.visibility = 'hidden';
-			} else {
-				document.getElementById(id_mnu2).style.visibility = 'visible';
-			}
-		}
-		function showDrawerMenu() {
-			document.querySelector('html').classList.toggle('menu-active');
-			showmnc2("nav-horizontal");
-		}
-		expand = function(itemId) {
-			Array.from(document.getElementsByClassName('menu-c2')).forEach((e, i) => {
-				if (e.id != itemId) e.style.display = 'none'
-			});
-			elm = document.getElementById(itemId);
-			elm.style.display = elm.style.display == 'block' ? 'none' : 'block'
-		}
-	</script>
+	<script src="theme/frontend/js/toastify.js" defer></script>
+	<script src="theme/frontend/js/base.js" defer></script>
+	<script src="theme/frontend/js/xhr.js" defer></script>
 	@yield('js')
 </body>
 </html>

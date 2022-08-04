@@ -52,28 +52,6 @@
             </tr>
         </tbody>
     </table>
-    <div class="control-panel">
-        <form class="digits-form">
-            <label class="radio" data-value="0">
-            <input type="radio" name="showed-digits" checked value="0">
-            <b></b>
-            <span></span>
-            </label>
-            <label class="radio" data-value="2">
-            <input type="radio" name="showed-digits" value="2">
-            <b></b><span></span>
-            </label>
-            <label class="radio" data-value="3">
-            <input type="radio" name="showed-digits" value="3">
-            <b></b><span></span>
-            </label>
-        </form>
-        <div class="buttons-wrapper">
-            <span class="zoom-in-button"><i class="icon zoom-in-icon"></i>
-            <span></span>
-            </span>
-        </div>
-    </div>
 </div>
 <div data-id="dd" class="col-firstlast">
     <table class="firstlast-mb fl">

@@ -1,33 +1,33 @@
 @extends('index')
 @section('breadcrumb')
-    {{Breadcrumbs::render('test_spin_categories', $currentItem)}}
+    {{Breadcrumbs::render('page', $currentItem)}}
 @endsection
 @section('main')
 <div class="box quay-thu">
     <ul class="tab-panel tab-auto">
         @foreach ($listItemTestSpinCategory as $item)
-            <li class="{{$item->id == $currentItem->id ? 'active':''}}">
+            <li class="{{$item->id == $activeCate->id ? 'active':''}}">
                 <a href="{{Support::show($item,'slug')}}" title="{{Support::show($item,'short_name')}}">{{Support::show($item,'short_name')}}</a>
             </li>
         @endforeach
     </ul>
     <div class="tit-mien clearfix">
         <h2>
-            @if ($currentItem->id == 1)
-                Quay thử {{Support::show($currentItem,'main_area_name')}} ngày {{now()->format('d-m-Y')}}
+            @if ($activeCate->id == 1)
+                Quay thử {{Support::show($activeCate,'main_area_name')}} ngày {{now()->format('d-m-Y')}}
             @else
-                Quay thử {{Support::show($currentItem,'main_area_name')}} ngày {{now()->format('d-m-Y')}}
+                Quay thử {{Support::show($activeCate,'main_area_name')}} ngày {{now()->format('d-m-Y')}}
             @endif
         </h2>
     </div>
     <div class="box" id="trial-box">
         <div class="txt-center bg-orange">
-            <form id="trial_form" class="form-horizontal" action="{{Support::show($currentItem,'slug')}}" method="post" accept-charset="utf8">
+            <form id="trial_form" class="form-horizontal" action="{{Support::show($activeCate,'slug')}}" method="post" accept-charset="utf8">
                 @csrf
                 <div class="form-group">
                     <select id="province_name" name="province_name" onchange="document.getElementById('trial_form').submit();">
                         <option value="">Chọn đài quay thử</option>
-                        @if ($currentItem->id == 1)
+                        @if ($activeCate->id == 1)
                             <option value="mien-bac" selected>Miền Bắc</option>
                         @endif
                         @foreach ($listItems as $item)
@@ -49,24 +49,23 @@
                 </div>
             </form>
         </div>
-        @if ($currentItem->id == 1)
+        @if ($activeCate->id == 1)
             @include('test_spins.result_box_single_mb')
         @else
             @include('test_spins.result_box_multi_mn',['listActiveTestSpinToday'=>$listActiveTestSpinToday])
         @endif
         <div class="clearfix"></div>
         @php
-            $listSeeMoreLink = Support::extractJson($currentItem->see_more_link);
+            $listSeeMoreLink = Support::extractJson($activeCate->see_more_link);
         @endphp
         @if (count($listSeeMoreLink) > 0)
             <div class="see-more">
                 <div class="bold see-more-title">⇒ Ngoài ra bạn có thể xem thêm:</div>
                 <ul class="list-html-link two-column">
-                    @foreach ($listSeeMoreLink as $itemSeeMoreLink)
-                        <li>{{Support::show($itemSeeMoreLink,'name')}} 
-                            <a href="{{Support::show($itemSeeMoreLink,'link')}}">{{Support::show($itemSeeMoreLink,'title')}}</a>
-                        </li>
-                    @endforeach
+                    <li>Xem thêm <a href="/">kết quả xổ số 3 miền</a></li>
+                    <li>Xem thêm <a href="du-doan-ket-qua-xo-so-kqxs-c229">dự đoán xổ số 3 miền</a></li>
+                    <li>Xem thêm <a href="quay-thu-xsmn-quay-thu-xo-so-mien-nam">quay thử XSMN</a></li>
+                    <li>Xem thêm <a href="quay-thu-xsmt-quay-thu-xo-so-mien-trung">quay thử XSMT</a></li>
                 </ul>
             </div>
         @endif
@@ -86,7 +85,7 @@
 </div>
 <div class="box">
     <h3 class="tit-mien"><strong>Thảo luận</strong></h3>
-    <div id="comment" class="fb-comments" data-href="{{url()->to($currentItem->slug)}}" data-width="100%" data-numposts="5"></div>
+    <div id="comment" class="fb-comments" data-href="{{url()->to($activeCate->slug)}}" data-width="100%" data-numposts="5"></div>
 </div>
 @endsection
 @section('jsl')

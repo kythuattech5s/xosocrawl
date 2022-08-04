@@ -32,5 +32,6 @@ Route::group([
     Route::get('convert-thu-cong-du-lieu-crawl', 'HomeController@convertThuCongDuLieuCrawl');
     Route::get('cronimg', array('uses' => 'CronImgController@convertImg'));
     Route::get('cronmail', 'CronMailController@cronmail');
+    Route::match(['get', 'post'], '/thong-tin-thanh-vien-c{id}', array('uses' => 'HomeController@test'))->where('id', '^((?!esystem)[0-9\?\.\-/])*$');
     Route::match(['get', 'post'], '/{link}', array('uses' => 'HomeController@direction'))->where('link', '^((?!esystem)[0-9a-zA-Z\?\.\-/])*$');
 });

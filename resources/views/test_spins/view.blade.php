@@ -17,9 +17,9 @@
         </h2>
     </div>
     <div class="box" id="trial-box">
-        <div class="txt-center  bg-orange">
-            <form id="trial_form" class="form-horizontal" action="/quay-thu-xsgl-quay-thu-xo-so-gia-lai.html" method="post">
-                <input type="hidden" name="_csrf" value="cIqXH4daHOyda1E3REBmUEztOogBU6iQuUVbJoJwo7oZw_sr3S1OqawtZgInJypnJ6d73TMpkKiLcC5z7kja7g=="> 
+        <div class="txt-center bg-orange">
+            <form id="trial_form" class="form-horizontal" action="{{Support::show($currentItem,'slug')}}" method="post">
+                @csrf
                 <div class="form-group">
                     <select id="province_name" name="province_name" onchange="document.getElementById('trial_form').submit();">
                         <option value="">Chọn đài quay thử</option>
@@ -45,7 +45,12 @@
                 </div>
             </form>
         </div>
-        
+        @if ($currentItem->category->id == 1)
+            @include('test_spins.result_box_single_mb')
+        @else
+            @include('test_spins.result_box_single_mn')
+        @endif
+        <div class="clearfix"></div>
     </div>
 </div>
 @include('test_spins.lucky_box')
@@ -64,4 +69,20 @@
     <h3 class="tit-mien"><strong>Thảo luận</strong></h3>
     <div id="comment" class="fb-comments" data-href="{{url()->to($currentItem->slug)}}" data-width="100%" data-numposts="5"></div>
 </div>
+@endsection
+@section('jsl')
+    <script type="text/javascript" src="{{ Support::asset('theme/frontend/js/jquery.3.4.1.min.js') }}"></script>
+@endsection
+@section('js')
+    <script type="text/javascript" src="{{ Support::asset('theme/frontend/js/test_spin.js') }}"></script>
+    <script>
+        xsmn.refreshCtrlPanel(document.querySelector("#trial-box" + " [data-id='kq'] table"));
+        document.querySelectorAll(".trial-button").forEach(item => item.addEventListener('click', () =>
+        {
+            xsmn.startTrialRolling("#trial-box",JSON.parse('{!!$dataTestSpin!!}'), item.getAttribute('data-interval'));
+            document.getElementById('lottery-sound').play();
+            }               
+        ));
+    </script>
+    <audio id="lottery-sound"><source src="theme/frontend/audio/xo-so-mien-bac.mp3" type="audio/mpeg"></audio>
 @endsection

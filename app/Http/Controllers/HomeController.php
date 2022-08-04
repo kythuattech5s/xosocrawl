@@ -16,7 +16,7 @@ class HomeController extends Controller
     {
         $lang = \App::getLocale();
         $link = \FCHelper::getSegment($request, 1);
-        $route = \DB::table('v_routes')->select('*')->where($lang.'_link', $link)->first();
+        $route = \vanhenry\manager\model\VRoute::select('*')->where($lang.'_link', $link)->first();
         if ($route == null) {
             abort(404);
         }
@@ -28,7 +28,7 @@ class HomeController extends Controller
     public function convertThuCongDuLieuCrawl()
     {
         $baseCrawler = new BaseCrawler;
-        $pages = Page::whereIn('layout_show',['dream_number_decodings','all_predict_the_outcome'])->where('convert_contented',0)->get();
+        $pages = Page::whereIn('layout_show',['dream_number_decodings','all_predict_the_outcome','all_spin_test'])->where('convert_contented',0)->get();
         foreach ($pages as $page) {
             $page->content = $baseCrawler->convertContent(str_get_html($page->content));
             $page->seo_title = $baseCrawler->clearContent($page->seo_title);

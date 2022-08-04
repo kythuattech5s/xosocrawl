@@ -2,17 +2,12 @@
 
 namespace App\Http\Controllers\Auth;
 
-use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
-use App\Events\ConfirmDataSuccess;
-use App\Events\RegisterSuccess;
 use App\Models\User;
-use Session;
 use Support;
-use VRoute;
 use Auth;
 
 class RegisterController extends Controller
@@ -72,25 +67,18 @@ class RegisterController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'username' => ['required'],
-            'name' => ['required'],
-            'phone' => ['required','unique:users'],
             'email' => ['required','email','unique:users'],
             'password' => ['required', 'min:8', 'confirmed'],
-            'class_study_id' => ['required']
         ], [
             'required' => 'Vui lòng chọn hoặc nhập :attribute',
             'min' => ':attribute tối thiểu :min kí tự',
-            'unique' => ':attribute đã tồn tại trong hệ thống',
+            'unique' => ':attribute đã được sử dụng',
             'confirmed' => 'Mật khẩu và mật xác nhận lại phải giống nhau'
         ], [
-            'username' => 'Tên đăng nhập',
             'password' => 'Mật khẩu',
-            'phone' => 'Số điện thoại',
             'name' => 'Họ và tên bé',
             'email' => 'Email',
             'password_confirmation' => 'Mật khẩu xác nhận',
-            'class_study_id' => "Khối/Lớp"
         ]);
     }
     public function register($request)
@@ -100,46 +88,47 @@ class RegisterController extends Controller
             return response()->json([
                 'code' => 100,
                 'message' => $validator->errors()->first(),
-                'redirect' => url()->previous()
             ]);
         }
 
-        $username = $request->username;
-        $user = $this->checkUser('username', $username);
+        $email = $request->email;
+        $user = $this->checkUser('email', $email);
 
         if(is_array($user)){
             return response($user);
         }
 
         $user = $this->createUser($request->all());
-
-        Auth::login($user);
-
+        $code = \Str::random(6);
+        $user->token = Hash::make($code);
+        $user->save();
+        event('sendmail.register_success', [[
+            'title' => 'Tạo tài khoàn thành công và mã xác nhận kích hoạt tài khoản',
+            'data' => [
+                'link' => url('kich-hoat-tai-khoan') . "?token=$code&email=$user->email",
+                'user' => $user,
+            ],
+            'email' => $user->email,
+            'type' => 'user_create',
+        ]]);
         return response()->json([
             'code' => 200,
-            'message' => trans("fdb::register_acc_success"),
-            'redirect_url' => url(\VRoute::get('profile'))
+            'message' => 'Đăng ký thành công.',
+            'redirect_url' => 'dang-ky-thanh-cong'
         ]);
     }
     protected function createUser($data){
         $user = new User;
-        $user->username = $data['username'];
+        $user->email = $data['email'];
         $user->password = Hash::make($data['password']);
-        $user->class_study_id = isset($data['class_study_id']) ? (int)$data['class_study_id']:0;
-        $user->province_id = isset($data['province_id']) ? (int)$data['province_id']:0;
-        $user->district_id = isset($data['district_id']) ? (int)$data['district_id']:0;
-        $user->name = isset($data['name']) ? $data['name']:'';
-        $user->phone = isset($data['phone']) ? $data['phone']:'';
-        $user->email = isset($data['email']) ? $data['email']:'';
-        $user->gender_id = isset($data['gender']) ? (int)$data['gender']:0;
-        if ($user->gender_id == 1) {
-            $user->img = \SettingHelper::getSetting('nam_avatar_default');
-        }
-        if ($user->gender_id == 2) {
-            $user->img = \SettingHelper::getSetting('nu_avatar_default');
-        }
+        $user->lastname = $data['lastname'];
+        $user->firstname = $data['firstname'];
+        $user->act = 0;
+        $user->banned = 0;
         $user->created_at = now();
         $user->updated_at = now();
+        $user->save();
+        $user->img = isset(request()->image_file) ? Support::uploadImg('image_file','users/'.$user->id.'/avatar',false):'';
         $user->save();
         return $user;
     }
@@ -149,8 +138,32 @@ class RegisterController extends Controller
         if($user !== null){
             return [
                 'code' => 100,
-                'message' => 'Tên đăng nhập đã tồn tại. Vui lòng chọn tên đăng nhập khác.'
+                'message' => 'Email đã được sử dụng.'
             ];
         }
+    }
+    public function registerSuccess ($request,$route)
+    {
+        $currentItem = $route;
+        return view('auth.register_success',compact('currentItem'));
+    }
+    public function activeUser($request)
+    {
+        if (!$request->input('token', false) || !$request->input('email', false)) {
+            return redirect()->to('/')->with('messageNotify', 'Dữ liệu không hợp lệ')->with('typeNotify', 100);
+        }
+        $user = User::where('email', $request->input('email'))->first();
+        if ($user->act == 1) {
+            return redirect()->to('/')->with('messageNotify', 'Tài khoản đã được kích hoạt rồi')->with('typeNotify', 200);
+        }
+        if ($user == null) {
+            return redirect()->to('/')->with('messageNotify', 'Email không tồn tại')->with('typeNotify', 100);
+        }
+        if (!Hash::check($request->input('token'), $user->token)) {
+            return redirect()->to('/')->with('messageNotify', 'Mã xác nhận không hợp lệ')->with('typeNotify', 100);
+        }
+        $user->act = 1;
+        $user->save();
+        return redirect()->to('dang-nhap')->with('messageNotify', 'Kích hoạt tài khoản thành công vui lòng đăng nhập')->with('typeNotify', 200);
     }
 }

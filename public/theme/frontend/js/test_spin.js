@@ -1638,6 +1638,108 @@ xsmn.drawProvinceById = function (t) {
     xsmn._showNumber(n.find(".v-g7"), e[7]),
         xsmn._showNumber(n.find(".v-g8"), e[8]);
 };
+xsmn.drawRegionById = function (t) {
+    var e = $(xsmn.updateBlock + " [data-id='kq']"),
+        n = Object.keys(t).length;
+    Object.keys(xsmn.intervals).forEach(function (t, e) {
+        clearInterval(xsmn.intervals[t]);
+    });
+    for (var o = 0; o < n; o++) {
+        for (
+            t[o].lotData = xsmn.getLastValProvince(t[o].lotData),
+                xsmn._showNumber(e.find(".v-g8").eq(o), t[o].lotData[8]),
+                xsmn._showNumber(e.find(".v-g7").eq(o), t[o].lotData[7]),
+                j = 0;
+            j < t[o].lotData[6].length;
+            j++
+        )
+            xsmn._showNumber(e.find(".v-g6-" + j).eq(o), t[o].lotData[6][j]);
+        for (
+            xsmn._showNumber(e.find(".v-g5").eq(o), t[o].lotData[5]), j = 0;
+            j < t[o].lotData[4].length;
+            j++
+        )
+            xsmn._showNumber(e.find(".v-g4-" + j).eq(o), t[o].lotData[4][j]);
+        for (j = 0; j < t[o].lotData[3].length; j++)
+            xsmn._showNumber(e.find(".v-g3-" + j).eq(o), t[o].lotData[3][j]);
+        xsmn._showNumber(e.find(".v-g2").eq(o), t[o].lotData[2]),
+            xsmn._showNumber(e.find(".v-g1").eq(o), t[o].lotData[1]),
+            xsmn._showNumber(e.find(".v-gdb").eq(o), t[o].lotData.DB);
+    }
+};
+xsmn.getLastValProvince = function (t) {
+    for (var e = "", n = 8; n > 0; n--)
+        t[n].forEach(function (t) {
+            e = "" != t ? t : e;
+        });
+    if ("" == (e = "" != t.DB ? t.DB : e)) return t;
+    var o = {};
+    t.DB == e
+        ? ((o.DB = ['<span class="cl-red">' + t.DB + "</span>"]), (e = ""))
+        : (o.DB = t.DB);
+    for (n = 1; n < 9; n++)
+        (o[n] = []),
+            t[n].forEach(function (t) {
+                t.trim() == e.trim() &&
+                    (t = '<span class="cl-red">' + t + "</span>"),
+                    o[n].push(t);
+            });
+    return o;
+};
+xsmn.getLastValMb = function (t) {
+    for (var e = "", n = 1; n < 8; n++)
+        t[n].forEach(function (t) {
+            e = "" != t ? t : e;
+        });
+    if ("" == (e = "" != t.DB ? t.DB : e)) return t;
+    var o = {};
+    t.DB == e
+        ? ((o.DB = ['<span class="cl-red">' + t.DB + "</span>"]), (e = ""))
+        : (o.DB = t.DB),
+        t.hasOwnProperty("MaDb") && (o.MaDb = t.MaDb);
+    for (n = 7; n > 0; n--)
+        (o[n] = []),
+            t[n].forEach(function (t) {
+                t.trim() == e.trim() &&
+                    (t = '<span class="clnote">' + t + "</span>"),
+                    o[n].push(t);
+            });
+    return o;
+};
+xsmn.drawRegionLotoById = function (t, e) {
+    var n = Object.keys(t).length,
+        o = $(xsmn.updateBlock + " [data-id='dd']");
+    t.forEach(function (t) {
+        var n = [],
+            o = [],
+            a = 0;
+        for (a = 0; a < 10; a++) (n[a + ""] = []), (o[a + ""] = []);
+        for (var i in t.lotData)
+            t.lotData.hasOwnProperty(i) &&
+                t.lotData[i].forEach(function (t) {
+                    let a = t.replace(/\D+/g, "");
+                    a >= 2 &&
+                        (n[a.slice(-2, -1)].push(
+                            2 == e ? a.slice(-2) : a.slice(-1)
+                        ),
+                        o[a.slice(-1)].push(
+                            2 == e ? a.slice(-2) : a.slice(-2, -1)
+                        ));
+                });
+        (t.dau = n), (t.duoi = o);
+    });
+    for (var a = 0; a < 10; a++)
+        for (j = 0; j < n; j++) {
+            var i = "";
+            t[j].dau[a].forEach(function (t) {
+                i += "," + t;
+            }),
+                o
+                    .find(".v-loto-dau-" + a)
+                    .eq(j)
+                    .html("" != i ? i.substring(1) : "");
+        }
+};
 $(document).ready(function () {
     $(".submitmm").on("click", () => xsCommon.mayManBox());
     $(".xemlai").on("click", () => xsCommon.mayManLai());

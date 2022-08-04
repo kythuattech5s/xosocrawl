@@ -57,6 +57,20 @@ class LoginController extends Controller
         }
     }
 
+    protected function validator(array $data)
+    {
+        return Validator::make($data, [
+            'email' => ['required','email'],
+            'password' => ['required'],
+        ], [
+            'required' => 'Vui lòng nhập :attribute',
+            'email' => 'Vui lòng nhập :attribute đúng định dạng.',
+        ], [
+            'email' => 'Email',
+            'password' => 'Mật khẩu'
+        ]);
+    }
+
     public function login($request)
     {
         $validator = $this->validator($request->all());
@@ -64,21 +78,20 @@ class LoginController extends Controller
         if ($validator->fails()) {
             return \Support::response([
                 'code' => 100,
-                'message' => $validator->errors(),
+                'message' => $validator->errors()->first(),
             ]);
         }
 
-        $username = $request->username;
-        $user = $this->checkUser('username',$username);
+        $email = $request->email;
+        $user = $this->checkUser('email',$email);
         if(is_array($user)){
             return response($user);
         }
-
-        $credentials = ['username' => $username, 'password'=>$request->password];
+        $credentials = ['email' => $email, 'password'=>$request->password];
         if (Auth::attempt($credentials, $request->remember)) {
             return $this->authenticated();
         }
-        return $this->sendFailedLoginResponse('username',$request);
+        return $this->sendFailedLoginResponse('email',$request);
     }
 
     protected function sendFailedLoginResponse($field, $request)
@@ -86,56 +99,51 @@ class LoginController extends Controller
         $message = $this->checkError($field,$request);
         return response()->json([
             'code' => 100,
-            'message' => $message,
-            'redirect' => url()->previous()
+            'message' => $message
         ]);
     }
 
     protected function checkError($field,$request)
     {
-        $user = \App\Models\User::where($field, $request->username)->where('act', 1)->first();
-        if(!Hash::check($user->password, $request->password)){
-            return 'Mật khẩu đăng nhập không chính xác';
-        }
+        return 'Tài khoản hoặc Mật khẩu đăng nhập không chính xác';
     }
 
-    protected function checkUser($field, $username){
-        $user = User::where($field, $username)->first();
+    protected function checkUser($field, $value){
+        $user = User::where($field, $value)->first();
         if($user == null){
             return [
                 'code' => 100,
                 'message' => 'Tài khoản không tồn tại vui lòng đăng ký'
             ];
         }
-
+        if(!Hash::check(request()->password,$user->password)){
+            return [
+                'code' => 100,
+                'message' => 'Tài khoản hoặc mật khẩu không chính xác'
+            ];
+        }
         if($user->act == 0){
             return [
                 'code' => 100,
-                'message' => 'Tài khoản đã bị khóa vui lòng liên hệ với quản trị viên'
+                'message' => 'Tài khoản chưa được kích hoạt'
+            ];
+        }
+        if($user->banned == 1){
+            return [
+                'code' => 100,
+                'message' => 'Tài khoản đã bị cấm'
             ];
         }
     }
-
-    protected function validator(array $data)
-    {
-        return Validator::make($data, [
-            'username' => ['required'],
-            'password' => ['required'],
-        ], [
-            'required' => 'Vui lòng nhập :attribute',
-        ], [
-            'password' => 'Vui lòng nhập mật khẩu',
-            'username' => 'Vui lòng nhập tên đăng nhập'
-        ]);
-    }
-
     protected function authenticated()
     {
-
+        $user = Auth::user();
+        $user->last_active_time = now();
+        $user->save();
         return response()->json([
             'code' => 200,
             'message' => 'Đăng nhập thành công',
-            'redirect_url' => url()->to('/')
+            'redirect_url' => url()->to('dien-dan-xo-so')
         ]);
     }
 

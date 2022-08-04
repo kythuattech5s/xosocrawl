@@ -1,15 +1,23 @@
 <?php
 namespace App\Listeners;
+
+use App\Models\QueueEmail;
+
 class ManagerSubscribe
 {
     public function subscribe($events)
     {
-        $events->listen('notification.user', function($data,$type,$user){
-            $this->sendNotificationUser($data,$type,$user);
+        $events->listen('sendmail.register_success', function($data){
+            $mail = new QueueEmail();
+            $mail->title = $data['title'];
+            $mail->content = view('mail_templates.' . $data['type'], $data['data'] ?? [])->render();
+            $mail->from = config('mail.from.name');
+            $mail->to = $data['email'];
+            $mail->status = 0;
+            $mail->is_sms = $data['isSms'] ?? null;
+            $mail->bcc = null;
+            $mail->cc = null;
+            $mail->save();
         });
-    }
-
-    public function sendNotificationUser($data,$type,$user){
-        $user->sendNotification($data,$type);
     }
 }

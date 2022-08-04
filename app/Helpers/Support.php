@@ -80,10 +80,10 @@ class Support
         } else {
             $image = $images;
         }
-        $uploadRootDir = 'public/uploads';
+        $uploadRootDir = 'uploads';
         $uploadDir = $saveFrom;
         $pathRelative = $uploadRootDir . '/' . $uploadDir . '/';
-        $pathAbsolute = base_path($pathRelative);
+        $pathAbsolute = public_path($pathRelative);
         $dirs = explode('/', $uploadDir);
         $parentId = 0;
         foreach ($dirs as $item) {
@@ -100,14 +100,12 @@ class Support
             $fileName = $image->getClientOriginalName();
         }
         $img_id = Media::insertImageMedia($uploadRootDir, $pathAbsolute, $pathRelative, $fileName, $parentId);
-
         // Thêm vào bảng cron
         \DB::table('custom_media_images')->insert([
             'name' => $pathRelative . $fileName,
             'media_id' => $img_id,
             'act' => 0,
         ]);
-
         return Media::img($img_id);
     }
 
@@ -216,5 +214,22 @@ class Support
             return 0;
         }
         return number_format($number, 0, $stringFormat, $stringChange);
+    }
+    public static function json(array $arr, int $status = -1)
+    {
+        if ($status != -1) {
+            return response()->json($arr, $status);
+        }
+        return response()->json($arr);
+    }
+    public static function response(array $arr, int $status = -1)
+    {
+        if (request()->ajax()) {
+            return self::json($arr, $status);
+        } else {
+            \Session::flash('typeNotify', $arr['code'] != 200 ? 'error' : 'success');
+            \Session::flash('messageNotify', $arr['message']);
+            return (!isset($arr['redirect']) ? redirect('/') : redirect($arr['redirect']));
+        }
     }
 }
