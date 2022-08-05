@@ -21,13 +21,9 @@
                     <input type="file" id="customer-image_file" name="image_file">
                 </div>
             </div>
-            <div class="form-group field-customer-firstname">
-                <label class="control-label" for="customer-firstname">Họ</label>
-                <input type="text" id="customer-firstname" rules="required" class="form-control" name="firstname" maxlength="255">
-            </div>
-            <div class="form-group field-customer-lastname">
-                <label class="control-label" for="customer-lastname">Tên</label>
-                <input type="text" id="customer-lastname" class="form-control" name="lastname" maxlength="255">
+            <div class="form-group field-customer-fullname">
+                <label class="control-label" for="customer-fullname">Họ và tên</label>
+                <input type="text" id="customer-fullname" class="form-control" name="fullname" maxlength="255" rules="required">
             </div>
             <div class="form-group field-customer-email">
                 <label class="control-label" for="customer-email">Email</label>

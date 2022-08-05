@@ -9,21 +9,16 @@
     <div class="cont-detail paragraph" id="article-content">
         {!!Support::show($currentItem,'content')!!}
     </div>
-    {{-- <div class="box list-chot-so">
-        <h3 class="bold">Dự đoán mới nhất của các cao thủ hôm nay:</h3>
-        <div class="box-body chat-box" id="chat-box">
-            <div class="comments"></div>
-            <div class="view-more ">Xem thêm</div>
-        </div>
-        <div class="clearfix"></div>
-    </div> --}}
 </div>
-{{-- <div class="box box-news">
+<div class="box box-news">
     <h3 class="tit-mien"><strong>Diễn đàn xổ số</strong></h3>
     <ul>
-        <li><span class="ic"></span><a href="/dien-dan-xo-so.html" title="Diễn đàn xổ số">Box thảo luận</a></li>
+        <li>
+            <span class="ic"></span>
+            <a href="dien-dan-xo-so" title="Diễn đàn xổ số">Box thảo luận</a>
+        </li>
     </ul>
-</div> --}}
+</div>
 <div class="box box-news">
     <h3 class="tit-mien"><strong>Thảo luận kết quả xổ số</strong></h3>
     <div id="comment" class="fb-comments" data-href="{{url()->to($currentItem->slug)}}" data-width="100%" data-numposts="5"></div>

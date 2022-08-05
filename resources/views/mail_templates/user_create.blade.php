@@ -1,2 +1,2 @@
 <p>Xin chào {{Support::show($user,'email')}}.</p>
-<p>Bạn đã đăng ký thành công tài khoản tại {[site_name]}. Vui lòng click vào <a href="{{$link}}" style="background: #17a2b8;color: white;display: inline-block;padding: 6px 12px;border-radius: 5px;">đây</a> để kích hoạt tài khoản. </p>
+<p>Bạn đã đăng ký thành công tài khoản tại {[site_name]}. Vui lòng click vào <a href="{{$link}}" style="background: #17a2b8;color: white;display: inline-block;padding: 3px 12px;border-radius: 5px;text-decoration: none;">đây</a> để kích hoạt tài khoản. </p>

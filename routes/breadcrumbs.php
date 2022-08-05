@@ -53,3 +53,16 @@ Breadcrumbs::for('test_spin_categories', function ($trail,$currentItem) {
         $trail->push($currentItem->name, Support::show($currentItem, 'slug'));
     }
 });
+Breadcrumbs::for('user', function ($trail,$user) {
+    $trail->parent('home');
+    $trail->push('Diễn đàn sổ xố','dien-dan-xo-so');
+    $trail->push($user->fullname,'thong-tin-thanh-vien-c'.$user->id);
+});
+Breadcrumbs::for('user_sub', function ($trail,$user,$name,$slug) {
+    $trail->parent('user',$user);
+    $trail->push($name,$slug);
+});
+Breadcrumbs::for('forum', function ($trail,$currentItem) {
+    $trail->parent('home');
+    $trail->push($currentItem->name, Support::show($currentItem, 'slug'));
+});

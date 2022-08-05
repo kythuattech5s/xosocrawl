@@ -192,6 +192,12 @@ class Support
         if (file_exists($file_path)) {
             return asset($file) . '?v=' . filemtime($file_path);
         } else {
+            $context = stream_context_create( [
+                'ssl' => [
+                    'verify_peer' => false,
+                    'verify_peer_name' => false,
+                ],
+            ]);
             $path = collect(get_headers(url($file)));
 
             $path = $path->first(function ($string) {

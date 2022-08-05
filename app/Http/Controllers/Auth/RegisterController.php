@@ -67,6 +67,7 @@ class RegisterController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
+            'fullname' => ['required'],
             'email' => ['required','email','unique:users'],
             'password' => ['required', 'min:8', 'confirmed'],
         ], [
@@ -75,9 +76,9 @@ class RegisterController extends Controller
             'unique' => ':attribute đã được sử dụng',
             'confirmed' => 'Mật khẩu và mật xác nhận lại phải giống nhau'
         ], [
-            'password' => 'Mật khẩu',
-            'name' => 'Họ và tên bé',
+            'fullname' => 'Họ và tên',
             'email' => 'Email',
+            'password' => 'Mật khẩu',
             'password_confirmation' => 'Mật khẩu xác nhận',
         ]);
     }
@@ -102,7 +103,7 @@ class RegisterController extends Controller
         $code = \Str::random(6);
         $user->token = Hash::make($code);
         $user->save();
-        event('sendmail.register_success', [[
+        event('sendmail.static', [[
             'title' => 'Tạo tài khoàn thành công và mã xác nhận kích hoạt tài khoản',
             'data' => [
                 'link' => url('kich-hoat-tai-khoan') . "?token=$code&email=$user->email",
@@ -121,8 +122,7 @@ class RegisterController extends Controller
         $user = new User;
         $user->email = $data['email'];
         $user->password = Hash::make($data['password']);
-        $user->lastname = $data['lastname'];
-        $user->firstname = $data['firstname'];
+        $user->fullname = $data['fullname'];
         $user->act = 0;
         $user->banned = 0;
         $user->created_at = now();
@@ -163,6 +163,7 @@ class RegisterController extends Controller
             return redirect()->to('/')->with('messageNotify', 'Mã xác nhận không hợp lệ')->with('typeNotify', 100);
         }
         $user->act = 1;
+        $user->active_at = now();
         $user->save();
         return redirect()->to('dang-nhap')->with('messageNotify', 'Kích hoạt tài khoản thành công vui lòng đăng nhập')->with('typeNotify', 200);
     }

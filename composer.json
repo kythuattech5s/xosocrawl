@@ -50,6 +50,7 @@
             "vanhenry\\mail\\": "packages/vanhenry/mail/src",
             "vanhenry\\minify\\": "packages/vanhenry/minify/src",
             "crawlmodule\\basecrawler\\": "packages/crawlmodule/basecrawler/src",
+            "basiccomment\\comment\\": "packages/basiccomment/comment/src",
             "CustomTable\\": "packages/table_customs/src"
         }
     },

@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\PasswordReset;
 use Illuminate\Foundation\Auth\SendsPasswordResetEmails;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Password;
 
 class ForgotPasswordController extends Controller
 {
@@ -20,7 +20,8 @@ class ForgotPasswordController extends Controller
         if ($request->isMethod('post')) {
             return $this->sendResetLinkEmail($request);
         } else {
-            return view('auth.forgot_password', compact('route'));
+            $currentItem = $route;
+            return view('auth.forgot_password', compact('currentItem'));
         }
     }
 
@@ -28,28 +29,17 @@ class ForgotPasswordController extends Controller
     {
         $validator = $this->validateEmail($request);
         if ($validator->fails()) {
-            return \Support::response([
-                'code' => 100,
-                'message' => $validator->errors()->first()
-            ]);
-        }
-
-        $response = $this->broker()->sendResetLink(
-            $this->credentials($request)
-        );
-        
-        if ($response == Password::RESET_LINK_SENT) {
-            return response()->json([
-                'code' => 200,
-                'message' => 'Gửi yêu cầu lấy lại mật khẩu thành công. Hãy kiểm tra email của bạn và làm theo hướng dẫn.',
-                'redirect_url' => url('/')
-            ]);
-        } else {
             return response()->json([
                 'code' => 100,
-                'message' => trans('fdb::email_not_exists')
+                'message' => $validator->errors()->first(),
             ]);
         }
+        $token = PasswordReset::createToken($request->input('email'));
+        return response()->json([
+            'code' => 200,
+            'message' => 'Gửi yêu cầu lấy lại mật khẩu thành công. Hãy kiểm tra email của bạn và làm theo hướng dẫn.',
+            'redirect_url' => 'gui-yeu-cau-lay-lai-mat-khau-thanh-cong'
+        ]);
     }
   
     protected function validateEmail(Request $request)
@@ -57,9 +47,16 @@ class ForgotPasswordController extends Controller
         return Validator::make($request->all(), [
             'email' => ['required', 'email', 'exists:users'],
         ], [
-            'required' => trans('fdb::required').' :attribute',
-            'email' => 'email '.trans('fdb::malformed'),
-            'exists' => ':attribute '.trans('fdb::not_exist')
+            'required' => 'Vui lòng nhập :attribute',
+            'email' => 'Vui lòng nhập Email đúng định dạng',
+            'email.exists' => ':attribute không tồn tại'
+        ],[
+            'email' => 'Email'
         ]);
+    }
+    public function sendMailSuccess(Request $request,$route)
+    {
+        $currentItem = $route;
+        return view('auth.send_mail_forgot_success',compact('currentItem'));
     }
 }

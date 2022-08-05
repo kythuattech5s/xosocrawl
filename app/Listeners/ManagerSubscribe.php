@@ -7,7 +7,7 @@ class ManagerSubscribe
 {
     public function subscribe($events)
     {
-        $events->listen('sendmail.register_success', function($data){
+        $events->listen('sendmail.static', function($data){
             $mail = new QueueEmail();
             $mail->title = $data['title'];
             $mail->content = view('mail_templates.' . $data['type'], $data['data'] ?? [])->render();

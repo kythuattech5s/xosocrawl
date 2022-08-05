@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Traits\Auth\LoginSocial;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
@@ -14,6 +15,7 @@ use Hash;
 
 class LoginController extends Controller
 {
+    use LoginSocial;
     /*
     |--------------------------------------------------------------------------
     | Login Controller
@@ -31,6 +33,7 @@ class LoginController extends Controller
      *
      * @var string
      */
+    
     protected $redirectTo = RouteServiceProvider::HOME;
 
     /**
@@ -46,14 +49,14 @@ class LoginController extends Controller
     public function switchLogin($request, $route, $link)
     {
         if (Auth::check()) {
-            return \Support::response(['code'=>200,'message'=>'Bạn đang đăng nhập rồi','redirect'=>'/']);
+            return \Support::response(['code'=>200,'message'=>'Bạn đang đăng nhập rồi','redirect'=>'cap-nhat-tai-khoan']);
         }
-
         if ($request->isMethod('post')) {
             return $this->login($request);
         } else {
             Session::put('_url_intended', url()->previous());
-            return view('auth.login', compact('route', 'link'));
+            $currentItem = $route;
+            return view('auth.login', compact('currentItem'));
         }
     }
 
@@ -74,14 +77,12 @@ class LoginController extends Controller
     public function login($request)
     {
         $validator = $this->validator($request->all());
-
         if ($validator->fails()) {
             return \Support::response([
                 'code' => 100,
                 'message' => $validator->errors()->first(),
             ]);
         }
-
         $email = $request->email;
         $user = $this->checkUser('email',$email);
         if(is_array($user)){

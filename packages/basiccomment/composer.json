@@ -1,0 +1,9 @@
+{
+    "name": "basiccomment/comment",
+    "authors": [
+        {
+            "name": "basiccomment",
+        }
+    ],
+    "require": {}
+}

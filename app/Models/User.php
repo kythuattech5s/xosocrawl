@@ -3,6 +3,7 @@ namespace App\Models;
 
 use App\Notifications\ResetPasswordNotification;
 use App\Notifications\User as UserNotify;
+use FCHelper;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -24,19 +25,14 @@ class User extends Authenticatable
     {
         $this->notify(new UserNotify($data, $type, $this));
     }
-
-    public function province()
+    public function getAvatarImageSrc()
     {
-        return $this->belongsTo(Province::class,'province_id','id');
-    }
-
-    public function ward()
-    {
-        return $this->belongsTo(Ward::class,'ward_id','id');
-    }
-
-    public function district()
-    {
-        return $this->belongsTo(District::class,'district_id','id');
+        if ($this->use_image_social == 1) {
+            return $this->image_social;
+        }
+        if ($this->img != '') {
+            return FCHelper::eimg($this->img);
+        }
+        return 'theme/frontend/images/default_avatar.gif';
     }
 }

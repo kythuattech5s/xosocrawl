@@ -25,12 +25,12 @@ class ResetPasswordController extends Controller
             if ($password_reset == null) {
                 return \Support::response([
                     'code' => 100,
-                    'message' => trans("fdb::data_not_exists"),
+                    'message' => 'Yêu cầu không tồn tại hoặc đã hết thời gian',
                 ]);
             }
             if(\Hash::check($request->token,$password_reset->token)){
                 return view('auth.reset_password')->with(
-                    ['token' => $request->token, 'email' => $request->email, 'route' => $route]
+                    ['token' => $request->token, 'email' => $request->email, 'currentItem' => $route]
                 );
             }else{
                 return redirect(url('/'));
@@ -55,23 +55,22 @@ class ResetPasswordController extends Controller
         );
 
         if ($response == Password::PASSWORD_RESET) {
-            \Support::flash(200,trans("fdb::reset_pass_success"));
             return response()->json([
                 'code' => 200,
-                'message' => 'Thay đổi mật khẩu thành công mời bạn đăng nhập',
-                'redirect_url' => url('/')
+                'message' => 'Thay đổi mật khẩu thành công.',
+                'redirect_url' => url('cap-nhat-tai-khoan')
             ]);
         }
         else{
             if ($response == 'passwords.token') {
                 return response()->json([
                     'code' => 101,
-                    'message' => trans('fdb::token_invalid')
+                    'message' => 'Yêu cầu không hợp lệ'
                 ]);
             }
             return response()->json([
                 'code' => 102,
-                'message' => trans('fdb::fail')
+                'message' => 'Thất bại'
             ]);
         }
     }
@@ -82,12 +81,11 @@ class ResetPasswordController extends Controller
             'token' => 'required',
             'password' => 'required|confirmed|min:8',
         ], [
-            'required' => trans('fdb::required').' :attribute',
-            'email' => 'email '.trans('fdb::malformed'),
-            'confirmed' => trans('fdb::confirmed'),
-            'min' => ':attribute '.trans('fdb::content_min').' :min',
+            'required' => 'Vui lòng nhập :attribute',
+            'confirmed' => 'Mật khẩu và mật khẩu xác nhận phải giống nhau',
+            'min' => ':attribute tối thiểu :min kí tự',
         ], [
-            'password' => trans('fdb::password'),
+            'password' => 'Mật khẩu',
         ]);
     }
 }

@@ -95,7 +95,7 @@ class MailHelper
 	}
 
 	public function setFromEmail(){
-		$this->from_email = \SettingHelper::getSetting('mail_from_address') ?? 'CSKH.nhatquangshop@gmail.com';
+		$this->from_email = \SettingHelper::getSetting('mail_from_address') ?? '';
 		return $this;
 	}
 }
