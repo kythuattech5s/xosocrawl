@@ -1455,25 +1455,25 @@ table th {
 }
 
 @media (max-width:1023px) {
-  .dsp-mobile {
+  .dsp-mobile,.dsp-mb {
     display: block
   }
 }
 
 @media (min-width:1024px) {
-  .dsp-mobile {
+  .dsp-mobile,.dsp-mb {
     display: none
   }
 }
 
 @media (max-width:1023px) {
-  .dsp-desktop {
+  .dsp-desktop, .dsp-dk {
     display: none
   }
 }
 
 @media (min-width:1024px) {
-  .dsp-desktop {
+  .dsp-desktop, .dsp-dk {
     display: block
   }
 }

@@ -30,6 +30,7 @@ class LottoServiceProvider extends ServiceProvider
         if ($this->app->runningInConsole()) {
             $this->loadCommands();
         }
+        $this->loadRoutes();
     }
     protected function loadCommands()
     {
@@ -64,5 +65,9 @@ class LottoServiceProvider extends ServiceProvider
                 });
             }
         }
+    }
+    public function loadRoutes()
+    {
+        $this->loadRoutesFrom(__DIR__ . '/../routes/web.php');
     }
 }

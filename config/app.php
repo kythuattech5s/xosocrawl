@@ -186,7 +186,7 @@ return [
         vanhenry\search\SearchServiceProvider::class,
         vanhenry\mail\CustomMailServiceProvider::class,
         vanhenry\minify\MinifyServiceProvider::class,
-
+        Lotto\LottoServiceProvider::class,
         crawlmodule\basecrawler\Providers\BasecrawlerServiceProvider::class,
         /*
          * Application Service Providers...
@@ -198,8 +198,8 @@ return [
         App\Providers\RouteServiceProvider::class,
         App\Providers\MailConfigServiceProvider::class,
         App\Providers\LoginSocialServiceProvider::class,
-        Maatwebsite\Excel\ExcelServiceProvider::class,
-        Lotto\LottoServiceProvider::class
+        Maatwebsite\Excel\ExcelServiceProvider::class
+
     ],
 
     /*

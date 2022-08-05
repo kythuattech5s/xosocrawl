@@ -15,11 +15,16 @@ class LottoCategory extends BaseModel
     {
         return $this->hasMany(LottoItem::class);
     }
-    public function lottoTodayItems()
+    public function lottoTodayItems($dow = -1)
     {
-        return $this->lottoItems()->join('lotto_times', function ($join) {
+        $dow  = $dow > 0 ? $dow : LottoHelper::getCurrentDateOfWeek();
+        return $this->lottoItems()->select('lotto_items.*')->join('lotto_times', function ($join) {
             $join->on('lotto_items.id', '=', 'lotto_times.lotto_item_id');
-        })->where('lotto_times.dayofweek', LottoHelper::getCurrentDateOfWeek())->get();
+        })->where('lotto_times.dayofweek', $dow)->get();
+
+        // return $this->lottoItems()->whereHas('lottoTimes', function ($q) use ($dow) {
+        //     $q->where('lotto_times.dayofweek', $dow);
+        // })->get();
     }
     public function lottoNearestItem()
     {
@@ -45,10 +50,10 @@ class LottoCategory extends BaseModel
     {
         $slugDate = $this->slug_with_dayofweek;
         if ($forceDay < 0) {
-            $params = [LottoHelper::getCurrentDateOfWeek($lottoRecord->created_at)];
-        } else {
-            $params = [$forceDay < 8 ? 'thu-' . $forceDay : 'chu-nhat'];
+            $forceDay = LottoHelper::getCurrentDateOfWeek($lottoRecord->created_at);
         }
+        $params = [$forceDay < 8 ? 'thu-' . $forceDay : 'chu-nhat'];
+
 
         $link = vsprintf($slugDate, $params);
         return $link;

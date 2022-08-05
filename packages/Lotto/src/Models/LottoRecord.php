@@ -6,6 +6,7 @@ use App\Models\BaseModel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Lotto\Dtos\HeadTail;
 use Lotto\Enums\CrawlStatus;
+use Lotto\Enums\DayOfWeek;
 
 class LottoRecord extends BaseModel
 {
@@ -29,6 +30,7 @@ class LottoRecord extends BaseModel
             $record->created_at = $date;
             $record->updated_at = $now;
             $record->lotto_item_id = $lottoItem->id;
+            $record->lotto_category_id = $lottoItem->lotto_category_id;
             $record->lotto_time_id = $lottoTime->id;
             $record->status = CrawlStatus::WAIT;
             $record->save();
@@ -59,13 +61,21 @@ class LottoRecord extends BaseModel
     {
         return $this->belongsTo(LottoItem::class);
     }
-    public function prev()
+    public function prev($checkLottoItem = true)
     {
-        return static::where('id', '<', $this->id)->where('lotto_item_id', $this->lotto_item_id)->orderBy('id', 'desc')->limit(1)->first();
+        $q = static::where('created_at', '<', $this->created_at)->where('lotto_category_id', $this->lotto_category_id);
+        if ($checkLottoItem) {
+            $q = $q->where('lotto_item_id', $this->lotto_item_id);
+        }
+        return $q->orderBy('created_at', 'desc')->limit(1)->first();
     }
-    public function next()
+    public function next($checkLottoItem = true)
     {
-        return static::where('id', '>', $this->id)->where('lotto_item_id', $this->lotto_item_id)->orderBy('id', 'asc')->limit(1)->first();
+        $q = static::where('created_at', '>', $this->created_at)->where('lotto_category_id', $this->lotto_category_id);
+        if ($checkLottoItem) {
+            $q = $q->where('lotto_item_id', $this->lotto_item_id);
+        }
+        return $q->orderBy('created_at', 'asc')->limit(1)->first();
     }
     public function link($prefix)
     {
@@ -75,6 +85,22 @@ class LottoRecord extends BaseModel
         $params = array_fill(0, $count, $lottoTime->formatByType($this->created_at));
         $link = vsprintf($slugDate, $params);
         return implode('/', [$prefix, $link]);
+    }
+    public function linkWithFormat($format)
+    {
+        $f = $format['format'];
+        $slug = $format['slug'];
+        if ($f == 'thu-dow') {
+            $d = DayOfWeek::fromDate($this->created_at);
+            $slug = vsprintf($slug, [$d->slug()]);
+        } else {
+            $slug = vsprintf($slug, [$this->created_at->format($f)]);
+        }
+        return $slug;
+    }
+    public function lottoTimes()
+    {
+        return $this->belongsTo(LottoTime::class, 'lotto_time_id');
     }
     public function headTail()
     {

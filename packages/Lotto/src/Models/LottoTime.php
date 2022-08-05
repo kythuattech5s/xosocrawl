@@ -9,6 +9,7 @@ use Carbon\Carbon;
 
 class LottoTime extends BaseModel
 {
+    protected $table = 'lotto_times';
     use HasFactory;
     private static $ALLTIMES;
     public static function allLottoTimes()

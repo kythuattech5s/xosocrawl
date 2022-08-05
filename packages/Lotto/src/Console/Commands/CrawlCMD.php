@@ -4,6 +4,7 @@ namespace Lotto\Console\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Str;
+use Lotto\Enums\CrawlStatus;
 use Lotto\Models\LottoItem;
 use Lotto\Models\LottoRecord;
 use Lotto\Models\LottoResultDetail;
@@ -42,17 +43,33 @@ class CrawlCMD extends Command
      */
     public function handle()
     {
-        $items = LottoItem::get();
-        foreach ($items as $key => $item) {
-            $shortName = 'XS';
-            $name = $item->name;
-            $names = explode(' ', $name);
-            foreach ($names as $n) {
-                $shortName .= strtoupper(Str::slug(substr($n, 0, 1)));
-            }
-            $item->short_name = $shortName;
-            $item->save();
+        $lottoItem = LottoItem::find(1);
+        $date = now()->addDays(-1);
+        $record = LottoRecord::getRecordByDate($lottoItem, $date);
+        if ($record && $record->status == CrawlStatus::SUCCESS) {
+            return;
         }
+        $xsmb = new XoSoMienBac($lottoItem);
+        $xsmb->setDateCrawl($date);
+        $result = $xsmb->parseTableResult();
+
+        $record->description = $result->getDescription();
+        $record->status = $result->getStatus();
+        $record->crawl_response = $result->getNote();
+        $record->save();
+
+        $record->insertResults($result->getDatas(), $date);
+        // $items = LottoItem::get();
+        // foreach ($items as $key => $item) {
+        //     $shortName = 'XS';
+        //     $name = $item->name;
+        //     $names = explode(' ', $name);
+        //     foreach ($names as $n) {
+        //         $shortName .= strtoupper(Str::slug(substr($n, 0, 1)));
+        //     }
+        //     $item->short_name = $shortName;
+        //     $item->save();
+        // }
         // $records = LottoRecord::get();
         // foreach ($records as $key => $record) {
         //     $this->info($record->fullcode);
