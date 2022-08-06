@@ -969,8 +969,8 @@
 }
 
 .item-comment-content .user-comment {
-  line-height: 1.5;
   min-height: 21px;
+  font-size: 14px;
 }
 
 .item-comment-content .btn-reply-comment {

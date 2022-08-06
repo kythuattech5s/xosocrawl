@@ -7,7 +7,7 @@
 <div class="item-comment-box off-reply{{$countChild > 0 ? ' have-child':''}} {{$showChildAble ? 'open':''}}">
     <div class="avartar">
         <a href="{{isset($authorUser) ? 'thong-tin-thanh-vien-c'.$authorUser->id:'javascript:void(0)'}}" class="c-img" title="{{isset($authorUser) ? $authorUser->fullname:$itemComment->name}}">
-            @if (isset($authorUser) && $authorUser->img != '')
+            @if (isset($authorUser))
                 <img src="{{$authorUser->getAvatarImageSrc()}}" alt="Default User Avartar">
             @else
                 <img src="theme/frontend/images/default_avatar.gif" alt="Default User Avartar">

@@ -47,6 +47,7 @@ class ItemComment
         $comment->content = $this->data['content'];
         $comment->referrer = $this->data['referrer'];
         $comment->act = 1;
+        $comment->timecreate = now()->timestamp;
         $comment->created_at = now();
         $comment->updated_at = now();
         $comment->save();

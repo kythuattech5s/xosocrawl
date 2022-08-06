@@ -4,7 +4,7 @@
             <div class="user-image">
                 <div class="c-img">
                     @if ($itemUser->img != '')
-                        @include('image_loader.big',['itemImage'=>$itemUser,'key'=>'img'])
+                        <img src="{{$itemUser->getAvatarImageSrc()}}" alt="Default User Avartar">
                     @else
                         <img src="theme/frontend/images/default_avatar.gif" alt="Default User Avartar">
                     @endif

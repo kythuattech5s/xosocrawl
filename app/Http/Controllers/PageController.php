@@ -27,6 +27,9 @@ class PageController extends Controller
         if ($currentItem->layout_show == 'all_spin_test') {
             return $this->viewPageAllSpinTest($request,$currentItem);
         }
+        if ($currentItem->layout_show == 'spin_test_vietlott') {
+            return $this->viewPageSpinTestVietlott($request,$currentItem);
+        }
         return view('pages.'.$currentItem->layout_show, compact('currentItem'));
     }
     private function viewPageAllDreamNumberDecoding($request,$currentItem){
@@ -76,5 +79,10 @@ class PageController extends Controller
                                 ->get();
         $dataTestSpin = TestSpin::buildDataSpinCate($activeCate,$listActiveTestSpinToday);
         return view('pages.'.$currentItem->layout_show, compact('currentItem','listItemTestSpinCategory','listActiveTestSpinToday','listItems','dataTestSpin','activeCate'));
+    }
+    public function viewPageSpinTestVietlott($request,$currentItem)
+    {
+        $listItemTestSpinCategory = TestSpinCategory::act()->get();
+        return view('pages.'.$currentItem->layout_show, compact('currentItem','listItemTestSpinCategory'));
     }
 }

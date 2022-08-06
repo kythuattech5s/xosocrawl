@@ -28,14 +28,14 @@
             </div>
             <div>Thành viên | Hoạt động</div>
         </div>
-        @if (Auth::check() && Auth::id() != $user->id)
+        {{-- @if (Auth::check() && Auth::id() != $user->id)
             <div>
                 <i class="icon ic-report"></i>
                 <a id="report-link" data-id="{{$user->id}}">
                     <span> Báo cáo vi phạm</span>
                 </a>
             </div>
-        @endif
+        @endif --}}
         <div class="clearfix"></div>
     </div>
     @if (Auth::check() && Auth::id() == $user->id)
@@ -56,13 +56,6 @@
             </ul>
         </div>
     @endif
-</div>
-<div class="box">
-    <div class="comment-history chat-box" id="chat-box">
-        <h2 class="tit-mien">Lịch sử thảo luận</h2>
-        <div class="comments"></div>
-        <div class="view-more" style="display: none;">Xem thêm</div>
-    </div>
 </div>
 @endsection
 @section('jsl')

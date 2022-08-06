@@ -5,9 +5,9 @@
     <table class="colthreecity colgiai extendable">
         <tbody>
             <tr class="gr-yellow">
-                <th class="first"></th>
+                <th class="first" style="width: 10%"></th>
                 @foreach ($listActiveTestSpinToday as $itemlistActiveTestSpinToday)
-                    <th data-pid="23">
+                    <th style="width: {{90/$countItemActive}}%">
                         <span class="bold">{{Support::show($itemlistActiveTestSpinToday,'province_name')}}</span>
                     </th>
                 @endforeach
@@ -100,17 +100,17 @@
     <table class="firstlast-mn bold">
         <tbody>
             <tr class="header">
-                <th class="first">Đầu</th>
+                <th class="first" style="width: 10%">Đầu</th>
                 @foreach ($listActiveTestSpinToday as $itemlistActiveTestSpinToday)
-                    <th>{{Support::show($itemlistActiveTestSpinToday,'province_name')}}</th>
+                    <th style="width: {{90/$countItemActive}}%">{{Support::show($itemlistActiveTestSpinToday,'province_name')}}</th>
                 @endforeach
             </tr>
             @for ($i = 0; $i < 10; $i++)
                 <tr>
                     <td class="clnote bold">{{$i}}</td>
-                    <td class="v-loto-dau-{{$i}}"></td>
-                    <td class="v-loto-dau-{{$i}}"></td>
-                    <td class="v-loto-dau-{{$i}}"></td>
+                    @for ($j = 0; $j < $countItemActive; $j++)
+                        <td class="v-loto-dau-{{$i}}"></td>
+                    @endfor
                 </tr>
             @endfor
         </tbody>
