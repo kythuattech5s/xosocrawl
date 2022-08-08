@@ -9,4 +9,8 @@ use Lotto\Helpers\LottoHelper;
 class LottoResultDetail extends BaseModel
 {
     use HasFactory;
+    public function lottoRecord()
+    {
+        return $this->belongsTo(LottoRecord::class);
+    }
 }

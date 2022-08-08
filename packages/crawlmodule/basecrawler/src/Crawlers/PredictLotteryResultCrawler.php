@@ -96,6 +96,20 @@ class PredictLotteryResultCrawler extends BaseCrawler
         $itemPredictLotteryResult->seo_key = $this->clearContent($itemPredictLotteryResult->seo_key);
         $itemPredictLotteryResult->seo_des = $this->clearContent($itemPredictLotteryResult->seo_des);
 
+        preg_match('/(\d{1,2})-(\d{1,2})-(\d{4})/', $itemPredictLotteryResult->slug, $dates);
+        if (count($dates) == 4) {
+            $day = $dates[1] < 10 ? '0'.$dates[1]:$dates[1];
+            $month = $dates[2] < 10 ? '0'.$dates[2]:$dates[2];
+            $year = $dates[3];
+            $code = $dates[3].$dates[2].$dates[1];
+            $time = now()->createFromFormat('d/m/Y',$day.'/'.$month.'/'.$year);
+            $fullCode = $year.$month.$day;
+            $itemPredictLotteryResult->code = $code;
+            $itemPredictLotteryResult->fullCode = $fullCode;
+            $itemPredictLotteryResult->created_at = $time;
+            $itemPredictLotteryResult->updated_at = $time;
+        }
+
         $itemPredictLotteryResult->save();
 
         $this->inserVRouter($itemPredictLotteryResult,'App\Http\Controllers\PredictLotteryResultController@view');

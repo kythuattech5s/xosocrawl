@@ -18,7 +18,7 @@ class CommentCrawler extends BaseCrawler
     }
     public function crawlChildCommentForum($itemForumCrawl)
     {
-        $listOldComment = Comment::where('is_crawl',1)->where('map_id',$itemForumCrawl->id)->orderBy('created_at','desc')->limit(100)->get();
+        $listOldComment = Comment::where('is_crawl',1)->where('map_id',$itemForumCrawl->id)->orderBy('created_at','desc')->limit(50)->get();
         foreach ($listOldComment as $itemOldComment) {
             $listComment = $this->exeCurl($itemForumCrawl->crawl_comment_link.'&parent_id='.$itemOldComment->crawl_id);
             $arrCommentCrawl = \Support::extractJson($listComment);

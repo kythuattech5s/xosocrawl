@@ -55,20 +55,16 @@
             @include('test_spins.result_box_multi_mn',['listActiveTestSpinToday'=>$listActiveTestSpinToday])
         @endif
         <div class="clearfix"></div>
-        @php
-            $listSeeMoreLink = Support::extractJson($activeCate->see_more_link);
-        @endphp
-        @if (count($listSeeMoreLink) > 0)
-            <div class="see-more">
-                <div class="bold see-more-title">⇒ Ngoài ra bạn có thể xem thêm:</div>
-                <ul class="list-html-link two-column">
-                    <li>Xem thêm <a href="/">kết quả xổ số 3 miền</a></li>
-                    <li>Xem thêm <a href="du-doan-ket-qua-xo-so-kqxs-c229">dự đoán xổ số 3 miền</a></li>
-                    <li>Xem thêm <a href="quay-thu-xsmn-quay-thu-xo-so-mien-nam">quay thử XSMN</a></li>
-                    <li>Xem thêm <a href="quay-thu-xsmt-quay-thu-xo-so-mien-trung">quay thử XSMT</a></li>
-                </ul>
-            </div>
-        @endif
+        <div class="see-more">
+            <div class="bold see-more-title">⇒ Ngoài ra bạn có thể xem thêm:</div>
+            <ul class="list-html-link two-column">
+                <li>Xem thêm <a href="/">kết quả xổ số 3 miền</a></li>
+                <li>Xem thêm <a href="du-doan-ket-qua-xo-so-kqxs-c229">dự đoán xổ số 3 miền</a></li>
+                <li>Xem thêm <a href="quay-thu-xsmn-quay-thu-xo-so-mien-nam">quay thử XSMN</a></li>
+                <li>Xem thêm <a href="quay-thu-xsmt-quay-thu-xo-so-mien-trung">quay thử XSMT</a></li>
+                <li>Xem thêm <a href="quay-thu-vietlott-mega-645-power-655-max4d-ngay-hom-nay">quay thử Vietlott</a></li>
+            </ul>
+        </div>
     </div>
 </div>
 @include('test_spins.lucky_box')

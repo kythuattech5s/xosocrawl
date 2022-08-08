@@ -66,3 +66,7 @@ Breadcrumbs::for('forum', function ($trail,$currentItem) {
     $trail->parent('home');
     $trail->push($currentItem->name, Support::show($currentItem, 'slug'));
 });
+Breadcrumbs::for('statical_lottery_northerns', function ($trail,$currentItem) {
+    $trail->parent('home');
+    $trail->push($currentItem->breadcrum_name, Support::show($currentItem, 'slug'));
+});

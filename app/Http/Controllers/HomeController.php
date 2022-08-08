@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Page;
+use App\Models\PredictLotteryResult;
 use crawlmodule\basecrawler\Crawlers\BaseCrawler;
 use Illuminate\Http\Request;
 use Lotto\LottoServiceProvider;
@@ -32,15 +33,15 @@ class HomeController extends Controller
     }
     public function convertThuCongDuLieuCrawl()
     {
-        $baseCrawler = new BaseCrawler;
-        $pages = Page::whereIn('layout_show',['dream_number_decodings','all_predict_the_outcome','all_spin_test','spin_test_vietlott'])->where('convert_contented',0)->get();
-        foreach ($pages as $page) {
-            $page->content = $baseCrawler->convertContent(str_get_html($page->content));
-            $page->seo_title = $baseCrawler->clearContent($page->seo_title);
-            $page->seo_key = $baseCrawler->clearContent($page->seo_key);
-            $page->seo_des = $baseCrawler->clearContent($page->seo_des);
-            $page->convert_contented = 1;
-            $page->save();
-        }
+        // $baseCrawler = new BaseCrawler;
+        // $pages = Page::whereIn('layout_show',['dream_number_decodings','all_predict_the_outcome','all_spin_test','spin_test_vietlott'])->where('convert_contented',0)->get();
+        // foreach ($pages as $page) {
+        //     $page->content = $baseCrawler->convertContent(str_get_html($page->content));
+        //     $page->seo_title = $baseCrawler->clearContent($page->seo_title);
+        //     $page->seo_key = $baseCrawler->clearContent($page->seo_key);
+        //     $page->seo_des = $baseCrawler->clearContent($page->seo_des);
+        //     $page->convert_contented = 1;
+        //     $page->save();
+        // }
     }
 }

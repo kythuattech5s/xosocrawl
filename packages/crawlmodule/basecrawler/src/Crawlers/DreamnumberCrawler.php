@@ -4,8 +4,6 @@ use App\Models\DreamNumberDecoding;
 use vanhenry\manager\model\VRoute as ModelVRoute;
 class DreamNumberCrawler extends BaseCrawler
 {
-    const CRAWL_DUPLICATE = 150;
-    const CRAWL_SUCCESS = 200;
     protected $imageSaveDir = 'old/dreamnumber';
     protected $linkCrawlListDreamNumberDecoding = "https://xoso.me/so-mo-lo-de-mien-bac-so-mo-giai-mong.html";
     public function startCrawl()
