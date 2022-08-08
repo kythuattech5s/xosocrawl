@@ -43,6 +43,25 @@ class DayOfWeek extends BaseEnum
                 return 'Thứ 7';
         }
     }
+    public function toLongFullString()
+    {
+        switch ($this->getValue()) {
+            case 8:
+                return 'Chủ Nhật';
+            case 2:
+                return 'Thứ Hai';
+            case 3:
+                return 'Thứ Ba';
+            case 4:
+                return 'Thứ Tư';
+            case 5:
+                return 'Thứ Năm';
+            case 6:
+                return 'Thứ Sáu';
+            case 7:
+                return 'Thứ Bảy';
+        }
+    }
     public function toShortString()
     {
         switch ($this->getValue()) {
@@ -61,6 +80,14 @@ class DayOfWeek extends BaseEnum
             case 7:
                 return 'Thứ 7';
         }
+    }
+    public function toDayOfWeekMysql()
+    {
+        $value = $this->getValue();
+        if ($value == 8) {
+            return 1;
+        }
+        return $value;
     }
     public function slug()
     {

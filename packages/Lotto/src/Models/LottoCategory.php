@@ -58,4 +58,11 @@ class LottoCategory extends BaseModel
         $link = vsprintf($slugDate, $params);
         return $link;
     }
+    public function linkCustomDate($date)
+    {
+
+        $slugDate = $this->slug_with_date;
+        $link = vsprintf($slugDate, [$date->format('j-n-Y')]);
+        return $link;
+    }
 }
