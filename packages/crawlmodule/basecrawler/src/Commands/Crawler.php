@@ -20,8 +20,8 @@ class Crawler extends Command
         $crawlType = CrawlType::where('type',$type)->first();
         if (isset($crawlType)) {
             $crawler = CrawlerFactory::getCrawler($crawlType->type);
-            $status = $crawler->startCrawl();
             $this->info('Bắt đầu Crawl '.$crawlType->name);
+            $status = $crawler->startCrawl();
             if ($status) {
                 $this->info('Crawl '.$crawlType->name.' thành công.');
             }else{

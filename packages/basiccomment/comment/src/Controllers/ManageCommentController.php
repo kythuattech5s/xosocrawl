@@ -113,7 +113,7 @@ class ManageCommentController extends Controller
                                     $q->whereHas('user')->with('user');
                                 }])
                                 ->where('id',$rootCommentId);
-        $listComment = $baseComment->orderBy('created_at','asc')->get();
+        $listComment = $baseComment->orderBy('created_at','asc')->get(); 
         $isPaginate = false;
         $levelShow = $activeComment->level;
         $showAllChilds = true;
@@ -160,10 +160,11 @@ class ManageCommentController extends Controller
             $listComment = $baseComment->where('id','!=',$rootCommentId)->orderBy($sortString,$sortMethod)->orderBy('id','desc')->paginate(10);
             $isPaginate = true;
         }else{
-            $listComment = $baseComment->orderBy('created_at','asc')->get();
+            $listComment = $baseComment->orderBy('created_at','desc')->paginate(10);
+            $isPaginate = true;
         }
         $showAllChilds = false;                 
-        return view('basiccmt::frontend.item_comment.list_item',compact('listComment','isPaginate','showAllChilds'))->render();
+        return view('basiccmt::frontend.item_comment.list_item',compact('listComment','isPaginate','showAllChilds','target'))->render();
     }
     public function loadFormComment()
     {

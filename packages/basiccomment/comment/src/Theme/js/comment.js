@@ -625,9 +625,15 @@ var basic_COMMENT = {
         if (paginationBox.length > 0) {
             var nextUrl = paginationBox.find(".next-page");
             if (nextUrl.length > 0) {
-                var htmlViewMore = `<a href="${nextUrl.attr(
-                    "href"
-                )}" class="btn-view-more-comment" title="Xem thêm bình luận">Xem thêm bình luận</a>`;
+                if (paginationBox.hasClass("view-old-comment")) {
+                    var htmlViewMore = `<a href="${nextUrl.attr(
+                        "href"
+                    )}" class="btn-view-more-comment" title="Xem bình luận cũ hơn">Xem bình luận cũ hơn</a>`;
+                } else {
+                    var htmlViewMore = `<a href="${nextUrl.attr(
+                        "href"
+                    )}" class="btn-view-more-comment" title="Xem thêm bình luận">Xem thêm bình luận</a>`;
+                }
                 paginationBox.find(".pagination-hidden-box").remove();
                 paginationBox.prepend(htmlViewMore);
             } else {
@@ -701,25 +707,54 @@ var basic_COMMENT = {
         $(document).on("click", ".btn-view-more-comment", function (e) {
             e.preventDefault();
             var _this = $(this);
-            var commentBox = _this.closest(".list-comment");
-            _this.closest(".pagination-comment-box").remove();
-            commentBox.append(`<div class="loader-dot">
-                <div class="loader-item"></div>
-                <div class="loader-item"></div>
-                <div class="loader-item"></div>
-                <div class="loader-item"></div>
-            </div>`);
-            $.ajax({
-                url: _this.attr("href"),
-                type: "GET",
-                global: false,
-            }).done(function (html) {
-                commentBox.find(".loader-dot").remove();
-                commentBox.append(html);
-                var paginationBox = commentBox.find(".pagination-comment-box");
-                basic_COMMENT.initPaginationBox(paginationBox);
-                basic_COMMENT.initBaseGui();
-            });
+            var parentBox = _this.closest(".pagination-comment-box");
+            if (parentBox.hasClass("view-old-comment")) {
+                var commentBox = _this.closest(".list-child-comment");
+                _this.closest(".pagination-comment-box").remove();
+                commentBox.prepend(`<div class="loader-dot">
+                    <div class="loader-item"></div>
+                    <div class="loader-item"></div>
+                    <div class="loader-item"></div>
+                    <div class="loader-item"></div>
+                </div>`);
+                $.ajax({
+                    url: _this.attr("href"),
+                    type: "GET",
+                    global: false,
+                    dataType: "html",
+                }).done(function (html) {
+                    commentBox.find(".loader-dot").remove();
+                    commentBox.prepend(html);
+                    var paginationBox = commentBox.find(
+                        ".pagination-comment-box"
+                    );
+                    basic_COMMENT.initPaginationBox(paginationBox);
+                    basic_COMMENT.initBaseGui();
+                });
+            } else {
+                var commentBox = _this.closest(".list-comment");
+                parentBox.remove();
+                commentBox.append(`<div class="loader-dot">
+                    <div class="loader-item"></div>
+                    <div class="loader-item"></div>
+                    <div class="loader-item"></div>
+                    <div class="loader-item"></div>
+                </div>`);
+                $.ajax({
+                    url: _this.attr("href"),
+                    type: "GET",
+                    global: false,
+                    dataType: "html",
+                }).done(function (html) {
+                    commentBox.find(".loader-dot").remove();
+                    commentBox.append(html);
+                    var paginationBox = commentBox.find(
+                        ".pagination-comment-box"
+                    );
+                    basic_COMMENT.initPaginationBox(paginationBox);
+                    basic_COMMENT.initBaseGui();
+                });
+            }
         });
     },
     initReportComment() {
