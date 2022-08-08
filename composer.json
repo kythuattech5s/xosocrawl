@@ -51,6 +51,7 @@
             "vanhenry\\minify\\": "packages/vanhenry/minify/src",
             "crawlmodule\\basecrawler\\": "packages/crawlmodule/basecrawler/src",
             "basiccomment\\comment\\": "packages/basiccomment/comment/src",
+            "Lotto\\": "packages/Lotto/src",
             "CustomTable\\": "packages/table_customs/src"
         }
     },
@@ -84,7 +85,10 @@
     },
     "extra": {
         "laravel": {
-            "dont-discover": []
+            "dont-discover": [],
+            "providers": [
+                "Lotto\\LottoServiceProvider"
+            ]
         }
     },
     "config": {

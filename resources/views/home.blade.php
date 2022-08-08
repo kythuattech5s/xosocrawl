@@ -1,69 +1,15 @@
 @extends('index')
 @section('main')
-<div class="link-du-doan">
-    <span>
-        <img alt="hot" height="11" src="theme/frontend/images/hot2.gif" width="22" />
-    </span>
-    <a class="text-link-ads bold clnote" href="https://xoso.me/redirect/out?token=I%2FZxoQFsuUjDev87POoC9PSveDZOsQOylNFoAc3oAoA%3D" rel="nofollow" target="_blank" title="Loto chuẩn xác"> Loto chuẩn xác </a>
-    <span>
-        <img alt="hot" height="11" src="theme/frontend/images/hot2.gif" width="22" />
-    </span>
-    <a class="text-link-ads bold clnote" href="https://xoso.me/redirect/out?token=I%2FZxoQFsuUjDev87POoC9PSveDZOsQOylNFoAc3oAoA%3D" rel="nofollow" target="_blank" title="Lấy số chuẩn"> Lấy số chuẩn </a>
-    <span>
-        <img alt="hot" height="11" src="theme/frontend/images/hot2.gif" width="22" />
-    </span>
-    <a class="text-link-ads bold clnote" href="https://xoso.me/redirect/out?token=I%2FZxoQFsuUjDev87POoC9PSveDZOsQOylNFoAc3oAoA%3D" rel="nofollow" target="_blank" title="Cầu chuẩn mb"> Cầu chuẩn mb </a>
-    <span>
-        <img alt="hot" height="11" src="theme/frontend/images/hot2.gif" width="22" />
-    </span>
-    <a class="text-link-ads bold clnote" href="https://xoso.me/redirect/out?token=I%2FZxoQFsuUjDev87POoC9PSveDZOsQOylNFoAc3oAoA%3D" rel="nofollow" target="_blank" title="XSMB bao nổ"> XSMB bao nổ </a>
-    <span>
-        <img alt="hot" height="11" src="theme/frontend/images/hot2.gif" width="22" />
-    </span>
-    <a class="text-link-ads bold clnote" href="https://xoso.me/redirect/out?token=I%2FZxoQFsuUjDev87POoC9PSveDZOsQOylNFoAc3oAoA%3D" rel="nofollow" target="_blank" title="Số chuẩn hội đồng"> Số chuẩn hội đồng </a>
-    <span>
-        <img alt="hot" height="11" src="theme/frontend/images/hot2.gif" width="22" />
-    </span>
-    <a class="text-link-ads bold clnote" href="https://xoso.me/redirect/out?token=I%2FZxoQFsuUjDev87POoC9PSveDZOsQOylNFoAc3oAoA%3D" rel="nofollow" target="_blank" title="Số chuẩn k phí"> Số chuẩn k phí </a>
-    <span>
-        <img alt="hot" height="11" src="theme/frontend/images/hot2.gif" width="22" />
-    </span>
-    <a class="text-link-ads bold clblue" href="https://xoso.me/redirect/out?token=I%2FZxoQFsuUjDev87POoC9PSveDZOsQOylNFoAc3oAoA%3D" rel="nofollow" target="_blank" title="Độc thủ lô"> Độc thủ lô </a>
-    <span>
-        <img alt="hot" height="11" src="theme/frontend/images/hot2.gif" width="22" />
-    </span>
-    <a class="text-link-ads bold clnote" href="https://xoso.me/redirect/out?token=I%2FZxoQFsuUjDev87POoC9PSveDZOsQOylNFoAc3oAoA%3D" rel="nofollow" target="_blank" title="Cho số miễn phí"> Cho số miễn phí </a>
-    <span>
-        <img alt="hot" height="11" src="theme/frontend/images/hot2.gif" width="22" />
-    </span>
-    <a class="text-link-ads bold clnote" href="https://xoso.me/redirect/out?token=I%2FZxoQFsuUjDev87POoC9PSveDZOsQOylNFoAc3oAoA%3D" rel="nofollow" target="_blank" title="kích vào trúng lớn"> kích vào trúng lớn </a>
-    <span>
-        <img alt="hot" height="11" src="theme/frontend/images/hot2.gif" width="22" />
-    </span>
-    <a class="text-link-ads bold clnote" href="https://xoso.me/redirect/out?token=I%2FZxoQFsuUjDev87POoC9PSveDZOsQOylNFoAc3oAoA%3D" rel="nofollow" target="_blank" title="Cầu chuẩn tuyệt mật"> Cầu chuẩn tuyệt mật </a>
-    <span>
-        <img alt="hot" height="11" src="theme/frontend/images/hot2.gif" width="22" />
-    </span>
-    <a class="text-link-ads bold clblue" href="https://xsmn.me/xsmn-sxmn-kqxsmn-kqsxmn-ket-qua-xo-so-mien-nam.html" rel="dofollow" target="_blank" title="XSMN"> XSMN </a>
-    <span>
-        <img alt="hot" height="11" src="theme/frontend/images/hot2.gif" width="22" />
-    </span>
-    <a class="text-link-ads bold clblue" href="https://xsmb.me/xsmt-xsmtr-sxmt-xo-so-mien-trung.html" rel="dofollow" target="_blank" title="SXMT"> SXMT </a>
-    <span>
-        <img alt="hot" height="11" src="theme/frontend/images/hot2.gif" width="22" />
-    </span>
-    <a class="text-link-ads bold clblue" href="https://xsmn.me/xsmb-sxmb-kqxsmb-xstd-xshn-ket-qua-xo-so-mien-bac.html" rel="dofollow" target="_blank" title="XSMB"> XSMB </a>
-</div>
+@include('partials.link_du_doan')
 <div class="box">
     <div class="bg_gray">
         <div class=" opt_date_full clearfix">
             <a class="ic-pre fl" href="https://xoso.me/kqxs-19-7-2022-ket-qua-xo-so-ngay-19-7-2022.html" title="Kết quả xổ số ngày 19/07/2022">
             </a>
             <label>
-                <strong> Thứ tư </strong> - <input class="nobor hasDatepicker" id="searchDate" type="text" value="20/07/2022">
+                <strong> Thứ tư </strong> - <input class="nobor hasDatepicker" id="searchDate" type="text" value="20/07/2022"/>
                 <span class="ic ic-calendar">
                 </span>
-                </input>
             </label>
             <a class="ic-next" href="https://xoso.me/kqxs-21-7-2022-ket-qua-xo-so-ngay-21-7-2022.html" title="Kết quả xổ số ngày 21/07/2022">
             </a>
@@ -76,40 +22,50 @@
             <strong> Các tỉnh mở thưởng hôm nay </strong>
         </div>
         <table class="table-fixed">
-            <tbody>
                 <tr>
                     <td>
-                        <a href="https://xoso.me/mien-nam/xsdn-ket-qua-xo-so-dong-nai-p11.html" title="XSDN"> Đồng Nai </a>
+                        <table>
+                            <?php $mns = \Lotto\Models\LottoCategory::find(3)->lottoTodayItems(); ?>
+                            @foreach($mns as $item)
+                            <tr>
+                                <td>
+                                    <a href="{{$item->slug}}" title="Xổ Số {{$item->name}}"> {{$item->name}} </a>
+                                </td>
+                            </tr>
+                            @endforeach
+                        </table>
                     </td>
                     <td>
-                        <a href="https://xoso.me/mien-trung/xsdng-ket-qua-xo-so-da-nang-p24.html" title="XSDNG"> Đà Nẵng </a>
+                        <table>
+                            <?php $mts = \Lotto\Models\LottoCategory::find(4)->lottoTodayItems(); ?>
+                            @foreach($mts as $item)
+                            <tr>
+                                <td>
+                                    <a href="{{$item->slug}}" title="Xổ Số {{$item->name}}"> {{$item->name}} </a>
+                                </td>
+                            </tr>
+                            @endforeach
+                        </table>
                     </td>
                     <td>
-                        <a href="https://xoso.me/xsmb-sxmb-xstd-xshn-kqxsmb-ket-qua-xo-so-mien-bac.html" title="KQXSMB"> Miền Bắc </a>
+                        <table>
+                            <tr>
+                                <?php $mb = \Lotto\Models\LottoCategory::find(1); ?>
+                                <td>
+                                    <a href="{{$mb->slug}}" title="{{$mb->name}}"> Miền Bắc </a>
+                                </td>
+                            </tr>
+                            <?php $dts = \Lotto\Models\LottoCategory::find(2)->lottoTodayItems(); ?>
+                            @foreach($dts as $item)
+                            <tr>
+                                <td>
+                                    <a href="{{$item->slug}}" title="Xổ Số {{$item->name}}"> {{$item->name}} </a>
+                                </td>
+                            </tr>
+                            @endforeach
+                        </table>
                     </td>
                 </tr>
-                <tr>
-                    <td>
-                        <a href="" title="XSCT"> Cần Thơ </a>
-                    </td>
-                    <td>
-                        <a href="https://xoso.me/mien-trung/xskh-ket-qua-xo-so-khanh-hoa-p28.html" title="XSKH"> Khánh Hòa </a>
-                    </td>
-                    <td>
-                        <a href="https://xoso.me/kqxs-mega-645-ket-qua-xo-so-mega-6-45-vietlott-ngay-hom-nay.html" title="XS Mega 6/45"> Mega 6/45 </a>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <a href="https://xoso.me/mien-nam/xsst-ket-qua-xo-so-soc-trang-p17.html" title="XSST"> Sóc Trăng </a>
-                    </td>
-                    <td>
-                    </td>
-                    <td>
-                        <a href="https://xoso.me/kqxs-max3d-ket-qua-xo-so-max-3d-vietlott.html" title="XS Max 3D"> Max 3D </a>
-                    </td>
-                </tr>
-            </tbody>
         </table>
     </div>
     <div class="box">

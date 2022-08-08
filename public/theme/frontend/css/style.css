@@ -1189,7 +1189,9 @@ body {
   padding: 0;
   background: #e1e3e4;
   -webkit-text-size-adjust: 100%;
-  -ms-text-size-adjust: 100%
+  -ms-text-size-adjust: 100%;
+  line-height: 1.3;
+
 }
 
 a {
@@ -1402,6 +1404,15 @@ table th {
   background: #fff;
   margin-bottom: 2px
 }
+.box.mo-thuong-ngay>table,
+.box.mo-thuong-ngay>table>tbody>tr,
+.box.mo-thuong-ngay>table>tbody>tr>td
+{
+  border: none;
+}
+.box.mo-thuong-ngay>table>tbody>tr>td{
+  padding:0
+}
 
 .box-html {
   padding: 5px
@@ -1444,25 +1455,25 @@ table th {
 }
 
 @media (max-width:1023px) {
-  .dsp-mobile {
+  .dsp-mobile,.dsp-mb {
     display: block
   }
 }
 
 @media (min-width:1024px) {
-  .dsp-mobile {
+  .dsp-mobile,.dsp-mb {
     display: none
   }
 }
 
 @media (max-width:1023px) {
-  .dsp-desktop {
+  .dsp-desktop, .dsp-dk {
     display: none
   }
 }
 
 @media (min-width:1024px) {
-  .dsp-desktop {
+  .dsp-desktop, .dsp-dk {
     display: block
   }
 }
@@ -5880,4 +5891,10 @@ img.emoji {
 
 .ats-overlay-bottom-wrapper-unrendered {
   display: none
+}
+table.kqmb td.number{
+  font-size: 0 !important;
+}
+.kqmb td.v-giai span[class^=v-g]{
+  font-size: 23px;;
 }

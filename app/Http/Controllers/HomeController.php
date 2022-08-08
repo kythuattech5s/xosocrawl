@@ -1,15 +1,20 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use App\Models\Page;
 use crawlmodule\basecrawler\Crawlers\BaseCrawler;
 use Illuminate\Http\Request;
+use Lotto\LottoServiceProvider;
+use Lotto\Models\LottoCategory;
 
 class HomeController extends Controller
 {
-    public function index(Request $request){
+    public function index(Request $request)
+    {
         $isHome = 1;
-        return view('home',compact('isHome'));
+        // dump(LottoCategory::find(1)->lottoTodayItems());
+        return view('home', compact('isHome'));
     }
 
     public function direction(Request $request, $link)

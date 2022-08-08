@@ -16,6 +16,7 @@
         var messageNotify = "{{ Session::get('messageNotify', '') }}";
         var typeNotify = "{{ Session::get('typeNotify', '') }}";
 	</script>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vanillajs-datepicker@1.2.0/dist/css/datepicker.min.css">
 	{[CMS_HEADER]}
 </head>
 <body>
@@ -41,6 +42,29 @@
 	<script src="theme/frontend/js/toastify.js" defer></script>
 	<script src="theme/frontend/js/base.js" defer></script>
 	<script src="theme/frontend/js/xhr.js" defer></script>
+	<script>
+		function showmnc2(id_mnu2) {
+			if (document.getElementById(id_mnu2).style.visibility == 'visible') {
+				document.getElementById(id_mnu2).style.visibility = 'hidden';
+			} else {
+				document.getElementById(id_mnu2).style.visibility = 'visible';
+			}
+		}
+		function showDrawerMenu() {
+			document.querySelector('html').classList.toggle('menu-active');
+			showmnc2("nav-horizontal");
+		}
+		expand = function(itemId) {
+			Array.from(document.getElementsByClassName('menu-c2')).forEach((e, i) => {
+				if (e.id != itemId) e.style.display = 'none'
+			});
+			elm = document.getElementById(itemId);
+			elm.style.display = elm.style.display == 'block' ? 'none' : 'block'
+		}
+	</script>
+	<script src="https://cdn.jsdelivr.net/npm/vanillajs-datepicker@1.2.0/dist/js/datepicker.min.js" defer></script>
+	<script src="https://cdn.jsdelivr.net/npm/vanillajs-datepicker@1.2.0/dist/js/locales/vi.js" defer></script>
+	<script src="theme/frontend/js/main.js" defer></script>
 	@yield('js')
 </body>
 </html>
