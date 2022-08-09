@@ -5,7 +5,7 @@
         @include('xoso.head_tail')
         <div class="clearfix"></div>
     </div>
-    @if(isset($viewRelate))
-        @include('xoso.mien_bac.'.$viewRelate)
+    @if (isset($viewRelate))
+        @include('xoso.mien_bac.related.' . $viewRelate)
     @endif
 </div>

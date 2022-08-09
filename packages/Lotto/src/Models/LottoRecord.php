@@ -92,17 +92,17 @@ class LottoRecord extends BaseModel
     }
     public function link($prefix = null)
     {
-        $params = [];
+        $paramPrints = [];
         if (isset($prefix) && $prefix != '') {
-            $params[] = $prefix;
+            $paramPrints[] = $prefix;
         }
         $lottoTime = $this->lottoItem->lottoTime;
         $slugDate = $this->lottoItem->slug_date;
         $count = substr_count($slugDate, "%s");
         $params = array_fill(0, $count, $lottoTime->formatByType($this->created_at));
         $link = vsprintf($slugDate, $params);
-        $params[] = $link;
-        return implode('/', $params);
+        $paramPrints[] = $link;
+        return implode('/', $paramPrints);
     }
     public function linkWithFormat($format)
     {

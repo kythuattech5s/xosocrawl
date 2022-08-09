@@ -4,6 +4,7 @@ namespace Lotto\Console\Commands;
 
 use Illuminate\Console\Command;
 use Lotto\Enums\CrawlStatus;
+use Lotto\Models\LottoCategory;
 use Lotto\Models\LottoItem;
 use Lotto\Models\LottoRecord;
 use Lotto\Processors\XoSoMienBac;
@@ -15,7 +16,7 @@ class CrawlResultMb extends Command
      *
      * @var string
      */
-    protected $signature = 'lotto:crawl-mb {id}';
+    protected $signature = 'lotto:crawl-mb';
 
     /**
      * The console command description.
@@ -39,14 +40,22 @@ class CrawlResultMb extends Command
      *
      * @return int
      */
-    protected $year = 2021;
+    protected $year = 2001;
     public function handle()
     {
-        $lottoItem = LottoItem::find($this->argument('id'));
+        $lottoItems = LottoCategory::find(1)->lottoItems;
+        $this->info('Start');
+        foreach ($lottoItems as $lottoItem) {
+            $this->crawlSingle($lottoItem);
+        }
+        $this->info('End');
+    }
+    protected function crawlSingle($lottoItem)
+    {
         $dates = $this->getDates($lottoItem);
         $dates = array_reverse($dates);
         $xsmb = new XoSoMienBac($lottoItem);
-        $this->info('Start');
+        $this->info('Start ' . $lottoItem->name);
         foreach ($dates as $date) {
             $this->info($date);
             $record = LottoRecord::getRecordByDate($lottoItem, $date);
@@ -64,7 +73,7 @@ class CrawlResultMb extends Command
 
             $record->insertResults($result->getDatas(), $date);
         }
-        $this->info('End');
+        $this->info('End ' . $lottoItem->name);
     }
     protected function getDates($lottoItem)
     {

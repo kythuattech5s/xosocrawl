@@ -6,6 +6,7 @@ use App\Models\BaseModel;
 use DB;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Lotto\Enums\CrawlStatus;
+use Lotto\Enums\DayOfWeek;
 use Lotto\Helpers\LottoHelper;
 
 class LottoCategory extends BaseModel
@@ -64,5 +65,10 @@ class LottoCategory extends BaseModel
         $slugDate = $this->slug_with_date;
         $link = vsprintf($slugDate, [$date->format('j-n-Y')]);
         return $link;
+    }
+    public function getContentDow($lottoRecord)
+    {
+        $d = DayOfWeek::fromDate($lottoRecord->created_at);
+        return vsprintf($this->content_dow, [$d->toFullString(), $d->slug()]);
     }
 }

@@ -72,7 +72,7 @@
     </div>
 
     @php
-    $viewRelated = 'xoso.mien_bac.related_' . ($typeRelated ?? '');
+    $viewRelated = 'xoso.mien_bac.related.related_' . ($typeRelated ?? '');
     @endphp
     @if (View::exists($viewRelated))
         @include($viewRelated)

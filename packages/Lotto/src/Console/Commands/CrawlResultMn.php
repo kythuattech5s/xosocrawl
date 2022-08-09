@@ -14,7 +14,7 @@ class CrawlResultMn extends CrawlResultMb
     protected $year = 2009;
     public function handle()
     {
-        $lottoItems = LottoItem::where('lotto_category_id', 3)->where('id', '>', 18)->get();
+        $lottoItems = LottoItem::where('lotto_category_id', 3)->get();
         $this->info('Start');
         foreach ($lottoItems as $lottoItem) {
             $this->info('Start ' . $lottoItem->name);

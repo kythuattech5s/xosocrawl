@@ -5,6 +5,7 @@ namespace Lotto\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Lotto\Enums\DayOfWeek;
+use Lotto\Enums\LottoTypeRelate;
 use Lotto\Helpers\SeoHelper;
 use Lotto\Models\LottoCategory;
 use Lotto\Models\LottoItem;
@@ -33,7 +34,7 @@ class XoSoController extends Controller
         $date = $lottoTime->getDateFromString($dateParam);
         $this->checkAbort404($lottoItem);
         $fullCode = $date->format('Ymd');
-        $lottoRecord = $lottoItem->lottoRecords()->where('fullcode', $fullCode)->orderBy('id', 'desc')->limit(1)->first();
+        $lottoRecord = $lottoItem->lottoRecords()->where('fullcode', $fullCode)->orderBy('created_at', 'desc')->limit(1)->first();
         $this->checkAbort404($lottoRecord);
         $linkPrefix = $request->segment(1, '');
         $currentItem = SeoHelper::getSeoProvince($lottoItem, $lottoRecord);
@@ -45,10 +46,11 @@ class XoSoController extends Controller
     {
         $linkPrefix = 'mien-bac';
         $lottoItem = LottoItem::find($route->map_id);
-        $lottoRecord = $lottoItem->lottoRecords()->orderBy('id', 'desc')->limit(1)->first();
+        $lottoRecord = $lottoItem->lottoRecords()->orderBy('created_at', 'desc')->limit(1)->first();
         $this->checkAbort404($lottoRecord);
         $currentItem = SeoHelper::getSeoProvince($lottoItem, $lottoRecord);
-        return view('xoso.detail', compact('lottoItem', 'lottoRecord', 'linkPrefix', 'currentItem'));
+        $typeRelated = LottoTypeRelate::PROVINCE_TODAY;
+        return view('xoso.detail', compact('lottoItem', 'lottoRecord', 'linkPrefix', 'currentItem', 'typeRelated'));
     }
     public function xoSoMienBacCategory(Request $request, $route, $link)
     {
@@ -65,7 +67,7 @@ class XoSoController extends Controller
             'slug' => $lottoCategory->slug_with_date,
             'format' => 'j-n-Y'
         ];
-        $typeRelated = 'category';
+        $typeRelated = LottoTypeRelate::CATEGORY;
         return view('xoso.mien_bac', compact('lottoCategory', 'lottoItem', 'lottoRecord', 'linkFormat', 'currentItem', 'typeRelated'));
     }
     public function xoSoMienBacCategoryDow(Request $request, $id1, $id2)
@@ -80,9 +82,9 @@ class XoSoController extends Controller
         $this->checkAbort404($lottoItem);
         $lottoRecord = $lottoItem->lottoRecords()->whereHas('lottoTimes', function ($q) use ($dow) {
             $q->where('lotto_times.dayofweek', $dow);
-        })->orderBy('id', 'desc')->limit(1)->first();
+        })->orderBy('created_at', 'desc')->limit(1)->first();
         $this->checkAbort404($lottoRecord);
-        $typeRelated = 'dow';
+        $typeRelated = LottoTypeRelate::DOW;
         $currentItem = SeoHelper::getSeoMienBacDow($lottoCategory, $lottoItem, $lottoRecord);
         return view('xoso.mien_bac', compact('lottoCategory', 'lottoItem', 'lottoRecord',  'currentItem', 'typeRelated'));
     }
@@ -101,14 +103,14 @@ class XoSoController extends Controller
             $q->where('fullcode', $fullCode);
         })->first();
         $this->checkAbort404($lottoItem);
-        $lottoRecord = $lottoItem->lottoRecords()->where('fullcode', $fullCode)->orderBy('id', 'desc')->limit(1)->first();
+        $lottoRecord = $lottoItem->lottoRecords()->where('fullcode', $fullCode)->orderBy('created_at', 'desc')->limit(1)->first();
         $this->checkAbort404($lottoRecord);
         $currentItem = SeoHelper::getSeoMienBacDmY($lottoCategory, $lottoItem, $lottoRecord);
         $linkFormat = [
             'slug' => $lottoCategory->slug_with_date,
             'format' => 'j-n-Y'
         ];
-        $typeRelated = 'dmY';
+        $typeRelated = LottoTypeRelate::DMY;
 
         return view('xoso.mien_bac', compact('lottoCategory', 'lottoItem', 'lottoRecord', 'linkFormat', 'currentItem', 'typeRelated'));
     }
@@ -131,21 +133,32 @@ class XoSoController extends Controller
         $this->checkAbort404($lottoItem);
         $lottoCategory = $lottoItem->lottoCategory();
         $this->checkAbort404($lottoCategory);
-        if ($lottoType == 'dow') {
-            $time = $lottoRecord->created_at->addDays(-15);
-        } else {
-            $time = $lottoRecord->created_at->addDays(-3);
-        }
 
-        $q = LottoRecord::where('lotto_category_id', $lottoRecord->lotto_category_id)->where('created_at', '<', $time)->orderBy('created_at', 'desc');
+        $q = LottoRecord::where('lotto_category_id', $lottoRecord->lotto_category_id)->orderBy('created_at', 'desc');
 
-        if ($lottoType == 'dow') {
-            $d = DayOfWeek::fromDate($lottoRecord->created_at);
-            $dowMysql = $d->toDayOfWeekMysql();
-            $q->whereRaw('DAYOFWEEK(lotto_records.created_at) = ' . $dowMysql);
-        }
+        $lottoTypeRelate = LottoTypeRelate::getByValue($lottoType, LottoTypeRelate::CATEGORY);
+        $lottoTypeRelate->addCondition($q, $lottoRecord, $lottoItem);
+
         $relateRecords = $q->simplePaginate(4)->appends($request->except(['page', '_token']));;
 
-        return view('xoso.mien_bac.ajax_more', compact('lottoItem', 'lottoRecord', 'relateRecords'));
+        return view('xoso.mien_bac.related.ajax_more', compact('lottoItem', 'lottoRecord', 'relateRecords'));
+    }
+
+    public function xoSoMienNam(Request $request)
+    {
+
+        $url =  $request->segment(2, '');
+        if (strlen($url) == 0) {
+            abort(404);
+        }
+        $lottoItem = LottoItem::where('slug', $url)->where("is_master", 0)->first();
+        $this->checkAbort404($lottoItem);
+        $lottoRecord = $lottoItem->lottoRecords()->orderBy('created_at', 'desc')->limit(1)->first();
+        $this->checkAbort404($lottoRecord);
+        $linkPrefix = $request->segment(1, '');
+        $prefixPath = 'mien_nam';
+
+
+        return view('xoso.detail', compact('lottoItem', 'lottoRecord', 'linkPrefix', 'prefixPath'));
     }
 }

@@ -4,6 +4,7 @@ namespace Lotto\Models;
 
 use App\Models\BaseModel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Str;
 use Lotto\Helpers\LottoHelper;
 
 class LottoItem extends BaseModel
@@ -47,5 +48,13 @@ class LottoItem extends BaseModel
     public function lottoCategory()
     {
         return $this->belongsTo(LottoCategory::class);
+    }
+    public function getSlug()
+    {
+        $prefix = $this->prefix_sub_link;
+        if (strlen($prefix) > 0) {
+            return $prefix . '/' . $this->slug;
+        }
+        return $this->slug;
     }
 }
