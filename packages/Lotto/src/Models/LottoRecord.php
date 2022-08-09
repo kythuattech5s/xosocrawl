@@ -20,7 +20,7 @@ class LottoRecord extends BaseModel
     {
         $code = $date->format('Ynj');
         $fullcode = $date->format('Ymd');
-        $record = static::where('code', $code)->where('lotto_item_id', $lottoItem->id)->first();
+        $record = static::where('fullcode', $fullcode)->where('lotto_item_id', $lottoItem->id)->first();
         if (!$record) {
             $now = now();
             $lottoTime = $lottoItem->lottoTimeByDate($date)->first();
@@ -54,6 +54,10 @@ class LottoRecord extends BaseModel
         }
     }
 
+    public function dayOfWeek()
+    {
+        return DayOfWeek::fromDate($this->created_at);
+    }
     public function currentDayOfWeek()
     {
         $d = DayOfWeek::fromDate($this->created_at);

@@ -49,6 +49,14 @@ class LottoItem extends BaseModel
     {
         return $this->belongsTo(LottoCategory::class);
     }
+    public function testSpin()
+    {
+        return $this->belongsTo(TestSpin::class);
+    }
+    public function predictLotteryProvinceResult()
+    {
+        return $this->belongsTo(PredictLotteryProvinceResult::class);
+    }
     public function getSlug()
     {
         $prefix = $this->prefix_sub_link;

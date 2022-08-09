@@ -25,7 +25,7 @@
     <div class="see-more">
         <div class="bold see-more-title">Xem kết quả miền theo ngày:</div>
         <ul class="list-html-link">
-            <?php $categories = \Lotto\Models\LottoCategory::whereIn('id', [3, 4])->get();
+            <?php $categories = \Lotto\Models\LottoCategory::whereIn('id', [1, 3, 4])->get();
             $now = now(); ?>
             @foreach ($categories as $category)
                 <li>Xem thêm <a href="{{ $category->linkCustomDate($now) }}"

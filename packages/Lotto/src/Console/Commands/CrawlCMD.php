@@ -5,6 +5,8 @@ namespace Lotto\Console\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Support\Str;
 use Lotto\Enums\CrawlStatus;
+use Lotto\Helpers\LottoHelper;
+use Lotto\Models\LottoCategory;
 use Lotto\Models\LottoItem;
 use Lotto\Models\LottoRecord;
 use Lotto\Models\LottoResultDetail;
@@ -43,53 +45,15 @@ class CrawlCMD extends Command
      */
     public function handle()
     {
-        $lottoItem = LottoItem::find(1);
-        $date = now()->addDays(-1);
-        $record = LottoRecord::getRecordByDate($lottoItem, $date);
-        if ($record && $record->status == CrawlStatus::SUCCESS) {
-            return;
+        $lottoItems = LottoCategory::find(3)->lottoItems;
+        foreach ($lottoItems as $key => $lottoItem) {
+            $url = 'https://xoso.me/mien-nam/' . $lottoItem->slug . '.html';
+            @include_once(__DIR__ . '/../../Libs/simple_html_dom.php');
+            $content = LottoHelper::requestUrl($url);
+            $htmlDom = \str_get_html($content);
+            $box = $htmlDom->find('.box-html', 0);
+            $lottoItem->content = $box->innertext;
+            $lottoItem->save();
         }
-        $xsmb = new XoSoMienBac($lottoItem);
-        $xsmb->setDateCrawl($date);
-        $result = $xsmb->parseTableResult();
-
-        $record->description = $result->getDescription();
-        $record->status = $result->getStatus();
-        $record->crawl_response = $result->getNote();
-        $record->save();
-
-        $record->insertResults($result->getDatas(), $date);
-        // $items = LottoItem::get();
-        // foreach ($items as $key => $item) {
-        //     $shortName = 'XS';
-        //     $name = $item->name;
-        //     $names = explode(' ', $name);
-        //     foreach ($names as $n) {
-        //         $shortName .= strtoupper(Str::slug(substr($n, 0, 1)));
-        //     }
-        //     $item->short_name = $shortName;
-        //     $item->save();
-        // }
-        // $records = LottoRecord::get();
-        // foreach ($records as $key => $record) {
-        //     $this->info($record->fullcode);
-        //     $code = $record->fullcode;
-        //     $date = \Carbon\Carbon::createFromFormat('Ymd', $code);
-        //     $record->created_at = $record->created_at->setDate($date->year, $date->month, $date->day);
-        //     $record->updated_at = $record->created_at;
-        //     $record->save();
-        // }
-
-        // $details = LottoResultDetail::where('lotto_item_id',1)->get();
-        // foreach ($details as $key => $detail) {
-        //     $this->info($detail->id);
-        //     $record = LottoRecord::find('id',$detail->lotto_record_id);
-        //     if($record){
-        //         $detail->created_at = $record->created_at;
-        //         $detail->updated_at = $record->created_at;
-        //         $detail->save();
-        //     }
-
-        // }
     }
 }

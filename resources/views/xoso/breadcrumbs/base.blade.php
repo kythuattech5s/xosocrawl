@@ -3,7 +3,7 @@
         <a class="title-a " href="{{ $lottoItem->lottoCategory->slug }}"
             title="{{ $lottoItem->lottoCategory->short_name }}">{{ $lottoItem->lottoCategory->short_name }}</a>
         »
-        <a class="title-a" href="{{ $lottoItem->slug }}"
+        <a class="title-a" href="{{ $lottoItem->getSlug() }}"
             title="{{ $lottoItem->short_name }}">{{ $lottoItem->short_name }}</a>
         »
         <a class="title-a " href="{{ $lottoRecord->link($linkPrefix ?? '') }}"

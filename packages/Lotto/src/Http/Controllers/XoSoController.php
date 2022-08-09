@@ -152,13 +152,39 @@ class XoSoController extends Controller
             abort(404);
         }
         $lottoItem = LottoItem::where('slug', $url)->where("is_master", 0)->first();
+        if ($lottoItem) {
+            return $this->xoSoMienNamToday($request, $lottoItem);
+        }
+        preg_match_all('/([1-9]|[1-2][0-9]|3[0-1])-(1[1-2]|[1-9])-\d{4}/mi', $url, $dateParams);
+        $url = preg_replace('/([1-9]|[1-2][0-9]|3[0-1])-(1[1-2]|[1-9])-\d{4}/mi', '%s', $url);
+        $dateParams = $dateParams[0];
+        if (count($dateParams) != 2) {
+            abort(404);
+        }
+        $dateParam = $dateParams[0];
+        $lottoItem = LottoItem::where('slug_date', $url)->where("is_master", 0)->first();
+        $lottoTime = $lottoItem->lottoTime;
+        $date = $lottoTime->getDateFromString($dateParam);
+        $this->checkAbort404($lottoItem);
+        $fullCode = $date->format('Ymd');
+        $lottoRecord = $lottoItem->lottoRecords()->where('fullcode', $fullCode)->orderBy('created_at', 'desc')->limit(1)->first();
+        $this->checkAbort404($lottoRecord);
+        $linkPrefix = $request->segment(1, '');
+        $currentItem = SeoHelper::getSeoProvince($lottoItem, $lottoRecord);
+        $prefixPath = 'mien_nam';
+        $typeRelated = LottoTypeRelate::PROVINCE_BY_DATE;
+        return view('xoso.detail', compact('lottoItem', 'lottoRecord', 'linkPrefix', 'currentItem', 'prefixPath', 'typeRelated'));
+    }
+    protected function xoSoMienNamToday(Request $request, $lottoItem)
+    {
         $this->checkAbort404($lottoItem);
         $lottoRecord = $lottoItem->lottoRecords()->orderBy('created_at', 'desc')->limit(1)->first();
         $this->checkAbort404($lottoRecord);
         $linkPrefix = $request->segment(1, '');
         $prefixPath = 'mien_nam';
+        $typeRelated = LottoTypeRelate::PROVINCE_TODAY;
+        $currentItem = SeoHelper::getSeoProvince($lottoItem, $lottoRecord);
 
-
-        return view('xoso.detail', compact('lottoItem', 'lottoRecord', 'linkPrefix', 'prefixPath'));
+        return view('xoso.detail', compact('lottoItem', 'lottoRecord', 'linkPrefix', 'prefixPath', 'typeRelated', 'currentItem'));
     }
 }

@@ -8,6 +8,7 @@ class LottoTypeRelate extends BaseEnum
     const DOW = 'dow';
     const DMY = 'dmY';
     const PROVINCE_TODAY = 'province_today';
+    const PROVINCE_BY_DATE = 'province_by_date';
 
     protected function getLimitTime($lottoRecord)
     {

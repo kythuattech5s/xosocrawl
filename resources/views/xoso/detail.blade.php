@@ -45,10 +45,13 @@
         </div>
         @php
             $prefixPath = $prefixPath ?? 'mien_bac';
-            $viewSeemore = 'xoso.' . $prefixPath . '.related.related_' . ($typeRelated ?? '');
+            $pathSeeMore = $typeRelated ? 'see_more_' . $typeRelated : 'see_more';
+            $viewSeemore = 'xoso.' . $prefixPath . '.' . $pathSeeMore;
         @endphp
         @if (View::exists($viewSeemore))
             @include($viewSeemore)
+        @else
+            @include('xoso.mien_bac.see_more')
         @endif
     </div>
     @php
