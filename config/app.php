@@ -189,6 +189,7 @@ return [
         basiccomment\comment\Providers\BasicCommentServiceProvider::class,
         Lotto\LottoServiceProvider::class,
         crawlmodule\basecrawler\Providers\BasecrawlerServiceProvider::class,
+        ModuleStatical\ModuleStaticalServiceProvider::class,
         /*
          * Application Service Providers...
          */

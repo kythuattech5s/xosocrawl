@@ -18,7 +18,7 @@
         </div>
     </div>
     @php
-        $listPredictLotteryProvinceResult = App\Models\PredictLotteryProvinceResult::act()->get();
+        $listPredictLotteryProvinceResult = App\Models\PredictLotteryProvinceResult::act()->where('show_sidebar',1)->get();
     @endphp
     @if (count($listPredictLotteryProvinceResult) > 0)
         <div class="content-right bullet">

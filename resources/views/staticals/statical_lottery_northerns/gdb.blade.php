@@ -18,31 +18,29 @@
                 @foreach ($listSameDuoiGdb as $item)
                     <tr>
                         @php
-                            $shortCodeDay = $item->created_at->day.'-'.$item->created_at->month.'-'.$item->created_at->year;
-                            $nextItem = $item->nextResult ?? null;
+                            $itemTime = now()->parse($item['lotto_record']['created_at']);
+                            $shortCodeDay = Support::createShortCodeDay(now()->parse($itemTime));
+                            $nextItem = $item['nextResult'] ?? null;
                         @endphp
                         <td>
-                            <a class="sub-title" href="xsmb-{{$shortCodeDay}}-ket-qua-xo-so-mien-bac-ngay-{{$shortCodeDay}}" title="XSMB {{$shortCodeDay}}">{{Support::showDateTime($item->created_at,'d-m-Y')}}</a>
+                            <a class="sub-title" href="xsmb-{{$shortCodeDay}}-ket-qua-xo-so-mien-bac-ngay-{{$shortCodeDay}}" title="XSMB {{Support::showDateTime($itemTime)}}">{{Support::showDateTime($itemTime)}}</a>
                         </td>
                         <td>
-                            <div class="statistic_lo bold">{{substr($item->number,0,3)}} <span class="clnote">{{substr($item->number,-2)}}</span></div>
+                            <div class="statistic_lo bold">{{substr($item['number'],0,3)}} <span class="clnote">{{substr($item['number'],-2)}}</span></div>
                         </td>
                         <td>
                             @if (isset($nextItem))
-                                <div class="statistic_lo bold">{{substr($nextItem->number,0,3)}} <span class="clnote">{{substr($nextItem->number,-2)}}</span></div>
+                                <div class="statistic_lo bold">{{substr($nextItem['number'],0,3)}} <span class="clnote">{{substr($nextItem['number'],-2)}}</span></div>
                             @else
                                 <div class="statistic_lo bold"><span class="clnote">-</span></div>
                             @endif
                         </td>
                         <td>
                             @php
-                                $shortCodeNextDay = $item->created_at->addDays(1)->day.'-'.$item->created_at->addDays(1)->month.'-'.$item->created_at->addDays(1)->year;
+                                $nextItemTime = isset($nextItem) ? now()->parse($nextItem['lotto_record']['created_at']):$itemTime->addDays(1);
+                                $shortCodeNextDay = Support::createShortCodeDay($nextItemTime);
                             @endphp
-                            @if (isset($nextItem))
-                                <a class="sub-title" href="xsmb-{{$shortCodeNextDay}}-ket-qua-xo-so-mien-bac-ngay-{{$shortCodeNextDay}}" title="XSMB {{$shortCodeNextDay}}">{{Support::showDateTime($nextItem->created_at,'d-m-Y')}}</a>
-                            @else
-                                <a class="sub-title" href="xsmb-{{$shortCodeNextDay}}-ket-qua-xo-so-mien-bac-ngay-{{$shortCodeNextDay}}" title="XSMB {{$shortCodeNextDay}}">{{$item->created_at->addDays(1)->format('d-m-Y')}}</a>
-                            @endif
+                            <a class="sub-title" href="xsmb-{{$shortCodeNextDay}}-ket-qua-xo-so-mien-bac-ngay-{{$shortCodeNextDay}}" title="XSMB {{Support::showDateTime($nextItemTime,'d-m-Y')}}">{{Support::showDateTime($nextItemTime,'d-m-Y')}}</a>
                         </td>
                     </tr>
                 @endforeach
@@ -51,7 +49,7 @@
     </div>
     <a href="de-ve-{{$haiSoCuoiGdb}}" class="btn-see-more magb10 txt-center" title="Đề về {{$haiSoCuoiGdb}}">Xem thêm</a>
     <div class="box box-note">
-        <div class=" see-more ">
+        <div class="see-more">
             <ul class="list-html-link two-column">
                 @foreach (Support::extractJson($currentItem->related_link) as $itemSeeMore)
                     <li>{{Support::show($itemSeeMore,'name')}} <a href="{{Support::show($itemSeeMore,'link')}}" title="{{Support::show($itemSeeMore,'title')}}">{{Support::show($itemSeeMore,'title')}}</a></li>
@@ -72,16 +70,120 @@
                     <th>Bộ số</th>
                     <th>Bộ số</th>
                 </tr>
-                {{-- @foreach (array_chunk(arrFrequency()) as $item)
-                    
-                @endforeach --}}
+                @foreach (array_chunk($arrFrequency,5,true) as $itemFrequency)
+                    <tr>
+                        @foreach ($itemFrequency as $key => $item)
+                            <td><span class="clred bold">{{$key}}</span> - {{$item}} lần</td>
+                        @endforeach
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="box tbl-row-hover statistic-cham">
+    <h3 class="tit-mien bold">Thống kê chạm những hôm về <span class="clnote bold">21</span></h3>
+    <div class="clearfix">
+        <table class="mag0 fl">
+            <tbody>
                 <tr>
-                    <td><span class="clred bold">84</span> - 4 lần</td>
-                    <td><span class="clred bold">67</span> - 3 lần</td>
-                    <td><span class="clred bold">85</span> - 2 lần</td>
-                    <td><span class="clred bold">98</span> - 2 lần</td>
-                    <td><span class="clred bold">65</span> - 2 lần</td>
+                    <th>Bộ số</th>
+                    <th>Đã về - <span class="clred">Đầu</span></th>
+                    <th>Đã về - <span class="clred">Đuôi</span></th>
+                    <th>Đã về - <span class="clred">Tổng</span></th>
                 </tr>
+                @for ($i = 0; $i <= 9; $i++)
+                    <tr>
+                        <td>{{$i}}</td>
+                        <td><span class="clred">{{$arrLotteryTouch['dau'][$i] ?? 0}}</span> lần</td>
+                        <td><span class="clred">{{$arrLotteryTouch['duoi'][$i] ?? 0}}</span> lần</td>
+                        <td><span class="clred">{{$arrLotteryTouch['tong'][$i] ?? 0}}</span> lần</td>
+                    </tr>
+                @endfor
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="box tbl-row-hover">
+    <h2 class="tit-mien bold">2 số cuối đặc biệt (đề gan lì) Miền Bắc lâu chưa về nhất</h2>
+    <ul class="list-unstyle list-dau-db clearfix">
+        @foreach ($topLoGanMb as $item)
+            <li>
+                <a href="de-ve-{{$item['duoigdb']}}" title="Đề về {{$item['duoigdb']}}" class="statistic_lo">{{$item['duoigdb']}}</a>: <span class="clnote">{{now()->parse($item['max_time'])->diff($timeGdb)->days}} ngày</span>
+            </li>
+        @endforeach
+    </ul>
+</div>
+<div class="box tbl-row-hover">
+    <h2 class="tit-mien bold">Thống kê đầu GĐB Miền Bắc lâu chưa về ra nhất</h2>
+    <div>
+        <table class="mag0">
+            <tbody>
+                <tr>
+                    <th>Đầu số</th>
+                    <th>Ngày ra gần đây</th>
+                    <th>Số ngày gan</th>
+                </tr>
+                @foreach ($topLoGanDauMb as $item)
+                    @php
+                        $maxTime = now()->parse($item['max_time']);
+                        $shortCodeDay = Support::createShortCodeDay($maxTime);
+                    @endphp
+                    <tr>
+                        <td class="s18 bold">{{$item['dau']}}</td>
+                        <td><a class="sub-title" href="xsmb-{{$shortCodeDay}}-ket-qua-xo-so-mien-bac-ngay-{{$shortCodeDay}}" title="xổ số Miền Bắc ngày {{Support::showDateTime($maxTime,'d-m-Y')}}">{{Support::showDateTime($maxTime,'d-m-Y')}}</a></td>
+                        <td class="s18 clred bold">{{$maxTime->diff($timeGdb)->days}}</td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="box tbl-row-hover">
+    <h2 class="tit-mien bold">Thống kê đuôi GĐB Miền Bắc lâu chưa về ra nhất</h2>
+    <div>
+        <table class="mag0">
+            <tbody>
+                <tr>
+                    <th>Đuôi số</th>
+                    <th>Ngày ra gần đây</th>
+                    <th>Số ngày gan</th>
+                </tr>
+                @foreach ($topLoGanDuoiMb as $item)
+                    @php
+                        $maxTime = now()->parse($item['max_time']);
+                        $shortCodeDay = Support::createShortCodeDay($maxTime);
+                    @endphp
+                    <tr>
+                        <td class="s18 bold">{{$item['duoi']}}</td>
+                        <td><a class="sub-title" href="xsmb-{{$shortCodeDay}}-ket-qua-xo-so-mien-bac-ngay-{{$shortCodeDay}}" title="xổ số Miền Bắc ngày {{Support::showDateTime($maxTime,'d-m-Y')}}">{{Support::showDateTime($maxTime,'d-m-Y')}}</a></td>
+                        <td class="s18 clred bold">{{$maxTime->diff($timeGdb)->days}}</td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="box tbl-row-hover">
+    <h2 class="tit-mien bold">Thống kê giải đặc biệt Miền Bắc ngày này năm xưa</h2>
+    <div>
+        <table class="mag0">
+            <tbody>
+                <tr>
+                    <th>Năm</th>
+                    <th>Ngày</th>
+                    <th>Giải đặc biệt</th>
+                </tr>
+                @foreach ($listToDayPastYear as $item)
+                    @php
+                        $shortCodeDay = Support::createShortCodeDay($item->lottoRecord->created_at);
+                    @endphp
+                    <tr>
+                        <td class="s18 bold">{{$item->lottoRecord->created_at->year}}</td>
+                        <td><a class="sub-title" href="xsmb-{{$shortCodeDay}}-ket-qua-xo-so-mien-bac-ngay-{{$shortCodeDay}}" title="xổ số Miền Bắc ngày {{Support::showDateTime($item->lottoRecord->created_at,'d-m-Y')}}">{{Support::showDateTime($item->lottoRecord->created_at,'d-m-Y')}}</a></td>
+                        <td class="s18 clred bold">{{$item->number}}</td>
+                    </tr>
+                @endforeach
             </tbody>
         </table>
     </div>

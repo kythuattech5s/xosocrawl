@@ -33,8 +33,8 @@ class PredictLotteryProvinceResultCrawler extends BaseCrawler
                     }
                 }
             }
-            PredictLotteryProvinceResult::query()->update(['act'=>0]);
-            PredictLotteryProvinceResult::whereIn('id',$arrActiveItemId)->update(['act'=>1]);
+            PredictLotteryProvinceResult::query()->update(['show_sidebar'=>0]);
+            PredictLotteryProvinceResult::whereIn('id',$arrActiveItemId)->update(['show_sidebar'=>1]);
         }
         return true;
     }

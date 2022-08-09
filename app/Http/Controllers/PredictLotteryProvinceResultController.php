@@ -10,7 +10,7 @@ class PredictLotteryProvinceResultController extends Controller
         $currentItem = PredictLotteryProvinceResult::with('category')->slug($link)->act()->first();
         if ($currentItem == null) { abort(404); }
         $currentItem->updateCountView();
-        $listDifferent = PredictLotteryProvinceResult::act()->where('id','!=',$currentItem->id)->get();
+        $listDifferent = PredictLotteryProvinceResult::act()->where('show_sidebar',1)->where('id','!=',$currentItem->id)->get();
         $listPredictLotteryResultCategory = PredictLotteryResultCategory::get();
         return view('predict_lottery_province_result.view',compact('currentItem','listDifferent','listPredictLotteryResultCategory'));
     }

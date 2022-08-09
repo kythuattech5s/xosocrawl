@@ -293,4 +293,8 @@ class Support
             return (!isset($arr['redirect']) ? redirect('/') : redirect($arr['redirect']));
         }
     }
+    public static function createShortCodeDay($time)
+    {
+        return $time->day.'-'.$time->month.'-'.$time->year;
+    }
 }
