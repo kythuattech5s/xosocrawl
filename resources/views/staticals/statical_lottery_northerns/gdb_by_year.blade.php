@@ -1,19 +1,3 @@
-@php
-    $maxDayOfMonth = [
-        1 => 31,
-        2 => 29,
-        3 => 31,
-        4 => 30,
-        5 => 31,
-        6 => 30,
-        7 => 31,
-        8 => 31,
-        9 => 30,
-        10 => 31,
-        11 => 30,
-        12 => 31
-    ]
-@endphp
 @extends('index')
 @section('breadcrumb')
     {{Breadcrumbs::render('statical_lottery_northerns', $currentItem)}}
@@ -21,14 +5,14 @@
 @section('main')
 <div class="box">
     @include('staticals.statical_lottery_northerns.list_tab_panel',['activeId'=>$currentItem->id])
-    <h2 class="tit-mien bold">Bảng đặc biệt miền Bắc theo tháng</h2>
+    <h2 class="tit-mien bold">Bảng đặc biệt miền Bắc theo năm</h2>
     <form id="statistic-form" class="form-horizontal" action="{{$currentItem->slug}}" method="post" accept-charset="utf8">
         @csrf
-        <div class="form-group field-statisticform-month">
-            <label class="control-label" for="statisticform-month">Chọn tháng</label>
-            <select id="statisticform-month" class="form-control" name="month">
-                @for ($month = 1; $month <= 12; $month++)
-                    <option value="{{$month}}" {{$month == $activeMonth ? 'selected':''}}>{{$month}}</option>
+        <div class="form-group field-statisticform-year">
+            <label class="control-label" for="statisticform-year">Chọn năm</label>
+            <select id="statisticform-year" class="form-control" name="year">
+                @for ($year = now()->year; $year >= 2002; $year--)
+                    <option value="{{$year}}" {{$year == $activeYear ? 'selected':''}}>{{$year}}</option>
                 @endfor
             </select>
             <div class="help-block"></div>
@@ -39,32 +23,32 @@
     </form>
 </div>
 <div class="box tbl-row-hover db-by-month">
-    <h3 class="tit-mien bold">Xem thống kê giải đặc biệt tháng {{$activeMonth}}</h3>
+    <h3 class="tit-mien bold">Xem thống kê giải đặc biệt năm {{$activeYear}}</h3>
     <div class="box tong" style="overflow: auto;" id="monthly-result">
         <table>
             <tbody>
                 <tr>
                     <th class="td-split">
                         <div>
-                            <span class="bottom">Năm</span>
-                            <span class="top">Ngày</span>
+                            <span class="top">Tháng</span>
+                            <span class="bottom">Ngày</span>
                             <div class="line"></div>
                         </div>
                     </th>
-                    @for ($day = 1; $day <= $maxDayOfMonth[$activeMonth]; $day++)
-                        <th>{{$day}}</th>
+                    @for ($month = 1; $month <= 12; $month++)
+                        <th width="70px">{{$month}}</th>
                     @endfor
                 </tr>
-                @for ($year = now()->year; $year >= 2002; $year--)
+                @for ($day = 1; $day <= 31; $day++)
                     <tr>
-                        <td>{{$year}}</td>
-                        @for ($day = 1; $day <= $maxDayOfMonth[$activeMonth]; $day++)
+                        <td>{{$day}}</td>
+                        @for ($month = 1; $month <= 12; $month++)
                             @php
-                                $code = $year.($activeMonth < 10 ? '0'.$activeMonth:$activeMonth).($day < 10 ? '0'.$day:$day);
+                                $code = $activeYear.($month < 10 ? '0'.$month:$month).($day < 10 ? '0'.$day:$day);
                             @endphp
                             <td>
                                 @if (isset($arrItems[$code]))
-                                    <div class="s16 bold"> {{substr($arrItems[$code]->number,0,3)}}<span class="clred">{{substr($arrItems[$code]->number,-2)}}</span> </div>
+                                    <div class="s14 bold"> {{substr($arrItems[$code]->number,0,3)}}<span class="clred">{{substr($arrItems[$code]->number,-2)}}</span> </div>
                                 @endif
                             </td>
                         @endfor

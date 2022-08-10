@@ -8,7 +8,7 @@
 @section('main')
 <div class="box tbl-row-hover">
     @include('staticals.statical_lottery_northerns.list_tab_panel',['activeId'=>$currentItem->id])
-    <h2 class="tit-mien bold">Bảng đặc biệt miền Bắc theo tuần từ {{Support::showDateTime(,'name')}} đến 09-08-2022</h2>
+    <h2 class="tit-mien bold">Bảng đặc biệt miền Bắc theo tuần từ {{Support::showDateTime($timeStart,'d-m-Y')}} đến {{Support::showDateTime($timeEnd,'d-m-Y')}}</h2>
     <div class="box tong" id="monthly-result">
         <table>
             <tbody>
@@ -57,7 +57,6 @@
                         @endfor
                     </tr>
                 @endwhile
-                
             </tbody>
         </table>
     </div>

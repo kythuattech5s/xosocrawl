@@ -12,4 +12,8 @@ class ModuleStaticalHelper
         if (json_last_error() != JSON_ERROR_NONE) return $def;
         return $isArray ? json_decode($json,true):json_decode($json);
     }
+    public static function parseStringToTime($timeString)
+    {
+        return now()->createFromTimestamp(strtotime($timeString));
+    }
 }

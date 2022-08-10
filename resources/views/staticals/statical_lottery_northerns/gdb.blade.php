@@ -1,3 +1,7 @@
+@php
+    use ModuleStatical\Helpers\ModuleStaticalHelper;
+    use ModuleStatical\Gdbmb\ModuleStaticalGdbmb;
+@endphp
 @extends('index')
 @section('breadcrumb')
     {{Breadcrumbs::render('statical_lottery_northerns', $currentItem)}}
@@ -18,8 +22,8 @@
                 @foreach ($listSameDuoiGdb as $item)
                     <tr>
                         @php
-                            $itemTime = now()->parse($item['lotto_record']['created_at']);
-                            $shortCodeDay = Support::createShortCodeDay(now()->parse($itemTime));
+                            $itemTime = ModuleStaticalHelper::parseStringToTime($item['lotto_record']['created_at']);
+                            $shortCodeDay = Support::createShortCodeDay($itemTime);
                             $nextItem = $item['nextResult'] ?? null;
                         @endphp
                         <td>
@@ -37,7 +41,7 @@
                         </td>
                         <td>
                             @php
-                                $nextItemTime = isset($nextItem) ? now()->parse($nextItem['lotto_record']['created_at']):$itemTime->addDays(1);
+                                $nextItemTime = isset($nextItem) ? ModuleStaticalHelper::parseStringToTime($nextItem['lotto_record']['created_at']):$itemTime->addDays(1);
                                 $shortCodeNextDay = Support::createShortCodeDay($nextItemTime);
                             @endphp
                             <a class="sub-title" href="xsmb-{{$shortCodeNextDay}}-ket-qua-xo-so-mien-bac-ngay-{{$shortCodeNextDay}}" title="XSMB {{Support::showDateTime($nextItemTime,'d-m-Y')}}">{{Support::showDateTime($nextItemTime,'d-m-Y')}}</a>
@@ -109,7 +113,7 @@
     <ul class="list-unstyle list-dau-db clearfix">
         @foreach ($topLoGanMb as $item)
             <li>
-                <a href="de-ve-{{$item['duoigdb']}}" title="Đề về {{$item['duoigdb']}}" class="statistic_lo">{{$item['duoigdb']}}</a>: <span class="clnote">{{now()->parse($item['max_time'])->diff($timeGdb)->days}} ngày</span>
+                <a href="de-ve-{{$item['duoigdb']}}" title="Đề về {{$item['duoigdb']}}" class="statistic_lo">{{$item['duoigdb']}}</a>: <span class="clnote">{{ModuleStaticalHelper::parseStringToTime($item['max_time'])->startOfDay()->diff(ModuleStaticalGdbmb::getGdbTime()->startOfDay())->days}} ngày</span>
             </li>
         @endforeach
     </ul>
@@ -126,13 +130,13 @@
                 </tr>
                 @foreach ($topLoGanDauMb as $item)
                     @php
-                        $maxTime = now()->parse($item['max_time']);
+                        $maxTime = ModuleStaticalHelper::parseStringToTime($item['max_time']);
                         $shortCodeDay = Support::createShortCodeDay($maxTime);
                     @endphp
                     <tr>
                         <td class="s18 bold">{{$item['dau']}}</td>
                         <td><a class="sub-title" href="xsmb-{{$shortCodeDay}}-ket-qua-xo-so-mien-bac-ngay-{{$shortCodeDay}}" title="xổ số Miền Bắc ngày {{Support::showDateTime($maxTime,'d-m-Y')}}">{{Support::showDateTime($maxTime,'d-m-Y')}}</a></td>
-                        <td class="s18 clred bold">{{$maxTime->diff($timeGdb)->days}}</td>
+                        <td class="s18 clred bold">{{$maxTime->startOfDay()->diff(ModuleStaticalGdbmb::getGdbTime()->startOfDay())->days}}</td>
                     </tr>
                 @endforeach
             </tbody>
@@ -151,13 +155,13 @@
                 </tr>
                 @foreach ($topLoGanDuoiMb as $item)
                     @php
-                        $maxTime = now()->parse($item['max_time']);
+                        $maxTime = ModuleStaticalHelper::parseStringToTime($item['max_time']);
                         $shortCodeDay = Support::createShortCodeDay($maxTime);
                     @endphp
                     <tr>
                         <td class="s18 bold">{{$item['duoi']}}</td>
                         <td><a class="sub-title" href="xsmb-{{$shortCodeDay}}-ket-qua-xo-so-mien-bac-ngay-{{$shortCodeDay}}" title="xổ số Miền Bắc ngày {{Support::showDateTime($maxTime,'d-m-Y')}}">{{Support::showDateTime($maxTime,'d-m-Y')}}</a></td>
-                        <td class="s18 clred bold">{{$maxTime->diff($timeGdb)->days}}</td>
+                        <td class="s18 clred bold">{{$maxTime->startOfDay()->diff(ModuleStaticalGdbmb::getGdbTime()->startOfDay())->days}}</td>
                     </tr>
                 @endforeach
             </tbody>
