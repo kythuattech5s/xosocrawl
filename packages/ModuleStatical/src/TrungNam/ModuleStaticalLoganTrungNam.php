@@ -9,40 +9,48 @@ class ModuleStaticalLoganTrungNam extends ModuleStaticalTrungNam
     public static function getTopGanByLoganItem($itemLogan,$top)
     {
         $currentTime = self::getTime();
-        $listItems = LottoResultDetail::select(\DB::raw('right(number, 2) as duoi'),\DB::raw('max(created_at) as max_time'))
+        $listDuoi = LottoResultDetail::select(\DB::raw('right(number, 2) as duoi'),\DB::raw('max(created_at) as max_time'))
                                 ->where('lotto_item_id',$itemLogan->lotto_item_id)
                                 ->groupBy('duoi')
                                 ->having('duoi','!=','')
                                 ->orderBy('max_time','asc')
                                 ->limit($top)
-                                ->get();
+                                ->pluck('duoi')->toArray();
+        $listItemStatical = LottoResultDetail::select('created_at',\DB::raw('right(number, 2) as duoi'))
+                                        ->where('lotto_item_id',$itemLogan->lotto_item_id)
+                                        ->havingRaw("duoi in ('".implode("','",$listDuoi)."')")
+                                        ->orderBy('created_at','asc')
+                                        ->get()->groupBy('duoi');
         $arrDayOfWeek = explode(',',$itemLogan->day_of_week);
-        foreach ($listItems as $item) {
-            $maxTime = ModuleStaticalHelper::parseStringToTime($item->max_time);
-            $weekDiff = $currentTime->diffInWeeks($maxTime);
-            $totalGanDay = $weekDiff > 1 ? ($weekDiff - 1)*count($arrDayOfWeek):0;
-
-            $maxTimeDayOfWeek = $maxTime->dayOfWeek == 0 ? 7:$maxTime->dayOfWeek;
-            $count = $maxTimeDayOfWeek;
-            do {
-                $count++;
-                $compare = $count == 7 ? 0:$count;
-                if (in_array($compare,$arrDayOfWeek)) {
-                    $totalGanDay++;
+        $arrItems = [];
+        foreach ($listItemStatical as $key => $itemStatical) {
+            if (count($itemStatical) > 0) {
+                $arrFillter = [];
+                foreach ($itemStatical as $item) {
+                    $arrFillter[ModuleStaticalHelper::timeToFullcode($item->created_at)] = $item; 
                 }
-            } while ($count <= 7);
-
-            $count = $currentTime->dayOfWeek;
-            while ($count > 0) {
-                $count--;
-                if (in_array($count,$arrDayOfWeek)) {
-                    $totalGanDay++;
+                $arrItems[$key] = [];
+                $arrItems[$key]['gan'] = 0;
+                $arrItems[$key]['currentItem'] = $itemStatical[0];
+                $arrItems[$key]['maxGan'] = 0;
+                $timeLog = $itemStatical[0]->created_at->addDays(1);
+                while ($timeLog->lt($currentTime)) {
+                    if (in_array($timeLog->dayOfWeek,$arrDayOfWeek)) {
+                        if (isset($arrFillter[ModuleStaticalHelper::timeToFullcode($timeLog)])) {
+                            $arrItems[$key]['gan'] = 0;
+                            $arrItems[$key]['currentItem'] = $arrFillter[ModuleStaticalHelper::timeToFullcode($timeLog)];
+                        }else{
+                            $arrItems[$key]['gan'] = $arrItems[$key]['gan']+1;
+                            if ($arrItems[$key]['maxGan'] < $arrItems[$key]['gan']) {
+                                $arrItems[$key]['maxGan'] = $arrItems[$key]['gan'];
+                            }
+                        }
+                    }
+                    $timeLog->addDays(1);
                 }
             }
-            $item->dayGan = $totalGanDay;
         }
-        $listDuoi = $listItems->pluck('duoi');
-        
+        $listItems = collect($arrItems)->sortByDesc('gan');
         return $listItems;
     }
 }

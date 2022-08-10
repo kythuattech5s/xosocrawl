@@ -42,7 +42,10 @@ class ModuleStaticalGdbmb
     }
     public static function getGdbTime(){
         $time = now()->subDays(1);
-        if (now()->hour >= 18 && now()->minute >= 18) {
+        if (now()->hour = 18 && now()->minute >= 18) {
+            $time = now();
+        }
+        if (now()->hour > 18) {
             $time = now();
         }
         return $time;

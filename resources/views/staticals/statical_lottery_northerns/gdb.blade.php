@@ -86,7 +86,7 @@
     </div>
 </div>
 <div class="box tbl-row-hover statistic-cham">
-    <h3 class="tit-mien bold">Thống kê chạm những hôm về <span class="clnote bold">21</span></h3>
+    <h3 class="tit-mien bold">Thống kê chạm những hôm về <span class="clnote bold">{{$haiSoCuoiGdb}}</span></h3>
     <div class="clearfix">
         <table class="mag0 fl">
             <tbody>

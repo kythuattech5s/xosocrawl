@@ -53,14 +53,14 @@
                         </tr>
                         @foreach (ModuleStaticalLoganTrungNam::getTopGanByLoganItem($itemLoganActive,10) as $item)
                             @php
-                                $maxTime = ModuleStaticalHelper::parseStringToTime($item->max_time);
+                                $maxTime = ModuleStaticalHelper::parseStringToTime($item['currentItem']->created_at);
                                 $shortCodeDay = Support::createShortCodeDay($maxTime);
                             @endphp
                             <tr>
-                                <td><strong>{{$item->duoi}}</strong></td>
-                                <td><a class="sub-title bold" href="xsdn-{{$shortCodeDay}}-ket-qua-xo-so-dong-nai-ngay-{{$shortCodeDay}}-p11" title="xổ số Đồng Nai ngày {{Support::showDateTime($maxTime,'d-m-Y')}}">{{Support::showDateTime($maxTime,'d-m-Y')}}</a></td>
-                                <td class="s18 clred bold">{{$item->dayGan}}</td>
-                                <td class="s18 clred bold">27</td>
+                                <td><strong>{{$item['currentItem']->duoi}}</strong></td>
+                                <td><a class="sub-title bold" href="xsdn-{{$shortCodeDay}}-ket-qua-xo-so-dong-nai-ngay-{{$shortCodeDay}}-p11" title="xổ số {{Support::show($itemLoganActive,'province_name')}} ngày {{Support::showDateTime($maxTime,'d-m-Y')}}">{{Support::showDateTime($maxTime,'d-m-Y')}}</a></td>
+                                <td class="s18 clred bold">{{$item['gan']}}</td>
+                                <td class="s18 clred bold">{{$item['maxGan']}}</td>
                             </tr>
                         @endforeach
                     </tbody>
