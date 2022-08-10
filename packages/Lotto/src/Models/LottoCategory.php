@@ -27,10 +27,10 @@ class LottoCategory extends BaseModel
         //     $q->where('lotto_times.dayofweek', $dow);
         // })->get();
     }
-    public function lottoNearestItem()
+    public function lottoNearestItem($limit = 1)
     {
         $currentDayOfWeek = LottoHelper::getCurrentDateOfWeek();
-        return $this->lottoItems()->select(DB::raw('lotto_items.*'))->join('lotto_times', function ($join) {
+        return $this->lottoItems()->select(DB::raw('lotto_items.*, lotto_times.dayofweek dow'))->join('lotto_times', function ($join) {
             $join->on('lotto_items.id', '=', 'lotto_times.lotto_item_id');
         })
             ->join('lotto_records', function ($join) {
@@ -38,7 +38,7 @@ class LottoCategory extends BaseModel
             })
             ->where('lotto_records.status', CrawlStatus::SUCCESS)
             ->orderBy('lotto_records.created_at', 'desc')
-            ->orderByRaw('ABS(' . $currentDayOfWeek . '-lotto_times.dayofweek)')->limit(1)->get();
+            ->orderByRaw('ABS(' . $currentDayOfWeek . '-lotto_times.dayofweek)')->limit($limit)->get();
     }
     public function linkDate($lottoRecord)
     {

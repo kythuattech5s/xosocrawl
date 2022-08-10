@@ -9,7 +9,7 @@
                 </tr>
             @endif
             @foreach ($lottoRecord->lottoResultDetails->groupBy('no_prize') as $no => $details)
-                <tr class="{{ \Lotto\Enums\NoPrize::getClassTr($no) }}">
+                <tr class="{{ \Lotto\Enums\NoPrize::getClassTr($no, $prefixPath ?? '') }}">
                     <td class="txt-giai">{{ $no == 0 ? 'ĐB' : 'Giải ' . $no }}</td>
                     <td class="v-giai number ">
                         @foreach ($details as $idx => $detail)

@@ -39,12 +39,12 @@ class LottoRecord extends BaseModel
     }
     public function insertResults($results, $date)
     {
-        $now = now();
         foreach ($results as $key => $rows) {
             foreach ($rows as $td) {
                 $item = new LottoResultDetail();
                 $item->lotto_record_id = $this->id;
                 $item->lotto_item_id = $this->lotto_item_id;
+                $item->lotto_category_id = $this->lotto_category_id;
                 $item->created_at = $date;
                 $item->updated_at = $date;
                 $item->no_prize = $key;

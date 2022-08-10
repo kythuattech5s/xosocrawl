@@ -45,6 +45,10 @@ class LottoItem extends BaseModel
     {
         return $this->hasMany(LottoRecord::class);
     }
+    public function lastLottoRecord()
+    {
+        return $this->hasOne(LottoRecord::class)->orderBy('created_at', 'desc');
+    }
     public function lottoCategory()
     {
         return $this->belongsTo(LottoCategory::class);

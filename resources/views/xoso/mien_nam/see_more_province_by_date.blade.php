@@ -1,12 +1,13 @@
 <div class="see-more">
     <div class="bold see-more-title">Xem theo ngày:</div>
     <ul class="list-html-link">
-        <?php $lottoPrv = clone $lottoRecord; ?>
+        <?php $lottoPrv = clone $lottoRecord;
+        $strNow = now()->format('Ymd'); ?>
         @for ($i = 0; $i < 5; $i++)
             <?php $lottoPrv = $lottoPrv->prev(); ?>
             <li>Xem <a href="{{ $lottoPrv->link($linkPrefix) }}"
                     title="{{ $lottoItem->short_name }} {{ $lottoPrv->created_at->format('j/n/Y') }}">{{ $lottoItem->short_name }}
-                    {{ $lottoPrv->created_at->format('j/n/Y') }}</a> (hôm nay)
+                    {{ $lottoPrv->created_at->format('j/n/Y') }}</a>{{ $strNow == $lottoPrv->created_at->format('Ymd') ? ' (hôm nay)' : '' }}
             </li>
         @endfor
     </ul>
