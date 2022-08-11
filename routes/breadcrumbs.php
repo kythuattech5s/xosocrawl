@@ -74,3 +74,11 @@ Breadcrumbs::for('logan_categories', function ($trail,$currentItem) {
     $trail->parent('home');
     $trail->push($currentItem->breadcrum_name, Support::show($currentItem, 'slug'));
 });
+Breadcrumbs::for('logans', function ($trail,$currentItem) {
+    if ($currentItem->category == null) {
+        $trail->parent('home');
+    }else{
+        $trail->parent('logan_categories',$currentItem->category);
+    }
+    $trail->push('Thống kê lô gan '.$currentItem->province_name, Support::show($currentItem, 'slug'));
+});

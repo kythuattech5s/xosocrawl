@@ -1,7 +1,6 @@
 @php
     use ModuleStatical\Helpers\ModuleStaticalHelper;
     use ModuleStatical\TrungNam\ModuleStaticalLoganTrungNam;
-    $timeTrungNam = ModuleStaticalLoganTrungNam::getTime();
 @endphp
 @extends('index')
 @section('breadcrumb')
@@ -51,16 +50,16 @@
                             <th>Số ngày gan</th>
                             <th>Gan cực đại</th>
                         </tr>
-                        @foreach (ModuleStaticalLoganTrungNam::getTopGanByLoganItem($itemLoganActive,10) as $item)
+                        @foreach (ModuleStaticalLoganTrungNam::getTopGanByLoganItem($itemLoganActive,10,10) as $item)
                             @php
-                                $maxTime = ModuleStaticalHelper::parseStringToTime($item['currentItem']->created_at);
+                                $maxTime = ModuleStaticalHelper::parseStringToTime($item->max_time);
                                 $shortCodeDay = Support::createShortCodeDay($maxTime);
                             @endphp
                             <tr>
-                                <td><strong>{{$item['currentItem']->duoi}}</strong></td>
-                                <td><a class="sub-title bold" href="xsdn-{{$shortCodeDay}}-ket-qua-xo-so-dong-nai-ngay-{{$shortCodeDay}}-p11" title="xổ số {{Support::show($itemLoganActive,'province_name')}} ngày {{Support::showDateTime($maxTime,'d-m-Y')}}">{{Support::showDateTime($maxTime,'d-m-Y')}}</a></td>
-                                <td class="s18 clred bold">{{$item['gan']}}</td>
-                                <td class="s18 clred bold">{{$item['maxGan']}}</td>
+                                <td><strong>{{$item->duoi}}</strong></td>
+                                <td><a class="sub-title bold" href="{{$itemLoganActive->lottoItem->buildLinkKetQua($maxTime)}}" title="xổ số {{Support::show($currentItem,'province_name')}} ngày {{Support::showDateTime($maxTime,'d-m-Y')}}">{{Support::showDateTime($maxTime,'d-m-Y')}}</a></td>
+                                <td class="s18 clred bold">{{$item->gan}}</td>
+                                <td class="s18 clred bold">{{$item->gan_maximum}}</td>
                             </tr>
                         @endforeach
                     </tbody>

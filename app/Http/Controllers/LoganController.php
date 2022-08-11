@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 use App\Models\Logan;
 use App\Models\LoganCategory;
 
-class LoganCategoryController extends Controller
+class LoganController extends Controller
 {	
     public function view($request, $route, $link){
         if ($request->isMethod('post')) {
@@ -23,19 +23,13 @@ class LoganCategoryController extends Controller
                 }
             }
         }
-        $currentItem = LoganCategory::slug($link)->act()->first();
+        $currentItem = Logan::slug($link)->whereHas('category')->with('lottoItem')->with('category')->act()->first();
         if ($currentItem == null) { abort(404); }
         $currentItem->updateCountView();
-        if ($currentItem->id != 1) {
-            $listLogan = $currentItem->logan()->get();
-            $activeNumOfDay = 10;
-            $listItemLoganActive = $currentItem->logan()
-                                                ->with('lottoItem')
-                                                ->whereRaw('FIND_IN_SET(?, day_of_week)', [now()->dayOfWeek])
-                                                ->get();
-            return view('staticals.logan_categories.view',compact('currentItem','listLogan','activeNumOfDay','listItemLoganActive'));
-        }else {
-            dd('Éc éc');
-        }
+        $listLogan = $currentItem->category->logan()->get();
+        $activeNumOfDay = (int)(session()->get('num_of_day') ?? 10);
+        $activeNumOfDay = $activeNumOfDay > 50 ? 50:$activeNumOfDay;
+        $activeNumOfDay = $activeNumOfDay < 2 ? 2:$activeNumOfDay;
+        return view('staticals.logans.view',compact('currentItem','listLogan','activeNumOfDay'));
     }
 }

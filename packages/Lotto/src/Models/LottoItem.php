@@ -5,6 +5,7 @@ namespace Lotto\Models;
 use App\Models\BaseModel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Lotto\Helpers\LottoHelper;
+use Support;
 
 class LottoItem extends BaseModel
 {
@@ -47,5 +48,10 @@ class LottoItem extends BaseModel
     public function lottoCategory()
     {
         return $this->belongsTo(LottoCategory::class);
+    }
+    public function buildLinkKetQua($date)
+    {
+        $code = Support::createShortCodeDay($date);
+        return vsprintf($this->prefix_slug_segment,[$code,$code]);
     }
 }
