@@ -1,40 +1,33 @@
-<div data-id="dd" class="col-firstlast">
-    <table class="firstlast-mb fl">
+<div data-id="dd" class="col-firstlast colthreecity colgiai">
+    <table class="firstlast-mn bold">
         <tbody>
-            <tr class="header">
-                <th>Đầu</th>
-                <th>Đuôi</th>
-            </tr>
-            @foreach ($lottoItemMnCollection->headTail()->getHeads() as $key => $numbers)
-                <tr>
-                    <td class="clnote">{{ $key }}</td>
-                    <td class="v-loto-dau-0">{!! implode(
-                        ',',
-                        array_map(function ($number) {
-                            return $number->isSpecial() ? '<span class="clnote">' . $number->getNumber() . '</span>' : $number->getNumber();
-                        }, $numbers),
-                    ) !!}</td>
-                </tr>
+            @foreach ($lottoItemMnCollection->headTail()->getHeads() as $key => $provinces)
+                @if ($key == -1)
+                    <tr class="header">
+                        <th class="first">Đầu</th>
+                        @foreach ($provinces as $province)
+                            <th>{{ $province['item']->name }}</th>
+                        @endforeach
+                    </tr>
+                @endif
             @endforeach
-        </tbody>
-    </table>
-    <table class="firstlast-mb fr">
-        <tbody>
-            <tr class="header">
-                <th>Đầu</th>
-                <th>Đuôi</th>
-            </tr>
-            @foreach ($lottoItemMnCollection->headTail()->getTails() as $key => $numbers)
-                <tr>
-                    <td class="v-loto-dau-0">{!! implode(
-                        ',',
-                        array_map(function ($number) {
-                            return $number->isSpecial() ? '<span class="clnote">' . $number->getNumber() . '</span>' : $number->getNumber();
-                        }, $numbers),
-                    ) !!}</td>
-                    <td class="clnote">{{ $key }}</td>
-                </tr>
+            @foreach ($lottoItemMnCollection->headTail()->getHeads() as $key => $provinces)
+                @if ($key != -1)
+                    <tr>
+                        <td class="clnote bold">{{ $key }}</td>
+                        @foreach ($provinces as $province)
+                            <td class="v-loto-dau-{{ $key }}">{!! implode(
+                                ',',
+                                array_map(function ($number) {
+                                    return $number->isSpecial() ? '<span class="clred">' . $number->getNumber() . '</span>' : $number->getNumber();
+                                }, $province['numbers']),
+                            ) !!}
+                            </td>
+                        @endforeach
+                    </tr>
+                @endif
             @endforeach
+
         </tbody>
     </table>
 </div>

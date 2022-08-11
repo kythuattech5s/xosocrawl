@@ -195,7 +195,7 @@ class XoSoController extends Controller
         $lottoCategory = LottoCategory::find($route->map_id);
 
         $this->checkAbort404($lottoCategory);
-        $listLottoItems = $lottoCategory->lottoNearestItem(3)->groupBy('dow');
+        $listLottoItems = $lottoCategory->lottoNearestItem(4)->groupBy('dow');
         $lottoItems = $listLottoItems->first();
         foreach ($listLottoItems as $tmp) {
             if (count($tmp) > count($lottoItems)) {

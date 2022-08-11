@@ -8,13 +8,24 @@ class HeadTailMn extends HeadTail
 {
     protected function calculate()
     {
-        foreach ($this->details as  $items) {
-            foreach ($items as $item) {
-                if (!array_key_exists('numbers', $item)) continue;
-                $details = $item['numbers'];
-                foreach ($details as $detail) {
-                    $number = $detail->number;
-                    $no_prize = $detail->no_prize;
+        foreach ($this->details as $key =>  $itemPrizes) {
+            foreach ($itemPrizes as $itemPrize) {
+
+                if (!array_key_exists('item', $itemPrize)) continue;
+
+                $item = $itemPrize['item'];
+                $itemId = $item->id;
+                $this->initArrayHead($itemId, $item);
+
+                if (!array_key_exists('numbers', $itemPrize)) {
+                    continue;
+                }
+
+                $numbers = $itemPrize['numbers'];
+
+                foreach ($numbers as $lottoResultDetail) {
+                    $number = $lottoResultDetail->number;
+                    $no_prize = $lottoResultDetail->no_prize;
                     $twoLastNumber = substr($number, -2);
                     $firstHead = substr($twoLastNumber, 0, 1);
                     $firstTail = substr($twoLastNumber, -1);
@@ -24,11 +35,23 @@ class HeadTailMn extends HeadTail
                     if (!Arr::exists($this->tail, $firstTail)) {
                         $this->tail[$firstTail] = [];
                     }
-                    $this->head[$firstHead][] = new HeadTailObject($no_prize, $firstTail);
-                    $this->tail[$firstTail][] = new HeadTailObject($no_prize, $firstHead);
+                    $this->head[$firstHead][$itemId]['numbers'][] = new HeadTailObject($no_prize, $firstTail);
                 }
             }
         }
         $this->isCalculate = true;
+    }
+    private function initArrayHead($itemId, $item)
+    {
+        for ($i = -1; $i < 10; $i++) {
+            $key = $i . '';
+            if (!array_key_exists($key, $this->head)) {
+                $this->head[$key] = [];
+            }
+            if (!array_key_exists($itemId, $this->head[$key])) {
+                $this->head[$key][$itemId]['item'] = $item;
+                $this->head[$key][$itemId]['numbers'] = [];
+            }
+        }
     }
 }

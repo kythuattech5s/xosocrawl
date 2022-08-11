@@ -72,7 +72,7 @@ class LottoRecord extends BaseModel
     {
         return $this->belongsTo(LottoItem::class);
     }
-    public function prev($checkLottoItem = true, $dow = false)
+    public function prev($checkLottoItem = true, $dow = false, $limit = 1)
     {
         $q = static::select("lotto_records.*");
         if ($dow) {
@@ -80,11 +80,20 @@ class LottoRecord extends BaseModel
             $dowMysql = $d->toDayOfWeekMysql();
             $q->whereRaw('DAYOFWEEK(lotto_records.created_at) = ' . $dowMysql);
         }
-        $q->where('lotto_records.created_at', '<', $this->created_at)->where('lotto_records.lotto_category_id', $this->lotto_category_id);
+        $createdAt = $this->created_at;
+        $createdAt->hour = 0;
+        $createdAt->minute = 0;
+        $createdAt->second = 0;
+        $q->where('lotto_records.created_at', '<', $createdAt)->where('lotto_records.lotto_category_id', $this->lotto_category_id);
         if ($checkLottoItem) {
             $q->where('lotto_records.lotto_item_id', $this->lotto_item_id);
         }
-        return $q->orderBy('lotto_records.created_at', 'desc')->limit(1)->first();
+        $q->orderBy('lotto_records.created_at', 'desc');
+        if ($limit == 1) {
+            return $q->limit(1)->first();
+        } else {
+            return $q->limit($limit)->get();
+        }
     }
     public function next($checkLottoItem = true)
     {
