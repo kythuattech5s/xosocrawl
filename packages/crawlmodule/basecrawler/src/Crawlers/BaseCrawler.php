@@ -6,7 +6,6 @@ use crawlmodule\basecrawler\Crawlers\Contracts\CrawlerInterface;
 use App\Helpers\Media;
 use vanhenry\manager\model\VRoute as ModelVRoute;
 use vanhenry\manager\model\Media as ModelMedia;
-use Google\Cloud\Vision\V1\ImageAnnotatorClient;
 
 class BaseCrawler implements CrawlerInterface
 {
@@ -30,6 +29,10 @@ class BaseCrawler implements CrawlerInterface
     public function __construct()
     {
         @include_once('simple_html_dom.php');
+    }
+    public function setImageSaveDir($imageSaveDir)
+    {
+        $this->imageSaveDir = $imageSaveDir;
     }
     public function exeCurl($url, $type = 'GET', $data = null, $headers = [])
     {
@@ -102,73 +105,73 @@ class BaseCrawler implements CrawlerInterface
         $content = trim($content);
         return $content;
     }
-    public function blockTextImage($imagePath){
-        // if (\SettingHelper::getSetting('block_text_crawl_image',0) == 1) {
-        //     $this->blockTextImage($pathAbsolute . $fileName);
-        // }
-        $visionClient = new ImageAnnotatorClient([
-            'projectId' => \SettingHelper::getSetting('gg_vision_project_id',0),
-            'keyFilePath' => \SettingHelper::getSettingFile('gg_vision_credential_file'),
-            'credentials' => \SettingHelper::getSettingFile('gg_vision_credential_file')
-        ]);
-        $textNeedBlockInImage = \SettingHelper::getSetting('block_text_crawl_image_word');
-        $arrTextNeedBlockInImage = explode(',',$textNeedBlockInImage);
-        foreach ($arrTextNeedBlockInImage as $key => $item) {
-            $arrTextNeedBlockInImage[$key] = trim($item);
-        }
+    // public function blockTextImage($imagePath){
+    //     // if (\SettingHelper::getSetting('block_text_crawl_image',0) == 1) {
+    //     //     $this->blockTextImage($pathAbsolute . $fileName);
+    //     // }
+    //     $visionClient = new ImageAnnotatorClient([
+    //         'projectId' => \SettingHelper::getSetting('gg_vision_project_id',0),
+    //         'keyFilePath' => \SettingHelper::getSettingFile('gg_vision_credential_file'),
+    //         'credentials' => \SettingHelper::getSettingFile('gg_vision_credential_file')
+    //     ]);
+    //     $textNeedBlockInImage = \SettingHelper::getSetting('block_text_crawl_image_word');
+    //     $arrTextNeedBlockInImage = explode(',',$textNeedBlockInImage);
+    //     foreach ($arrTextNeedBlockInImage as $key => $item) {
+    //         $arrTextNeedBlockInImage[$key] = trim($item);
+    //     }
 
-        $response = $visionClient->textDetection(
-            fopen($imagePath, 'r'),
-            ['TEXT_DETECTION']
-        );
-        $annotation = $response->getTextAnnotations();
-        for ($i=0; $i < $annotation->count(); $i++) { 
-            $container = $annotation->offsetGet($i);
-            if (in_array($container->getDescription(),$arrTextNeedBlockInImage) && $container->hasBoundingPoly()) {
-                $boundingPoly = $container->getBoundingPoly();
-                $vertices = $boundingPoly->getVertices();
-                if ($vertices->count() == 4) {
-                    $arrPositonText = [
-                        'top-left' => [
-                            'x' => $vertices->offsetGet(0)->getX(),
-                            'y' => $vertices->offsetGet(0)->getY()
-                        ],
-                        'top-right' => [
-                            'x' => $vertices->offsetGet(1)->getX(),
-                            'y' => $vertices->offsetGet(1)->getY()
-                        ],
-                        'bottom-right' => [
-                            'x' => $vertices->offsetGet(2)->getX(),
-                            'y' => $vertices->offsetGet(2)->getY()
-                        ],
-                        'bottom-left' => [
-                            'x' => $vertices->offsetGet(3)->getX(),
-                            'y' => $vertices->offsetGet(3)->getY()
-                        ]
-                    ];
-                    $itemPosition = [
-                        'x' => $arrPositonText['top-left']['x'] >= 10 ? $arrPositonText['top-left']['x'] - 10:0,
-                        'y' => $arrPositonText['top-left']['y'] >= 10 ? $arrPositonText['top-left']['y'] - 10:0,
-                        'width'=> $arrPositonText['top-right']['x'] - $arrPositonText['top-left']['x'] + 20,
-                        'height'=> $arrPositonText['bottom-left']['y'] - $arrPositonText['top-left']['y'] + 20
-                    ];
-                    $img = \Image::make($imagePath);
-                    $watermark = \Image::make(\SettingHelper::getSettingFile('block_text_crawl_image_image'));
-                    if ($itemPosition['width']/$itemPosition['height'] <= $watermark->width()/$watermark->height()) {
-                        $watermark->resize(null,$itemPosition['height'], function ($constraint) {
-                            $constraint->aspectRatio();
-                        });
-                    }else{
-                        $watermark->resize($itemPosition['width'], null, function ($constraint) {
-                            $constraint->aspectRatio();
-                        });
-                    }
-                    $img->insert($watermark,'top-left',$itemPosition['x'],$itemPosition['y']);
-                    $img->save($imagePath);
-                }
-            }
-        }
-    }
+    //     $response = $visionClient->textDetection(
+    //         fopen($imagePath, 'r'),
+    //         ['TEXT_DETECTION']
+    //     );
+    //     $annotation = $response->getTextAnnotations();
+    //     for ($i=0; $i < $annotation->count(); $i++) { 
+    //         $container = $annotation->offsetGet($i);
+    //         if (in_array($container->getDescription(),$arrTextNeedBlockInImage) && $container->hasBoundingPoly()) {
+    //             $boundingPoly = $container->getBoundingPoly();
+    //             $vertices = $boundingPoly->getVertices();
+    //             if ($vertices->count() == 4) {
+    //                 $arrPositonText = [
+    //                     'top-left' => [
+    //                         'x' => $vertices->offsetGet(0)->getX(),
+    //                         'y' => $vertices->offsetGet(0)->getY()
+    //                     ],
+    //                     'top-right' => [
+    //                         'x' => $vertices->offsetGet(1)->getX(),
+    //                         'y' => $vertices->offsetGet(1)->getY()
+    //                     ],
+    //                     'bottom-right' => [
+    //                         'x' => $vertices->offsetGet(2)->getX(),
+    //                         'y' => $vertices->offsetGet(2)->getY()
+    //                     ],
+    //                     'bottom-left' => [
+    //                         'x' => $vertices->offsetGet(3)->getX(),
+    //                         'y' => $vertices->offsetGet(3)->getY()
+    //                     ]
+    //                 ];
+    //                 $itemPosition = [
+    //                     'x' => $arrPositonText['top-left']['x'] >= 10 ? $arrPositonText['top-left']['x'] - 10:0,
+    //                     'y' => $arrPositonText['top-left']['y'] >= 10 ? $arrPositonText['top-left']['y'] - 10:0,
+    //                     'width'=> $arrPositonText['top-right']['x'] - $arrPositonText['top-left']['x'] + 20,
+    //                     'height'=> $arrPositonText['bottom-left']['y'] - $arrPositonText['top-left']['y'] + 20
+    //                 ];
+    //                 $img = \Image::make($imagePath);
+    //                 $watermark = \Image::make(\SettingHelper::getSettingFile('block_text_crawl_image_image'));
+    //                 if ($itemPosition['width']/$itemPosition['height'] <= $watermark->width()/$watermark->height()) {
+    //                     $watermark->resize(null,$itemPosition['height'], function ($constraint) {
+    //                         $constraint->aspectRatio();
+    //                     });
+    //                 }else{
+    //                     $watermark->resize($itemPosition['width'], null, function ($constraint) {
+    //                         $constraint->aspectRatio();
+    //                     });
+    //                 }
+    //                 $img->insert($watermark,'top-left',$itemPosition['x'],$itemPosition['y']);
+    //                 $img->save($imagePath);
+    //             }
+    //         }
+    //     }
+    // }
     public function saveImg($linkImg, $saveFrom, $returnPath = false)
     {
         try {
@@ -249,6 +252,27 @@ class BaseCrawler implements CrawlerInterface
         foreach ($scripts as $itemScript) {
             $itemScript->outertext = '';
         }
+        $fbShares = $contentDom->find('.fb-share-button');
+        foreach ($fbShares as $itemFbShare) {
+            $itemFbShare->outertext = '';
+        }
+        $zaloShares = $contentDom->find('.zalo-share-button');
+        foreach ($zaloShares as $itemZaloShare) {
+            $itemZaloShare->outertext = '';
+        }
+        
+        $adsBoxs = $contentDom->find('.ads.txt-center');
+        foreach ($adsBoxs as $itemAdsBox) {
+            $itemAdsBox->outertext = '';
+        }
+        $inputCsrf = $contentDom->find('input[name=_csrf]');
+        foreach ($inputCsrf as $itemInputCsrf) {
+            $itemInputCsrf->outertext = '';
+        }
+        $listDaterangePicker = $contentDom->find('#statisticform-fromdate');
+        foreach ($listDaterangePicker as $itemDaterangePicker) {
+            $itemDaterangePicker->setAttribute('data-krajee-daterangepicker','daterangepickerOption');
+        }
         // clear Link
         $listATag = $contentDom->find('a');
         foreach ($listATag as $itemA) {
@@ -257,6 +281,14 @@ class BaseCrawler implements CrawlerInterface
             }else{
                 $itemA->href = $this->clearLink($itemA->href);
             }
+        }
+        $listFormTag = $contentDom->find('form');
+        foreach ($listFormTag as $itemForm) {
+            $itemForm->action  = $this->clearLink($itemForm->action);
+        }
+        $listFaceBookComment = $contentDom->find('#comment');
+        foreach ($listFaceBookComment as $itemFaceBookComment) {
+            $itemFaceBookComment->setAttribute('data-href',$this->clearLink($itemFaceBookComment->getAttribute('data-href')));
         }
         // Clear list h3 của link youtube
         $listH3 = $contentDom->find('h3');

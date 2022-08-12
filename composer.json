@@ -52,7 +52,6 @@
             "crawlmodule\\basecrawler\\": "packages/crawlmodule/basecrawler/src",
             "basiccomment\\comment\\": "packages/basiccomment/comment/src",
             "Lotto\\": "packages/Lotto/src",
-            "ModuleStatical\\": "packages/ModuleStatical/src",
             "CustomTable\\": "packages/table_customs/src"
         }
     },

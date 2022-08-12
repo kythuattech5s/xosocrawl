@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\StaticalCrawl;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken as Middleware;
 
 class VerifyCsrfToken extends Middleware
@@ -12,6 +13,15 @@ class VerifyCsrfToken extends Middleware
      * @var array
      */
     protected $except = [
-        'dai-ly/upload-image-post'
+        'statistic/tansuat-loto-full'
     ];
+    protected function inExceptArray($request)
+    {
+        $parentCheck = parent::inExceptArray($request);
+        if (!$parentCheck) {
+            $itemStaticalCrawl = StaticalCrawl::slug($request->segment(1))->first();
+            return isset($itemStaticalCrawl);
+        }
+        return $parentCheck;
+    }
 }

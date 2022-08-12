@@ -1,0 +1,19 @@
+@extends('index')
+@section('cssl')
+    {!!$currentItem->css_add_libraly!!}
+@endsection
+@section('css')
+    {!!$currentItem->css_add!!}
+@endsection
+@section('breadcrumb')
+    {{Breadcrumbs::render('staticals', $currentItem)}}
+@endsection
+@section('main')
+{!!$dataHtml!!}
+@endsection
+@section('jsl')
+    {!!$currentItem->js_add_libraly!!}
+@endsection
+@section('js')
+    {!!$currentItem->js_add!!}
+@endsection

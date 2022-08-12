@@ -21,21 +21,25 @@
 </head>
 <body>
 	{[CMS_BODY]}
-	@include('header')
-	<div class="linkway">
-    	<div class="main">
-			@yield('breadcrumb')
+	@if (isset($contentOnly) && $contentOnly == 1)
+		@yield('main')
+	@else
+		@include('header')
+		<div class="linkway">
+			<div class="main">
+				@yield('breadcrumb')
+			</div>
 		</div>
-	</div>
-	@include('banner_ads_header')
-	<section class="content main clearfix">
-		<div class="col-l">
-			@yield('main')
-		</div>
-		@include('base_left_sidebar')
-		@include('base_right_sidebar')
-	</section>
-	@include('footer')
+		@include('banner_ads_header')
+		<section class="content main clearfix">
+			<div class="col-l">
+				@yield('main')
+			</div>
+			@include('base_left_sidebar')
+			@include('base_right_sidebar')
+		</section>
+		@include('footer')
+	@endif
 	{[CMS_FOOTER]}
 	@include('facebook_base')
 	@yield('jsl')

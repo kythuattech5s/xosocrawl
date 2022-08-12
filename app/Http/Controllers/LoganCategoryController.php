@@ -3,6 +3,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Logan;
 use App\Models\LoganCategory;
+use ModuleStatical\Logan\ModuleStaticalLogan;
+use ModuleStatical\Helpers\ModuleStaticalHelper;
 
 class LoganCategoryController extends Controller
 {	
@@ -27,15 +29,16 @@ class LoganCategoryController extends Controller
         if ($currentItem == null) { abort(404); }
         $currentItem->updateCountView();
         if ($currentItem->id != 1) {
-            $listLogan = $currentItem->logan()->get();
             $activeNumOfDay = 10;
-            $listItemLoganActive = $currentItem->logan()
-                                                ->with('lottoItem')
-                                                ->whereRaw('FIND_IN_SET(?, day_of_week)', [now()->dayOfWeek])
-                                                ->get();
-            return view('staticals.logan_categories.view',compact('currentItem','listLogan','activeNumOfDay','listItemLoganActive'));
+            $listLogan = $currentItem->logan()->act()->get();
+            $time = ModuleStaticalHelper::getTimeTrungNam($currentItem->lotto_category_id)->addDays(1);
+            $dataHtml = ModuleStaticalLogan::getStaticalData('logan_category',$time,$currentItem->id,$currentItem->real_link);
+            return view('staticals.logan_categories.view',compact('currentItem','listLogan','activeNumOfDay','dataHtml'));
         }else {
-            dd('Éc éc');
+            // $time = ModuleStaticalHelper::getTimeTrungNam($currentItem->lotto_category_id)->addDays(1);
+            // $activeNumOfDay = 10;
+            // $listLogan = $currentItem->logan()->act()->get();
+            // $dataHtml = ModuleStaticalLogan::getStaticalData('logan_category',$time,$currentItem->id,$currentItem->real_link);
         }
     }
 }

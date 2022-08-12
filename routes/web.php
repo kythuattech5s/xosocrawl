@@ -32,6 +32,14 @@ Route::group([
     Route::get('convert-thu-cong-du-lieu-crawl', 'HomeController@convertThuCongDuLieuCrawl');
     Route::get('cronimg', array('uses' => 'CronImgController@convertImg'));
     Route::get('cronmail', 'CronMailController@cronmail');
+
+    Route::prefix('statistic')->group(function () {
+        Route::get('loto-gan', 'StaticalCrawlController@staticalLoganProvince');
+        Route::match(['get', 'post'],'tansuat-loto-full', 'StaticalCrawlController@frequencyFull');
+    });  
+    Route::get('thong-ke-dau-duoi-lo-to.html', 'StaticalCrawlController@headAndTailRedirect');
+    Route::get('thong-ke-dau-duoi-dac-biet.html', 'StaticalCrawlController@headAndTailDacbietRedirect');
+    Route::get('thong-ke-nhanh.html', 'StaticalCrawlController@tkNhanhRedirect');
     Route::match(['get', 'post'], '/thong-tin-thanh-vien-c{id}', array('uses' => 'Auth\AccountController@userShowProfile'))->where('id', '^((?!esystem)[0-9\?\.\-/])*$');
     Route::match(['get', 'post'], '/{link}', array('uses' => 'HomeController@direction'))->where('link', '^((?!esystem)[0-9a-zA-Z\?\.\-/])*$');
 });
