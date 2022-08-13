@@ -45,17 +45,17 @@ class BaseCrawler implements CrawlerInterface
             CURLOPT_TIMEOUT => 100,
             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
             CURLOPT_CUSTOMREQUEST => $type,
-            CURLOPT_FOLLOWLOCATION => 0,
+            CURLOPT_FOLLOWLOCATION => 1,
             CURLOPT_SSL_VERIFYHOST => 0,
             CURLOPT_SSL_VERIFYPEER => 0,
         );
         if ($type == 'POST' && is_string($data)) {
             $params[CURLOPT_POSTFIELDS] = $data;
         }
-        if ($type == 'POST' && is_array($data)) {
+        if ($type == 'POST' && is_array($data) && count($data) > 0) {
             $params[CURLOPT_POSTFIELDS] = http_build_query($data);
         }
-        if ($type == 'GET' && is_array($data)) {
+        if ($type == 'GET' && is_array($data) && count($data) > 0) {
             $params[CURLOPT_URL] = $url . '?' . http_build_query($data);
         }
         if ($headers) {

@@ -13,7 +13,8 @@ class VerifyCsrfToken extends Middleware
      * @var array
      */
     protected $except = [
-        'statistic/tansuat-loto-full'
+        'statistic/tansuat-loto-full',
+        'ajax/see-more-result'
     ];
     protected function inExceptArray($request)
     {

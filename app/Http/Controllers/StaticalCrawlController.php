@@ -2,6 +2,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\StaticalCrawl;
+use crawlmodule\basecrawler\Crawlers\BaseCrawler;
 
 class StaticalCrawlController extends Controller
 {	
@@ -66,5 +67,11 @@ class StaticalCrawlController extends Controller
     public function tkNhanhRedirect()
     {
         return $this->redirectByTypeAndProvinceId('tk_nhanh',request()->province_id ?? '');
+    }
+    public function ajaxSeeMoreResult()
+    {
+        $baseCrawler = new BaseCrawler;
+        $html = $baseCrawler->exeCurl('https://xoso.me/ajax/see-more-result','POST',request()->all());
+        return response()->json(\Support::extractJson($html));
     }
 }

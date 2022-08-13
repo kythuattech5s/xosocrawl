@@ -40,6 +40,7 @@ Route::group([
     Route::get('thong-ke-dau-duoi-lo-to.html', 'StaticalCrawlController@headAndTailRedirect');
     Route::get('thong-ke-dau-duoi-dac-biet.html', 'StaticalCrawlController@headAndTailDacbietRedirect');
     Route::get('thong-ke-nhanh.html', 'StaticalCrawlController@tkNhanhRedirect');
+    Route::post('ajax/see-more-result', 'StaticalCrawlController@ajaxSeeMoreResult');
     Route::match(['get', 'post'], '/thong-tin-thanh-vien-c{id}', array('uses' => 'Auth\AccountController@userShowProfile'))->where('id', '^((?!esystem)[0-9\?\.\-/])*$');
     Route::match(['get', 'post'], '/{link}', array('uses' => 'HomeController@direction'))->where('link', '^((?!esystem)[0-9a-zA-Z\?\.\-/])*$');
 });
