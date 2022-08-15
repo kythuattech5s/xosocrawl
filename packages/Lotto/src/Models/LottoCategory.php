@@ -6,6 +6,7 @@ use App\Models\BaseModel;
 use DB;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Lotto\Enums\CrawlStatus;
+use Lotto\Enums\DayOfWeek;
 use Lotto\Helpers\LottoHelper;
 
 class LottoCategory extends BaseModel
@@ -26,10 +27,10 @@ class LottoCategory extends BaseModel
         //     $q->where('lotto_times.dayofweek', $dow);
         // })->get();
     }
-    public function lottoNearestItem()
+    public function lottoNearestItem($limit = 1)
     {
         $currentDayOfWeek = LottoHelper::getCurrentDateOfWeek();
-        return $this->lottoItems()->select(DB::raw('lotto_items.*'))->join('lotto_times', function ($join) {
+        return $this->lottoItems()->select(DB::raw('lotto_items.*, lotto_times.dayofweek dow'))->join('lotto_times', function ($join) {
             $join->on('lotto_items.id', '=', 'lotto_times.lotto_item_id');
         })
             ->join('lotto_records', function ($join) {
@@ -37,7 +38,7 @@ class LottoCategory extends BaseModel
             })
             ->where('lotto_records.status', CrawlStatus::SUCCESS)
             ->orderBy('lotto_records.created_at', 'desc')
-            ->orderByRaw('ABS(' . $currentDayOfWeek . '-lotto_times.dayofweek)')->limit(1)->get();
+            ->orderByRaw('ABS(' . $currentDayOfWeek . '-lotto_times.dayofweek)')->limit($limit)->get();
     }
     public function linkDate($lottoRecord)
     {
@@ -57,5 +58,35 @@ class LottoCategory extends BaseModel
 
         $link = vsprintf($slugDate, $params);
         return $link;
+    }
+    public function linkCustomDate($date)
+    {
+
+        $slugDate = $this->slug_with_date;
+        $link = vsprintf($slugDate, [$date->format('j-n-Y')]);
+        return $link;
+    }
+    public function getContentDow($lottoRecord, $isMienNam = false)
+    {
+        if (!$isMienNam) {
+            $d = DayOfWeek::fromDate($lottoRecord->created_at);
+            return vsprintf($this->content_dow, [$d->toFullString(), $d->slug()]);
+        } else {
+            $d = DayOfWeek::fromDate($lottoRecord->created_at);
+            $lottoItemTodays = $this->lottoTodayItems($d->getValue());
+            $str = '';
+            foreach ($lottoItemTodays as $key => $lottoItem) {
+                $str .= '<p dir="ltr">
+                <span style="font-size:14px">- <a href="' . $lottoItem->prefix_sub_link . '/' . $lottoItem->slug . '" title="Xổ số ' . $lottoItem->name . '">
+                    <span style="color:#FF0000">
+                      <strong>Xổ số ' . $lottoItem->name . '</strong>
+                    </span>
+                  </a>
+                </span>
+              </p>';
+            }
+            $d = DayOfWeek::fromDate($lottoRecord->created_at);
+            return vsprintf($this->content_dow, [$d->toFullString(), $d->slug(), $str]);
+        }
     }
 }

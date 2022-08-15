@@ -18,7 +18,7 @@ class XoSoMienNam extends AbstractXoSo
 
         for ($i = 0; $i < count($trs); $i++) {
             $tr = $trs[$i];
-            $datas[count($trs) - $i] = $this->parseSinglePrize($tr);
+            $datas[count($trs) - $i - 1] = $this->parseSinglePrize($tr);
         }
         $result->setDatas($datas);
         if (count($datas) > 0) {

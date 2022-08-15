@@ -86,7 +86,7 @@ class BaseEnum
         return $this->getName();
     }
 
-    public static function getByValue($value)
+    public static function getByValue($value, $def = null)
     {
         $const = static::getConstList();
 
@@ -95,7 +95,7 @@ class BaseEnum
                 return static::createByName($key);
             }
         }
-        return null;
+        return $def;
     }
     public static function getListDescSorted()
     {

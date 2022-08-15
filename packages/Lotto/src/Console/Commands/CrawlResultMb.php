@@ -4,6 +4,7 @@ namespace Lotto\Console\Commands;
 
 use Illuminate\Console\Command;
 use Lotto\Enums\CrawlStatus;
+use Lotto\Models\LottoCategory;
 use Lotto\Models\LottoItem;
 use Lotto\Models\LottoRecord;
 use Lotto\Processors\XoSoMienBac;
@@ -15,7 +16,7 @@ class CrawlResultMb extends Command
      *
      * @var string
      */
-    protected $signature = 'lotto:crawl-mb {id}';
+    protected $signature = 'lotto:crawl-mb';
 
     /**
      * The console command description.
@@ -39,14 +40,23 @@ class CrawlResultMb extends Command
      *
      * @return int
      */
-    protected $year = 2021;
+    protected $year = 2001;
+    protected $month = 7;
     public function handle()
     {
-        $lottoItem = LottoItem::find($this->argument('id'));
+        $lottoItems = LottoCategory::find(1)->lottoItems;
+        $this->info('Start');
+        foreach ($lottoItems as $lottoItem) {
+            $this->crawlSingle($lottoItem);
+        }
+        $this->info('End');
+    }
+    protected function crawlSingle($lottoItem)
+    {
         $dates = $this->getDates($lottoItem);
         $dates = array_reverse($dates);
         $xsmb = new XoSoMienBac($lottoItem);
-        $this->info('Start');
+        $this->info('Start ' . $lottoItem->name);
         foreach ($dates as $date) {
             $this->info($date);
             $record = LottoRecord::getRecordByDate($lottoItem, $date);
@@ -64,17 +74,17 @@ class CrawlResultMb extends Command
 
             $record->insertResults($result->getDatas(), $date);
         }
-        $this->info('End');
+        $this->info('End ' . $lottoItem->name);
     }
     protected function getDates($lottoItem)
     {
         $lottoTimes = $lottoItem->lottoTimes;
-        $now = now();
         $firstTime = $lottoTimes[0];
         $ddofweek = $firstTime->dayofweek;
         $ddofweek = $ddofweek == 8 ? 0 : $ddofweek - 1;
         for ($i = 0; $i < 7; $i++) {
-            $now->addDays(-1);
+            $now = now();
+            $now->addDays(-$i);
             if ($now->dayOfWeek == $ddofweek) {
                 break;
             }
@@ -95,7 +105,7 @@ class CrawlResultMb extends Command
             $minus = $this->getMinusByCount($count, $times);
             $date = $date->addDays($minus);
             $count++;
-        } while ($date->year > $this->year);
+        } while ($date->year > $this->year && $date->month > $this->month);
         return $dates;
     }
     protected function getMinusByCount($count, $times)

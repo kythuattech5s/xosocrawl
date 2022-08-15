@@ -1,4 +1,5 @@
 <?php
+
 namespace vanhenry\helpers\helpers;
 
 use vanhenry\helpers\helpers\FCHelper;
@@ -93,6 +94,13 @@ class SEOHelper
         $ret .= '<meta property="og:type" content="website">';
         $ret .= '<meta property="og:title" content="' . addslashes($titleSEO) . '">';
         $ret .= '<meta property="og:description" content="Xem ngay cho nóng !!!">';
+        $ret .= '<meta name="geo.region" content="VN-HN">
+        <meta name="geo.placename" content="Hà Nội">
+        <meta name="geo.position" content="21.033953;105.785002">
+        <meta name="ICBM" content="21.033953, 105.785002">
+        <meta name="DC.title" content="kqxsmb, xsmt, xsmn, xo so 3 mien nhanh nhat" />
+        <meta name="DC.Source" content="/">
+        <meta name="DC.Coverage" content="Vietnam"><meta name="RATING" content="GENERAL">';
         if (request()->url() == asset('/')) {
             $img = SettingHelper::getSetting('fbshare');
             $img = json_decode($img, true);
@@ -106,7 +114,6 @@ class SEOHelper
             if ($pos === false) {
                 $img = asset('/') . $img;
             }
-
         } else {
             $img = (@$dataitem && @$dataitem->img) ? $dataitem->img : "";
             if (StringHelper::isNull($img)) {
@@ -135,7 +142,6 @@ class SEOHelper
             if ($pos === false) {
                 $img = asset('/') . $img;
             }
-
         }
         $ret .= '<meta property="og:image" content="' . $img . '">';
         $ret .= '<meta property="og:locale" content="vi_vn">';

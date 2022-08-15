@@ -29,7 +29,7 @@ class HeadTail
         }
         return $this->tail;
     }
-    private function calculate()
+    protected function calculate()
     {
         foreach ($this->details as  $detail) {
             $number = $detail->number;

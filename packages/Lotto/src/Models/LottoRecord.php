@@ -5,6 +5,7 @@ namespace Lotto\Models;
 use App\Models\BaseModel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Lotto\Dtos\HeadTail;
+use Lotto\Dtos\LottoItemMnCollection;
 use Lotto\Enums\CrawlStatus;
 use Lotto\Enums\DayOfWeek;
 
@@ -20,7 +21,7 @@ class LottoRecord extends BaseModel
     {
         $code = $date->format('Ynj');
         $fullcode = $date->format('Ymd');
-        $record = static::where('code', $code)->where('lotto_item_id', $lottoItem->id)->first();
+        $record = static::where('fullcode', $fullcode)->where('lotto_item_id', $lottoItem->id)->first();
         if (!$record) {
             $now = now();
             $lottoTime = $lottoItem->lottoTimeByDate($date)->first();
@@ -39,12 +40,12 @@ class LottoRecord extends BaseModel
     }
     public function insertResults($results, $date)
     {
-        $now = now();
         foreach ($results as $key => $rows) {
             foreach ($rows as $td) {
                 $item = new LottoResultDetail();
                 $item->lotto_record_id = $this->id;
                 $item->lotto_item_id = $this->lotto_item_id;
+                $item->lotto_category_id = $this->lotto_category_id;
                 $item->created_at = $date;
                 $item->updated_at = $date;
                 $item->no_prize = $key;
@@ -53,6 +54,17 @@ class LottoRecord extends BaseModel
             }
         }
     }
+
+    public function dayOfWeek()
+    {
+        return DayOfWeek::fromDate($this->created_at);
+    }
+    public function currentDayOfWeek()
+    {
+        $d = DayOfWeek::fromDate($this->created_at);
+        return $d->getValue();
+    }
+
     public function lottoResultDetails()
     {
         return $this->hasMany(LottoResultDetail::class);
@@ -61,30 +73,54 @@ class LottoRecord extends BaseModel
     {
         return $this->belongsTo(LottoItem::class);
     }
-    public function prev($checkLottoItem = true)
+    public function prev($checkLottoItem = true, $dow = false, $limit = 1)
     {
-        $q = static::where('created_at', '<', $this->created_at)->where('lotto_category_id', $this->lotto_category_id);
-        if ($checkLottoItem) {
-            $q = $q->where('lotto_item_id', $this->lotto_item_id);
+        $q = static::select("lotto_records.*");
+        if ($dow) {
+            $d = DayOfWeek::fromDate($this->created_at);
+            $dowMysql = $d->toDayOfWeekMysql();
+            $q->whereRaw('DAYOFWEEK(lotto_records.created_at) = ' . $dowMysql);
         }
-        return $q->orderBy('created_at', 'desc')->limit(1)->first();
+        $createdAt = $this->created_at;
+        $createdAt->hour = 0;
+        $createdAt->minute = 0;
+        $createdAt->second = 0;
+        $q->where('lotto_records.created_at', '<', $createdAt)->where('lotto_records.lotto_category_id', $this->lotto_category_id);
+        if ($checkLottoItem) {
+            $q->where('lotto_records.lotto_item_id', $this->lotto_item_id);
+        }
+        $q->orderBy('lotto_records.created_at', 'desc');
+        if ($limit == 1) {
+            return $q->limit(1)->first();
+        } else {
+            return $q->limit($limit)->get();
+        }
     }
     public function next($checkLottoItem = true)
     {
-        $q = static::where('created_at', '>', $this->created_at)->where('lotto_category_id', $this->lotto_category_id);
+        $createdAt = $this->created_at;
+        $createdAt->hour = 23;
+        $createdAt->minute = 59;
+        $createdAt->second = 59;
+        $q = static::where('created_at', '>', $createdAt)->where('lotto_category_id', $this->lotto_category_id);
         if ($checkLottoItem) {
             $q = $q->where('lotto_item_id', $this->lotto_item_id);
         }
         return $q->orderBy('created_at', 'asc')->limit(1)->first();
     }
-    public function link($prefix)
+    public function link($prefix = null)
     {
+        $paramPrints = [];
+        if (isset($prefix) && $prefix != '') {
+            $paramPrints[] = $prefix;
+        }
         $lottoTime = $this->lottoItem->lottoTime;
         $slugDate = $this->lottoItem->slug_date;
         $count = substr_count($slugDate, "%s");
         $params = array_fill(0, $count, $lottoTime->formatByType($this->created_at));
         $link = vsprintf($slugDate, $params);
-        return implode('/', [$prefix, $link]);
+        $paramPrints[] = $link;
+        return implode('/', $paramPrints);
     }
     public function linkWithFormat($format)
     {
@@ -105,5 +141,10 @@ class LottoRecord extends BaseModel
     public function headTail()
     {
         return new HeadTail($this->lottoResultDetails);
+    }
+    public function toLottoItemMnCollection()
+    {
+        $lottoRecords = static::where('lotto_category_id', $this->lotto_category_id)->where('fullcode', $this->fullcode)->orderBy('created_at', 'desc')->get();
+        return LottoItemMnCollection::createFromLottoRecords($lottoRecords);
     }
 }

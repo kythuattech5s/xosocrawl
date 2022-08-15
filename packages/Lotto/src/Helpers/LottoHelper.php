@@ -2,6 +2,9 @@
 
 namespace Lotto\Helpers;
 
+use Illuminate\Support\Collection;
+use Lotto\Models\LottoItem;
+
 class LottoHelper
 {
     public static function getCurrentDateOfWeek($date = null)

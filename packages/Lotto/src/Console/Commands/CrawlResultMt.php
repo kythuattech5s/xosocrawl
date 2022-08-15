@@ -11,7 +11,8 @@ use Lotto\Processors\XoSoMienNam;
 class CrawlResultMt extends CrawlResultMb
 {
     protected $signature = 'lotto:crawl-mt';
-    protected $year = 2008;
+    protected $year = 2022;
+    protected $month = 7;
     public function handle()
     {
         $lottoItems = LottoItem::where('lotto_category_id', 4)->get();

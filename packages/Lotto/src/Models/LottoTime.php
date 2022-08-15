@@ -15,7 +15,7 @@ class LottoTime extends BaseModel
     public static function allLottoTimes()
     {
         if (!static::$ALLTIMES) {
-            static::$ALLTIMES = static::select('lotto_item_id', 'dayofweek', 'type')->get()->groupBy('lotto_item_id')->toArray();
+            static::$ALLTIMES = static::select('lotto_item_id', 'dayofweek', 'type', 'hour_from', 'hour_to')->get()->groupBy('lotto_item_id')->toArray();
         }
         return static::$ALLTIMES;
     }

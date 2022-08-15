@@ -6,6 +6,7 @@ use App\Helpers\Media;
 use App\Models\Menu;
 use Carbon\Carbon;
 use Currency;
+use Lotto\Enums\DayOfWeek;
 
 class Support
 {
@@ -53,6 +54,11 @@ class Support
             case 6:
                 return 'Thứ 7';
         }
+    }
+    public static function getDayTextFullOfWeek($date)
+    {
+        $d = DayOfWeek::fromDate($date);
+        return $d->toLongFullString();
     }
     public static function getLottoDayOfWeek($date, $forceDate = -1)
     {
