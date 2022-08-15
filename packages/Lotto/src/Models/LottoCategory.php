@@ -66,9 +66,27 @@ class LottoCategory extends BaseModel
         $link = vsprintf($slugDate, [$date->format('j-n-Y')]);
         return $link;
     }
-    public function getContentDow($lottoRecord)
+    public function getContentDow($lottoRecord, $isMienNam = false)
     {
-        $d = DayOfWeek::fromDate($lottoRecord->created_at);
-        return vsprintf($this->content_dow, [$d->toFullString(), $d->slug()]);
+        if (!$isMienNam) {
+            $d = DayOfWeek::fromDate($lottoRecord->created_at);
+            return vsprintf($this->content_dow, [$d->toFullString(), $d->slug()]);
+        } else {
+            $d = DayOfWeek::fromDate($lottoRecord->created_at);
+            $lottoItemTodays = $this->lottoTodayItems($d->getValue());
+            $str = '';
+            foreach ($lottoItemTodays as $key => $lottoItem) {
+                $str .= '<p dir="ltr">
+                <span style="font-size:14px">- <a href="' . $lottoItem->prefix_sub_link . '/' . $lottoItem->slug . '" title="Xổ số ' . $lottoItem->name . '">
+                    <span style="color:#FF0000">
+                      <strong>Xổ số ' . $lottoItem->name . '</strong>
+                    </span>
+                  </a>
+                </span>
+              </p>';
+            }
+            $d = DayOfWeek::fromDate($lottoRecord->created_at);
+            return vsprintf($this->content_dow, [$d->toFullString(), $d->slug(), $str]);
+        }
     }
 }

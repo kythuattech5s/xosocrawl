@@ -4,26 +4,27 @@ namespace Lotto\Dtos;
 
 use Arr;
 use Illuminate\Support\Collection;
+use Lotto\Models\LottoRecord;
 
 class LottoItemMnCollection
 {
-    protected $lottoItems;
+    protected $lottoItems = [];
+    protected $lottoRecords;
     protected $lottoRecord;
     protected $transformResults = [];
-    public function __construct(Collection $lottoItems)
+    protected function __construct(Collection $lottoRecords)
     {
-        $this->lottoItems = $lottoItems;
-        $this->transfromLottoItems();
+        $this->lottoRecords = $lottoRecords;
+        $this->lottoRecord = $lottoRecords->first();
+        $this->transfrom();
     }
-    public function transfromLottoItems()
+    protected function transfrom()
     {
         if (count($this->transformResults) > 0) return $this->transformResults;
         $transformResults = [];
-        foreach ($this->lottoItems as $keyItem => $lottoItem) {
-            $lottoRecord = $lottoItem->lottoRecords()->orderBy('created_at', 'desc')->first();
-            if (!$this->lottoRecord) {
-                $this->lottoRecord = $lottoRecord;
-            }
+        foreach ($this->lottoRecords as $key => $lottoRecord) {
+            $this->lottoItems[] = $lottoItem = $lottoRecord->lottoItem;
+            $keyItem = $lottoItem->id;
             $lottoResultDetails = $lottoRecord->lottoResultDetails->groupBy('no_prize');
             $transformResults['-1'][$keyItem] = [
                 'item' => $lottoItem,
@@ -51,25 +52,21 @@ class LottoItemMnCollection
     {
         return $this->transformResults;
     }
-    public function prev()
+    public function prev($checkLottoItem = false, $dow = false)
     {
-        $records = $this->lottoRecord->prev(false, false, 4);
+        $records = $this->lottoRecord->prev($checkLottoItem, $dow, 4);
         return static::createFromLottoRecords($records);
     }
-    protected static function createFromLottoRecords($lottoRecords)
+    public static function createFromLottoRecords($lottoRecords)
     {
         $records = $lottoRecords->groupBy('fullcode');
-        $lottoRecord = $records->first();
+        $listRecords = $records->first();
         foreach ($records as $tmp) {
-            if (count($tmp) > count($lottoRecord)) {
-                $lottoRecord = $tmp;
+            if (count($tmp) > count($listRecords)) {
+                $listRecords = $tmp;
             }
         }
-        $lottoItems = [];
-        foreach ($lottoRecord as $r) {
-            $lottoItems[] = $r->lottoItem;
-        }
-        return new LottoItemMnCollection(collect($lottoItems));
+        return new LottoItemMnCollection($listRecords);
     }
 
     /**
@@ -80,5 +77,19 @@ class LottoItemMnCollection
     public function getLottoRecord()
     {
         return $this->lottoRecord;
+    }
+
+    /**
+     * Get the value of lottoItems
+     *
+     * @return  mixed
+     */
+    public function getLottoItems()
+    {
+        return collect($this->lottoItems);
+    }
+    public function countItems()
+    {
+        return count($this->lottoItems);
     }
 }

@@ -1,10 +1,10 @@
 <?php
-$lottoItemMnCollectionPrev = $lottoItemMnCollection->prev();
+$lottoItemMnCollectionPrev = $lottoItemMnCollection->prev(false, true);
 $lottoRecordPrev = $lottoItemMnCollectionPrev->getLottoRecord();
 ?>
 @include('xoso.mien_nam.related.result_table_nearest', [
     'lottoItemMnCollection' => $lottoItemMnCollectionPrev,
-    'viewRelate' => 'related_news_1',
+    'viewRelate' => 'related_news_2',
     'lottoRecord' => $lottoRecordPrev,
 ])
 
@@ -14,5 +14,5 @@ $lottoRecordPrev = $lottoItemMnCollectionPrev->getLottoRecord();
 <button class="btn-see-more magb10" id="result-see-more" value="Xem thêm" data-page="2" data-province="mb">Xem thêm</button>
 
 <div class="box box-html s-content">
-    {!! $lottoCategory->content !!}
+    {!! $lottoCategory->getContentDow($lottoRecord, true) !!}
 </div>

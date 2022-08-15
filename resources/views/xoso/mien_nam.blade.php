@@ -38,8 +38,9 @@
     </ul>
     <div class="box">
         @php
-            $viewBreadcrumb = 'xoso.breadcrumbs.mien_bac_' . ($typeRelated ?? '');
+            $viewBreadcrumb = 'xoso.breadcrumbs.mien_nam_' . ($typeRelated ?? '');
         @endphp
+
         @if (View::exists($viewBreadcrumb))
             @include($viewBreadcrumb)
         @endif
@@ -61,7 +62,6 @@
         </div>
         @php
             $viewCateNews = 'xoso.mien_nam.cate_news.cate_news_' . ($typeRelated ?? '');
-            
         @endphp
         @if (View::exists($viewCateNews))
             @include($viewCateNews)
@@ -69,7 +69,7 @@
             @include('xoso.mien_nam.cate_news.cate_news')
         @endif
 
-        <div class="see-more">
+        {{-- <div class="see-more">
             <div class="bold see-more-title">⇒ Ngoài ra bạn có thể xem thêm:</div>
             <ul class="list-html-link two-column">
                 <li>Xem thống kê <a href="lo-gan-mn-thong-ke-lo-gan-mien-nam" title="lô gan miền Nam">lô gan miền Nam</a>
@@ -81,12 +81,13 @@
                 <li>Xem bảng kết quả <a href="xsmn-30-ngay-so-ket-qua-xo-so-kien-thiet-mien-nam"
                         title="XSMN 30 ngày gần nhất">XSMN 30 ngày gần nhất</a></li>
             </ul>
-        </div>
+        </div> --}}
 
     </div>
 
     @php
     $viewRelated = 'xoso.mien_nam.related.related_' . ($typeRelated ?? '');
+
     @endphp
     @if (View::exists($viewRelated))
         @include($viewRelated)
@@ -94,5 +95,5 @@
 
 @endsection
 @section('js')
-    <script src="theme/frontend/js/mien_bac.js" defer></script>
+    <script src="theme/frontend/js/mien_nam.js" defer></script>
 @endsection

@@ -1,4 +1,8 @@
-<div data-id="dd" class="col-firstlast colthreecity colgiai">
+<?php
+$transfromCollection = $lottoItemMnCollection->getTransformResults();
+$count = $lottoItemMnCollection->countItems();
+?>
+<div data-id="dd" class="col-firstlast col{{ $count == 3 ? 'three' : 'four' }}city colgiai">
     <table class="firstlast-mn bold">
         <tbody>
             @foreach ($lottoItemMnCollection->headTail()->getHeads() as $key => $provinces)

@@ -5,6 +5,7 @@ namespace Lotto\Models;
 use App\Models\BaseModel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Lotto\Dtos\HeadTail;
+use Lotto\Dtos\LottoItemMnCollection;
 use Lotto\Enums\CrawlStatus;
 use Lotto\Enums\DayOfWeek;
 
@@ -97,7 +98,11 @@ class LottoRecord extends BaseModel
     }
     public function next($checkLottoItem = true)
     {
-        $q = static::where('created_at', '>', $this->created_at)->where('lotto_category_id', $this->lotto_category_id);
+        $createdAt = $this->created_at;
+        $createdAt->hour = 23;
+        $createdAt->minute = 59;
+        $createdAt->second = 59;
+        $q = static::where('created_at', '>', $createdAt)->where('lotto_category_id', $this->lotto_category_id);
         if ($checkLottoItem) {
             $q = $q->where('lotto_item_id', $this->lotto_item_id);
         }
@@ -136,5 +141,10 @@ class LottoRecord extends BaseModel
     public function headTail()
     {
         return new HeadTail($this->lottoResultDetails);
+    }
+    public function toLottoItemMnCollection()
+    {
+        $lottoRecords = static::where('lotto_category_id', $this->lotto_category_id)->where('fullcode', $this->fullcode)->orderBy('created_at', 'desc')->get();
+        return LottoItemMnCollection::createFromLottoRecords($lottoRecords);
     }
 }

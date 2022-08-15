@@ -4,6 +4,8 @@
     @endphp
     @if (View::exists($viewBreadcrumb))
         @include($viewBreadcrumb)
+    @else
+        @include('xoso.breadcrumbs.base')
     @endif
     <div id="load_kq_tinh_1">
         @include('xoso.result_table')

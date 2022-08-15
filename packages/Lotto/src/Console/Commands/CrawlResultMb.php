@@ -41,6 +41,7 @@ class CrawlResultMb extends Command
      * @return int
      */
     protected $year = 2001;
+    protected $month = 7;
     public function handle()
     {
         $lottoItems = LottoCategory::find(1)->lottoItems;
@@ -78,12 +79,12 @@ class CrawlResultMb extends Command
     protected function getDates($lottoItem)
     {
         $lottoTimes = $lottoItem->lottoTimes;
-        $now = now();
         $firstTime = $lottoTimes[0];
         $ddofweek = $firstTime->dayofweek;
         $ddofweek = $ddofweek == 8 ? 0 : $ddofweek - 1;
         for ($i = 0; $i < 7; $i++) {
-            $now->addDays(-1);
+            $now = now();
+            $now->addDays(-$i);
             if ($now->dayOfWeek == $ddofweek) {
                 break;
             }
@@ -104,7 +105,7 @@ class CrawlResultMb extends Command
             $minus = $this->getMinusByCount($count, $times);
             $date = $date->addDays($minus);
             $count++;
-        } while ($date->year > $this->year);
+        } while ($date->year > $this->year && $date->month > $this->month);
         return $dates;
     }
     protected function getMinusByCount($count, $times)

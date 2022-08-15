@@ -11,7 +11,8 @@ use Lotto\Processors\XoSoMienNam;
 class CrawlResultMn extends CrawlResultMb
 {
     protected $signature = 'lotto:crawl-mn';
-    protected $year = 2009;
+    protected $year = 2022;
+    protected $month = 7;
     public function handle()
     {
         $lottoItems = LottoItem::where('lotto_category_id', 3)->get();
@@ -30,6 +31,7 @@ class CrawlResultMn extends CrawlResultMb
         $xsmb = new XoSoMienNam($lottoItem);
 
         foreach ($dates as $date) {
+            if ($date->format('dmY') ==  now()->format('dmY')) continue;
             $this->info($date);
             $xsmb->setDateCrawl($date);
             $result = $xsmb->parseTableResult();

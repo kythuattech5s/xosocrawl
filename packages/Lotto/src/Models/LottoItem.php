@@ -69,4 +69,33 @@ class LottoItem extends BaseModel
         }
         return $this->slug;
     }
+    public function getImageStatus()
+    {
+        $times = LottoTime::allLottoTimes();
+        $currentDayOfWeek = LottoHelper::getCurrentDateOfWeek(now());
+        $dayOfWeeks = $times[$this->id] ?? ['hour_from' => 0, 'hour_to' => 0];
+        $days = array_filter($dayOfWeeks, function ($item) use ($currentDayOfWeek) {
+            return $item['dayofweek'] == $currentDayOfWeek;
+        });
+        $day = $days[0];
+        $hourFrom = (int)$day['hour_from'];
+        $hourTo = (int)$day['hour_to'];
+        if ($hourFrom == 0 || $hourTo == 0) return '';
+        $now = now();
+        $hour = $now->hour;
+        $minute = $now->minute;
+        $totalMinute = $hour * 3600 + $minute * 60;
+        $img = '<img alt="image status" class="" height="10" src="theme/frontend/images/%1$s"
+        width="30">';
+        if ($totalMinute >= $hourFrom && $totalMinute <= $hourTo) {
+            return '<img alt="image status" class="" height="10" src="theme/frontend/images/rolling.gif"
+            width="30">';
+        } else if ($totalMinute > $hourTo) {
+            return '<img alt="image status" class="" height="15" src="theme/frontend/images/done.png"
+            width="15">';
+        } else {
+            return '<img alt="image status" class="" height="10" src="theme/frontend/images/waiting.gif"
+            width="30">';
+        }
+    }
 }

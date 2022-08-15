@@ -81,6 +81,25 @@ class DayOfWeek extends BaseEnum
                 return 'Thứ 7';
         }
     }
+    public function toMiniString()
+    {
+        switch ($this->getValue()) {
+            case 8:
+                return 'CN';
+            case 2:
+                return 'T2';
+            case 3:
+                return 'T3';
+            case 4:
+                return 'T4';
+            case 5:
+                return 'T5';
+            case 6:
+                return 'T6';
+            case 7:
+                return 'T7';
+        }
+    }
     public function toDayOfWeekMysql()
     {
         $value = $this->getValue();

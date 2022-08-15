@@ -17,13 +17,19 @@ use Lotto\Models\LottoCategory;
             </div>
             <ul>
                 @foreach ($category->lottoItems as $item)
-                    <li>
-                        <a href="{{ $item->getSlug() }}" title="Xổ số {(item.name)}"> {(item.name)} </a>
-                        @if ($item->hasResultToday())
-                            <img alt="image status" class="" height="10" src="theme/frontend/images/waiting.gif"
-                                width="30">
-                        @endif
-                    </li>
+                    @if ($item->hasResultToday())
+                        <li>
+                            <a href="{{ $item->getSlug() }}" title="Xổ số {(item.name)}"> {(item.name)} </a>
+                            {!! $item->getImageStatus() !!}
+                        </li>
+                    @endif
+                @endforeach
+                @foreach ($category->lottoItems as $item)
+                    @if (!$item->hasResultToday())
+                        <li>
+                            <a href="{{ $item->getSlug() }}" title="Xổ số {(item.name)}"> {(item.name)} </a>
+                        </li>
+                    @endif
                 @endforeach
             </ul>
         </div>
