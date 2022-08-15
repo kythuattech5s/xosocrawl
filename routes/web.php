@@ -36,6 +36,10 @@ Route::group([
     Route::prefix('statistic')->group(function () {
         Route::get('loto-gan', 'StaticalCrawlController@staticalLoganProvince');
         Route::match(['get', 'post'],'tansuat-loto-full', 'StaticalCrawlController@frequencyFull');
+    });
+    Route::prefix('redirect')->group(function () {
+        Route::get('outbn', 'RedirectOutLinkController@outBanner');
+        Route::get('out', 'RedirectOutLinkController@outGuessLink');
     });  
     Route::get('thong-ke-dau-duoi-lo-to.html', 'StaticalCrawlController@headAndTailRedirect');
     Route::get('thong-ke-dau-duoi-dac-biet.html', 'StaticalCrawlController@headAndTailDacbietRedirect');

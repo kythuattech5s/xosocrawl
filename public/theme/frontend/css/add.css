@@ -48,3 +48,9 @@ a.item_sublink{
     border-radius: 4px;
     font-weight: bold;
 }
+.ads img{
+    max-width: 100%;
+}
+.col-center .ads,.col-right .ads{
+    margin-top: 0;
+}

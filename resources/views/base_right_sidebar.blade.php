@@ -1,4 +1,5 @@
 <div class="col-right">
+    @include('banner_gdns.banner_sidebar',['positionType'=>App\Models\BannerGdnCategory::BANNER_TOP_RIGHT_SIDEBAR])
     <div class="content-right bullet">
         <div class="title-r">
             <strong> Kết quả xổ số hôm qua </strong>
@@ -104,20 +105,5 @@
             </ul>
         </div>
     @endif
-    @php
-        $bannerGdnBottomRightSidebar = App\Models\BannerGdn::where('banner_gdn_category_id',2)->act()->ord()->first();
-    @endphp
-    @if (isset($bannerGdnBottomRightSidebar))
-        <div class="txt-center ads">
-            <div class="center ads">
-                @if ($bannerGdnBottomRightSidebar->use_code != 1)
-                    <a class="banner-link" data-pos="banner_square_2" href="{{Support::show($bannerGdnBottomRightSidebar,'link')}}" {{$bannerGdnBottomRightSidebar->nofollow == 1 ? 'rel="nofollow"':''}} {{$bannerGdnBottomRightSidebar->is_blank == 1 ? ' target="_blank"':''}} title="{{Support::show($bannerGdnBottomRightSidebar,'name')}}">
-                        <img src="{%IMGV2.bannerGdnBottomRightSidebar.img.-1%}" alt="{%AIMGV2.bannerGdnBottomRightSidebar.img.alt%}"/>
-                    </a>
-                @else
-                    {!!$bannerGdnBottomRightSidebar->banner_content!!}
-                @endif
-            </div>
-        </div>
-    @endif
+    @include('banner_gdns.banner_sidebar',['positionType'=>App\Models\BannerGdnCategory::BANNER_BOTTOM_RIGHT_SIDEBAR])
 </div>

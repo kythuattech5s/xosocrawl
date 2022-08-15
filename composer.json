@@ -16,6 +16,7 @@
         "google/cloud-vision": "^1.5",
         "guzzlehttp/guzzle": "^7.0.1",
         "intervention/image": "^2.5",
+        "jaybizzle/laravel-crawler-detect": "1.*",
         "laravel/framework": "^8.12",
         "laravel/socialite": "^5.2",
         "laravel/tinker": "^2.5",

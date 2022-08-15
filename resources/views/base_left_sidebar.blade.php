@@ -2,9 +2,9 @@
     use Lotto\Models\LottoCategory;
 @endphp
 <div class="col-center">
+    @include('banner_gdns.banner_sidebar',['positionType'=>App\Models\BannerGdnCategory::BANNER_TOP_LEFT_SIDEBAR])
     @php
         $categories = LottoCategory::act()->get();
-        
     @endphp
     @foreach($categories as $category)
     <div class="content-right bullet">
@@ -27,5 +27,5 @@
         </ul>
     </div>
     @endforeach
-  
+    @include('banner_gdns.banner_sidebar',['positionType'=>App\Models\BannerGdnCategory::BANNER_BOTTOM_LEFT_SIDEBAR])
 </div>

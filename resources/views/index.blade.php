@@ -30,7 +30,7 @@
 				@yield('breadcrumb')
 			</div>
 		</div>
-		@include('banner_ads_header')
+		@include('banner_gdns.banner_ads_horizontal',['positionType'=>App\Models\BannerGdnCategory::BANNER_HEADER])
 		<section class="content main clearfix">
 			<div class="col-l">
 				@yield('main')
@@ -38,10 +38,12 @@
 			@include('base_left_sidebar')
 			@include('base_right_sidebar')
 		</section>
+		@include('banner_gdns.banner_ads_horizontal',['positionType'=>App\Models\BannerGdnCategory::BANNER_FOOTER])
 		@include('footer')
 	@endif
 	{[CMS_FOOTER]}
 	@include('facebook_base')
+	@include('js_click_quang_cao')
 	@yield('jsl')
 	<script src="theme/frontend/js/toastify.js" defer></script>
 	<script src="theme/frontend/js/base.js" defer></script>
