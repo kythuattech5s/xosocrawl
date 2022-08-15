@@ -72,6 +72,10 @@ class StaticalCrawlController extends Controller
     {
         $baseCrawler = new BaseCrawler;
         $html = $baseCrawler->exeCurl('https://xoso.me/ajax/see-more-result','POST',request()->all());
-        return response()->json(\Support::extractJson($html));
+        $arrData = \Support::extractJson($html);
+        if (isset($arrData['data']) && isset($arrData['data']['content'])) {
+            $arrData['data']['content'] = $baseCrawler->convertContent(str_get_html('<div>'.$arrData['data']['content'].'</div>'));
+        }
+        return response()->json($arrData);
     }
 }
