@@ -30,6 +30,9 @@ class PageController extends Controller
         if ($currentItem->layout_show == 'spin_test_vietlott') {
             return $this->viewPageSpinTestVietlott($request,$currentItem);
         }
+        if ($currentItem->layout_show == 'mega_6_45_vietlott_ngay_hom_nay') {
+            return $this->mega6_45VietlottNgayHomNay($request,$currentItem);
+        }
         return view('pages.'.$currentItem->layout_show, compact('currentItem'));
     }
     private function viewPageAllDreamNumberDecoding($request,$currentItem){
@@ -84,5 +87,9 @@ class PageController extends Controller
     {
         $listItemTestSpinCategory = TestSpinCategory::act()->get();
         return view('pages.'.$currentItem->layout_show, compact('currentItem','listItemTestSpinCategory'));
+    }
+    public function mega6_45VietlottNgayHomNay($request,$currentItem)
+    {
+        return view('pages.'.$currentItem->layout_show, compact('currentItem'));
     }
 }
