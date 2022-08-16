@@ -3,6 +3,9 @@
 namespace Lotto\Models;
 
 use App\Models\BaseModel;
+use App\Models\ProvinceMap;
+use App\Models\StaticalCrawl;
+use crawlmodule\basecrawler\Crawlers\BaseCrawler;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Support\Str;
 use Lotto\Helpers\LottoHelper;
@@ -57,7 +60,7 @@ class LottoItem extends BaseModel
     public function buildLinkKetQua($date)
     {
         $code = Support::createShortCodeDay($date);
-        return vsprintf($this->prefix_slug_segment,[$code,$code]);
+        return vsprintf($this->prefix_slug_segment, [$code, $code]);
     }
     public function testSpin()
     {
@@ -69,6 +72,7 @@ class LottoItem extends BaseModel
     }
     public function getSlug()
     {
+        if ($this->lotto_category_id != 3 && $this->lotto_category_id != 4) return $this->slug;
         $prefix = $this->prefix_sub_link;
         if (strlen($prefix) > 0) {
             return $prefix . '/' . $this->slug;
@@ -103,5 +107,9 @@ class LottoItem extends BaseModel
             return '<img alt="image status" class="" height="10" src="theme/frontend/images/waiting.gif"
             width="30">';
         }
+    }
+    public function getLogan()
+    {
+        return StaticalCrawl::where('type', 'tk_logan')->where('province_id', $this->province_map_id)->first();
     }
 }

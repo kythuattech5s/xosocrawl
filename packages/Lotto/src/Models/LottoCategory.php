@@ -3,6 +3,7 @@
 namespace Lotto\Models;
 
 use App\Models\BaseModel;
+use App\Models\PredictLotteryResult;
 use DB;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Lotto\Enums\CrawlStatus;
@@ -15,6 +16,10 @@ class LottoCategory extends BaseModel
     public function lottoItems()
     {
         return $this->hasMany(LottoItem::class);
+    }
+    public function lottoRecords()
+    {
+        return $this->hasMany(LottoRecord::class);
     }
     public function lottoTodayItems($dow = -1)
     {
@@ -88,5 +93,9 @@ class LottoCategory extends BaseModel
             $d = DayOfWeek::fromDate($lottoRecord->created_at);
             return vsprintf($this->content_dow, [$d->toFullString(), $d->slug(), $str]);
         }
+    }
+    public function getPredictNews()
+    {
+        return PredictLotteryResult::where('predict_lottery_result_category_id', $this->predict_lottery_result_category_id)->limit(3)->orderBy('id', 'desc')->get();
     }
 }

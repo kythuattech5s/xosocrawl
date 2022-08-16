@@ -28,8 +28,11 @@
 <div class="see-more">
     <div class="bold see-more-title">Bạn có thể xem thêm:</div>
     <ul class="list-html-link">
-        <li>Xem thêm <a href="https://xoso.me/thong-ke-lo-gan-xo-so-bac-lieu-xsbl.html"
-                title="thống kê lô gan Bạc Liêu">thống kê lô gan Bạc Liêu</a></li>
+        @if ($logan = $lottoItem->getLogan())
+            <li>Xem thêm <a href="{{ $logan->slug }}" title="{{ $logan->short_name }}">{{ $logan->short_name }}</a>
+            </li>
+        @endif
+
         @if ($lottoItem->predictLotteryProvinceResult)
             <li>Xem chuyên gia <a href="{{ $lottoItem->predictLotteryProvinceResult->slug }}"
                     title="{{ $lottoItem->predictLotteryProvinceResult->short_name }}">{{ $lottoItem->predictLotteryProvinceResult->short_name }}</a>

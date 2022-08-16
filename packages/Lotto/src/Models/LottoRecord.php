@@ -3,6 +3,7 @@
 namespace Lotto\Models;
 
 use App\Models\BaseModel;
+use crawlmodule\basecrawler\Crawlers\BaseCrawler;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Lotto\Dtos\HeadTail;
 use Lotto\Dtos\LottoItemMnCollection;
@@ -25,6 +26,7 @@ class LottoRecord extends BaseModel
         if (!$record) {
             $now = now();
             $lottoTime = $lottoItem->lottoTimeByDate($date)->first();
+            if (!$lottoTime) return null;
             $record = new static;
             $record->code = $code;
             $record->fullcode = $fullcode;
@@ -146,5 +148,25 @@ class LottoRecord extends BaseModel
     {
         $lottoRecords = static::where('lotto_category_id', $this->lotto_category_id)->where('fullcode', $this->fullcode)->orderBy('created_at', 'desc')->get();
         return LottoItemMnCollection::createFromLottoRecords($lottoRecords);
+    }
+    public function parseLogan()
+    {
+        $logan = LottoLogan::where('lotto_record_id', $this->id)->first();
+        if ($logan) {
+            return $logan->content;
+        }
+        $crawler = new BaseCrawler();
+        $url = 'https://xoso.me/' . $this->lottoItem->prefix_sub_link . '/' . request()->segment(2) . '.html';
+        $content = $crawler->exeCurl($url);
+        $dom = str_get_html($content);
+        $box = $dom->find('.col-l > .box', 2);
+        $boxHtml = $crawler->convertContent($box);
+        $logan = new LottoLogan;
+        $logan->content = $boxHtml;
+        $logan->lotto_record_id = $this->id;
+        $logan->lotto_category_id = $this->lotto_category_id;
+        $logan->created_at = $logan->updated_at = now();
+        $logan->save();
+        return $boxHtml;
     }
 }

@@ -31,15 +31,13 @@
 
             <div class="txt-center">
                 <div class="center">
-                    <a class="ban-link" href="/redirect/out?token=I%2FZxoQFsuUjDev87POoC9PSveDZOsQOylNFoAc3oAoA%3D"
-                        title="" rel="nofollow" target="_blank" data-pos="ban_square"><img
-                            src="theme/frontend/images/tuvan.png"></a>
+                    @include('xoso.ads.banner_between_result_table')
                 </div>
             </div>
             @include('xoso.head_tail')
             <div class="clearfix"></div>
             <div class="bg_brown clearfix">
-                <a rel="nofollow" class="conect_out " title="In vé dò" href="https://xoso.me/in-ve-do.html">In
+                <a rel="nofollow" class="conect_out " title="In vé dò" href="in-ve-do">In
                     vé dò</a>
             </div>
         </div>

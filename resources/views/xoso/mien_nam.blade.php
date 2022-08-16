@@ -48,15 +48,13 @@
             @include('xoso.mien_nam.result_table')
             <div class="txt-center">
                 <div class="center">
-                    <a class="ban-link" href="/redirect/out?token=I%2FZxoQFsuUjDev87POoC9PSveDZOsQOylNFoAc3oAoA%3D"
-                        title="" rel="nofollow" target="_blank" data-pos="ban_square"><img
-                            src="theme/frontend/images/tuvan.png"></a>
+                    @include('xoso.ads.banner_between_result_table')
                 </div>
             </div>
             @include('xoso.mien_nam.head_tail')
             <div class="clearfix"></div>
             <div class="bg_brown clearfix">
-                <a rel="nofollow" class="conect_out " title="In vé dò" href="https://xoso.me/in-ve-do.html">In
+                <a rel="nofollow" class="conect_out " title="In vé dò" href="in-ve-do">In
                     vé dò</a>
             </div>
         </div>
@@ -68,20 +66,6 @@
         @else
             @include('xoso.mien_nam.cate_news.cate_news')
         @endif
-
-        {{-- <div class="see-more">
-            <div class="bold see-more-title">⇒ Ngoài ra bạn có thể xem thêm:</div>
-            <ul class="list-html-link two-column">
-                <li>Xem thống kê <a href="lo-gan-mn-thong-ke-lo-gan-mien-nam" title="lô gan miền Nam">lô gan miền Nam</a>
-                </li>
-                <li>Mời bạn <a href="quay-thu-xsmn-quay-thu-xo-so-mien-nam" title="quay thử miền Nam">quay thử miền Nam</a>
-                    hôm nay để lấy hên</li>
-                <li>Xem cao thủ <a href="du-doan-ket-qua-xo-so-mien-nam-xsmn-c226" title="dự đoán xổ số miền Nam">dự đoán xổ
-                        số miền Nam</a> chính xác nhất</li>
-                <li>Xem bảng kết quả <a href="xsmn-30-ngay-so-ket-qua-xo-so-kien-thiet-mien-nam"
-                        title="XSMN 30 ngày gần nhất">XSMN 30 ngày gần nhất</a></li>
-            </ul>
-        </div> --}}
 
     </div>
 

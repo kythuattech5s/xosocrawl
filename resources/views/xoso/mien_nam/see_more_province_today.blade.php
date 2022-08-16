@@ -1,9 +1,10 @@
 <div class="see-more">
     <div class="bold see-more-title">⇒ Ngoài ra bạn có thể xem thêm:</div>
     <ul class="list-html-link two-column">
-        <li>Xem thêm <a href="thong-ke-lo-gan-xo-so-bac-lieu-xsbl" title="Thống kê lô gan Bạc Liêu">thống kê lô gan
-                Bạc Liêu</a>
-        </li>
+        @if ($logan = $lottoItem->getLogan())
+            <li>Xem thêm <a href="{{ $logan->slug }}" title="{{ $logan->short_name }}">{{ $logan->short_name }}</a>
+            </li>
+        @endif
         @if ($testSpin = $lottoItem->testSpin)
             <li>Xem thêm <a href="{{ $testSpin->slug }}"
                     title="{{ $testSpin->short_name }}">{{ $testSpin->short_name }}</a>

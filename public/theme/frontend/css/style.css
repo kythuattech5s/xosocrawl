@@ -3073,7 +3073,9 @@ table.kqmb td.number {
 .kqmb td.v-giai span.v-g3-0, .kqmb td.v-giai span.v-g3-1, .kqmb td.v-giai span.v-g3-2, .kqmb td.v-giai span.v-g5-0, .kqmb td.v-giai span.v-g5-1, .kqmb td.v-giai span.v-g5-2 {
   border-bottom: 1px solid #ccc
 }
-
+.kqmb td.v-giai span[class^=v-g3-] {
+  width: 33.33%;
+}
 .kqtinh.kqmb td.v-giai span[class^=v-g3-] {
   width: 50%;
   border-bottom: none
@@ -5892,9 +5894,70 @@ img.emoji {
 .ats-overlay-bottom-wrapper-unrendered {
   display: none
 }
-/* table.kqmb td.number{
+table.custom.kqmb td.number{
   font-size: 0 !important;
-} */
+}
 .kqmb td.v-giai span[class^=v-g]{
   font-size: 23px;;
+}
+#result-book table.kqmb td.number {
+  font-size: 20px;
+  line-height: 22px;
+  padding: 8px 4px
+}
+
+#result-book table.kqmb .db td.number {
+  font-size: 22px
+}
+
+#result-book .sub-col-l {
+  width: calc(68% - 5px);
+  float: left
+}
+
+#result-book .sub-col-r {
+  width: 32%;
+  float: right
+}
+
+#result-book .sub-col-r .firstlast-mb.fl,#result-book .sub-col-r .firstlast-mb.fr {
+  width: 100%
+}
+
+#result-book .sub-col-r td {
+  word-break: break-word
+}
+
+#result-book .sub-col-r td:first-child {
+  font-size: 18px;
+  line-height: 22px;
+  padding: 8px 5px
+}
+
+#result-book th {
+  color: #000;
+  background: #fff2bc;
+  font-size: 14px;
+  padding: 5px 0;
+  text-align: center;
+  word-break: initial
+}
+
+@media (max-width: 375px) {
+  #result-book table.kqmb td.number {
+      font-size:18px;
+      line-height: 22px;
+      padding: 8px 2px
+  }
+
+  #result-book th {
+      font-size: 13px
+  }
+}
+
+@media (max-width: 359px) {
+  #result-book .sub-col-l,#result-book .sub-col-r {
+      width:100%;
+      float: none
+  }
 }

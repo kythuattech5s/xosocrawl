@@ -105,7 +105,7 @@ class CrawlResultMb extends Command
             $minus = $this->getMinusByCount($count, $times);
             $date = $date->addDays($minus);
             $count++;
-        } while ($date->year > $this->year && $date->month > $this->month);
+        } while ($date->year > $this->year); // && $date->month > $this->month
         return $dates;
     }
     protected function getMinusByCount($count, $times)
