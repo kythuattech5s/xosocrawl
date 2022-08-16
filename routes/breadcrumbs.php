@@ -70,3 +70,12 @@ Breadcrumbs::for('staticals', function ($trail,$currentItem) {
     $trail->parent('home');
     $trail->push($currentItem->breadcrum_name, Support::show($currentItem, 'slug'));
 });
+Breadcrumbs::for('vietlott_child', function ($trail,$name,$slug) {
+    $trail->parent('home');
+    $trail->push('XS Vietlott','kq-xs-vietlott-truc-tiep-ket-qua-xo-so-vietlott-hom-nay');
+    $trail->push($name,$slug);
+});
+Breadcrumbs::for('so_dau_duoi', function ($trail,$currentItem) {
+    $trail->parent('home');
+    $trail->push($currentItem->short_name, Support::show($currentItem, 'slug'));
+});

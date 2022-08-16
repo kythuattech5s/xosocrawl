@@ -1,13 +1,13 @@
 @extends('index')
 @section('breadcrumb')
-    {{Breadcrumbs::render('vietlott_child','Xổ số Mega 6/45',$currentItem->slug)}}
+    {{Breadcrumbs::render('vietlott_child','Xổ số Power 6/55',$currentItem->slug)}}
 @endsection
 @section('main')
 <div class="box">
-    @include('pages.vietlott_tab_panel',['activePage'=>'mega-6-45'])
+    @include('pages.vietlott_tab_panel',['activePage'=>'power-6-55'])
     @if (count($listItems) > 0)
         @foreach ($listItems as $key => $item)
-            <div class="box mega645">
+            <div class="power655 mega645">
                 {!!$item->name_content!!}
                 {!!$item->content!!}
             </div>

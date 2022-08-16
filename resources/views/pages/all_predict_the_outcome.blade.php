@@ -15,7 +15,7 @@
                         </a>
                     </h3>
                     <a href="{{$item->slug}}" title="{{$item->name}}">
-                        <img class="mag-r5 fl" width="120" height="67" src="https://images.xoso.me/news_xosome/2022-07/21/xq/du-doan-xo-so-mien-bac-2-8-2022--120x120.png" alt="{{$item->name}}"> 
+                        <img class="mag-r5 fl" width="120" height="67" src="{%IMGV2.item.img.-1%}" title="{{Support::show($item,'name')}}" alt="{{Support::show($item,'name')}}">
                     </a>
                     <p class="mag0 sapo">{{Str::words($item->seo_des,28)}}</p>
                 </li>
@@ -29,7 +29,7 @@
     @endif
     @if ($listItems->total() == 1)
         <div class="loading-page clearfix">
-            <a class="secondary" href="so-mo-lo-de-mien-bac-so-mo-giai-mong" title="Đầu trang">
+            <a class="secondary" href="du-doan-ket-qua-xo-so-kqxs-c229" title="Đầu trang">
                 <b> Đầu trang </b>
             </a>
         </div>

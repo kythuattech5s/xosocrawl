@@ -20,7 +20,8 @@ class BaseCrawler implements CrawlerInterface
         'xoso.me',
         'Xoso.me',
         'xosome',
-        'Xosome'
+        'Xosome',
+        'minh ngọc'
     ];
     protected $fileNameReplaceCharacters = [
         'xosome' => 'xosovnme',

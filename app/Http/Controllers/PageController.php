@@ -1,9 +1,17 @@
 <?php
 namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
+use App\Models\DienToan123;
+use App\Models\DienToan636;
+use App\Models\DienToanThanTai;
 use App\Models\DreamNumberDecoding;
+use App\Models\Max3dProVietlott;
+use App\Models\Max3dVietlott;
+use App\Models\Mega645VietlottNow;
 use App\Models\Page;
+use App\Models\Power655VietlottNow;
 use App\Models\PredictLotteryResultCategory;
+use App\Models\StaticalCrawl;
 use App\Models\TestSpin;
 use App\Models\TestSpinCategory;
 use DB;
@@ -32,6 +40,27 @@ class PageController extends Controller
         }
         if ($currentItem->layout_show == 'mega_6_45_vietlott_ngay_hom_nay') {
             return $this->mega6_45VietlottNgayHomNay($request,$currentItem);
+        }
+        if ($currentItem->layout_show == 'power_6_55_vietlott_ngay_hom_nay') {
+            return $this->power6_55VietlottNgayHomNay($request,$currentItem);
+        }
+        if ($currentItem->layout_show == 'max_3d_hom_nay') {
+            return $this->max3dHomNay($request,$currentItem);
+        }
+        if ($currentItem->layout_show == 'max_3d_pro_hom_nay') {
+            return $this->max3dProHomNay($request,$currentItem);
+        }
+        if ($currentItem->layout_show == 'xo_so_dien_toan') {
+            return $this->xoSoDienToan($request,$currentItem);
+        }
+        if ($currentItem->layout_show == 'dien_toan_123') {
+            return $this->dienToan123($request,$currentItem);
+        }
+        if ($currentItem->layout_show == 'dien_toan_than_tai') {
+            return $this->dienToanThanTai($request,$currentItem);
+        }
+        if ($currentItem->layout_show == 'dien_toan_636') {
+            return $this->dienToan636($request,$currentItem);
         }
         return view('pages.'.$currentItem->layout_show, compact('currentItem'));
     }
@@ -90,6 +119,61 @@ class PageController extends Controller
     }
     public function mega6_45VietlottNgayHomNay($request,$currentItem)
     {
-        return view('pages.'.$currentItem->layout_show, compact('currentItem'));
+        $listItems = Mega645VietlottNow::act()->orderBy('time','desc')->paginate(7);
+        return view('pages.'.$currentItem->layout_show, compact('currentItem','listItems'));
+    }
+    public function power6_55VietlottNgayHomNay($request,$currentItem)
+    {
+        $listItems = Power655VietlottNow::act()->orderBy('time','desc')->paginate(7);
+        return view('pages.'.$currentItem->layout_show, compact('currentItem','listItems'));
+    }
+    public function max3dHomNay($request,$currentItem)
+    {
+        $listItems = Max3dVietlott::act()->orderBy('time','desc')->paginate(7);
+        return view('pages.'.$currentItem->layout_show, compact('currentItem','listItems'));
+    }
+    public function max3dProHomNay($request,$currentItem)
+    {
+        $listItems = Max3dProVietlott::act()->orderBy('time','desc')->paginate(7);
+        return view('pages.'.$currentItem->layout_show, compact('currentItem','listItems'));
+    }
+    public function xoSoDienToan($request,$currentItem)
+    {
+        $activeTime = StaticalCrawl::_getTime('bac');
+        $firstItem = DienToan123::act()->orderBy('time','desc')->first();
+        $secondItem = DienToanThanTai::act()->orderBy('time','desc')->first();
+        $lastItem = DienToan636::act()->orderBy('time','desc')->first();
+        return view('pages.dien_toan.base', compact('currentItem','activeTime','firstItem','secondItem','lastItem'));
+    }
+    public function dienToan123($request,$currentItem)
+    {
+        $listItems = DienToan123::act()->orderBy('time','desc')->paginate(10);
+        return view('pages.dien_toan.dien_toan_list_item_base', compact('currentItem','listItems'));
+    }
+    public function dienToanThanTai($request,$currentItem)
+    {
+        $listItems = DienToanThanTai::act()->orderBy('time','desc')->paginate(10);
+        return view('pages.dien_toan.dien_toan_list_item_base', compact('currentItem','listItems'));
+    }
+    public function dienToan636($request,$currentItem)
+    {
+        $listItems = DienToan636::act()->orderBy('time','desc')->paginate(10);
+        return view('pages.dien_toan.dien_toan_list_item_base', compact('currentItem','listItems'));
+    }
+    public function xoSoDienToanTheoNgay($id)
+    {
+        preg_match('/(\d{1,2})-(\d{1,2})-(\d{4})/', str_replace('/','-',$id), $dates);
+        if (count($dates) == 4) {
+            $day = $dates[1] < 10 ? $dates[1]:$dates[1];
+            $month = $dates[2] < 10 ? $dates[2]:$dates[2];
+            $year = $dates[3];
+            $code = $year.$month.$day;
+            $activeTime = now()->createFromFormat('d/m/Y H:i:s',$day.'/'.$month.'/'.$year.' 18:05:00');
+            $firstItem = DienToan123::act()->where('fullcode',$code)->first();
+            $secondItem = DienToanThanTai::act()->where('fullcode',$code)->first();
+            $lastItem = DienToan636::act()->where('fullcode',$code)->first();
+            return view('pages.dien_toan.all_dien_toan', compact('activeTime','firstItem','secondItem','lastItem'));
+        }
+        abort(404);
     }
 }

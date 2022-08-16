@@ -1,19 +1,16 @@
 @extends('index')
 @section('breadcrumb')
-    {{Breadcrumbs::render('vietlott_child','Xổ số Mega 6/45',$currentItem->slug)}}
+    {{Breadcrumbs::render('vietlott_child','Xổ số Max 3D pro',$currentItem->slug)}}
 @endsection
 @section('main')
 <div class="box">
-    @include('pages.vietlott_tab_panel',['activePage'=>'mega-6-45'])
+    @include('pages.vietlott_tab_panel',['activePage'=>'max-3d-pro'])
     @if (count($listItems) > 0)
         @foreach ($listItems as $key => $item)
-            <div class="box mega645">
-                {!!$item->name_content!!}
+            {!!$item->name_content!!}
+            <div id="load_kq_3dpro_{{$key}}">
                 {!!$item->content!!}
             </div>
-            @if ($key == 0 && $listItems->onFirstPage())
-                {!!$currentItem->moreinfo!!}
-            @endif
             @if ($key == 0)
                 <div class="see-more">
                     {!!$currentItem->seemore_box!!}

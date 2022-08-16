@@ -2,11 +2,12 @@ let MAIN = {
     init: function () {
         this.initDatePicker();
     },
-    initShowDigit:function(){
-        let inputs = document.querySelectorAll('[name=showed-digits]');
+    initShowDigit: function () {
+        let inputs = document.querySelectorAll("[name=showed-digits]");
     },
     initDatePicker: function () {
         const elem = document.querySelector("#searchDate");
+        if (!elem) return;
         const datepicker = new Datepicker(elem, {
             autohide: true,
             format: "dd/mm/yyyy",

@@ -8,9 +8,8 @@ use Support;
 class StaticalCrawl extends BaseModel
 {
     use HasFactory;
-    public function getTime()
-    {
-        switch ($this->time_type) {
+    public static function _getTime($type){
+        switch ($type) {
             case 'bac':
                 $time = now()->subDays(1);
                 if (now()->hour == 18 && now()->minute >= 40) {
@@ -41,10 +40,24 @@ class StaticalCrawl extends BaseModel
                 }
                 return $time;
                 break;
+            case 'vietlott':
+                $time = now()->subDays(1);
+                if (now()->hour == 18 && now()->minute >= 35) {
+                    $time = now();
+                }
+                if (now()->hour > 18) {
+                    $time = now();
+                }
+                return $time;
+                break;
             default:
                 return now();
                 break;
         }
+    }
+    public function getTime()
+    {
+        return self::_getTime($this->time_type);
     }
     public function timeToFullCode($time)
     {

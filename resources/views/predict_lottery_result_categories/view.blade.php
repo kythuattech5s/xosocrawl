@@ -50,7 +50,7 @@
     @endif
     @if ($listItems->total() == 1)
         <div class="loading-page clearfix">
-            <a class="secondary" href="so-mo-lo-de-mien-bac-so-mo-giai-mong" title="Đầu trang">
+            <a class="secondary" href="{{$currentItem->slug}}" title="Đầu trang">
                 <b> Đầu trang </b>
             </a>
         </div>
