@@ -124,6 +124,12 @@
                     <div class="clearfix"></div>
                 </div>
             @endforeach
+            @if ($nextPageUrl = $staticals->nextPageUrl())
+                <div class="txt-center">
+                    <button class="btn btn-danger" data-href="{{ $nextPageUrl }}" id="result-see-more"
+                        value="Xem thêm">Xem thêm</button>
+                </div>
+            @endif
         </div>
         <div class="box clearfix">
             <h2 class="tit-mien bold">Thống kê giải bặc biệt {{ $numOfDay }} ngày về nhiều nhất</h2>
@@ -134,36 +140,21 @@
                             <th>Bộ số</th>
                             <th>Số lượt về</th>
                         </tr>
-                        <tr>
-                            <td>
-                                <div class="bold"><span class="clred bold">13</span></div>
-                            </td>
-                            <td> về 3 lần</td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div class="bold"><span class="clred bold">55</span></div>
-                            </td>
-                            <td> về 2 lần</td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div class="bold"><span class="clred bold">93</span></div>
-                            </td>
-                            <td> về 2 lần</td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div class="bold"><span class="clred bold">02</span></div>
-                            </td>
-                            <td> về 1 lần</td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div class="bold"><span class="clred bold">03</span></div>
-                            </td>
-                            <td> về 1 lần</td>
-                        </tr>
+                        @php
+                            $dbs = $numResult->getDB();
+                            $dbKeys = array_keys($dbs);
+                            
+                        @endphp
+                        @for ($i = 0; $i < 5; $i++)
+                            <tr>
+                                <td>
+                                    <div class="bold"><span class="clred bold">{{ $key = array_shift($dbKeys) }}</span>
+                                    </div>
+                                </td>
+                                <td> về {{ $dbs[$key]['count'] }} lần</td>
+                            </tr>
+                        @endfor
+
                     </tbody>
                 </table>
                 <table class="fl tbl50">
@@ -172,40 +163,19 @@
                             <th>Bộ số</th>
                             <th>Số lượt về</th>
                         </tr>
-                        <tr>
-                            <td>
-                                <div class="bold"><span class="clred bold">04</span></div>
-                            </td>
-                            <td> về 1 lần</td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div class="bold"><span class="clred bold">06</span></div>
-                            </td>
-                            <td> về 1 lần</td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div class="bold"><span class="clred bold">09</span></div>
-                            </td>
-                            <td> về 1 lần</td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div class="bold"><span class="clred bold">17</span></div>
-                            </td>
-                            <td> về 1 lần</td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div class="bold"><span class="clred bold">19</span></div>
-                            </td>
-                            <td> về 1 lần</td>
-                        </tr>
+                        @for ($i = 5; $i < 10; $i++)
+                            <tr>
+                                <td>
+                                    <div class="bold"><span class="clred bold">{{ $key = array_shift($dbKeys) }}</span>
+                                    </div>
+                                </td>
+                                <td> về {{ $dbs[$key]['count'] }} lần</td>
+                            </tr>
+                        @endfor
                     </tbody>
                 </table>
             </div>
-            <h2 class="tit-mien bold">Thống kê 30 ngày đầu đuôi giải đặc biệt, tổng giải đặc biệt</h2>
+            <h2 class="tit-mien bold">Thống kê {{ $numOfDay }} ngày đầu đuôi giải đặc biệt, tổng giải đặc biệt</h2>
             <table class="mag0">
                 <tbody>
                     <tr>
@@ -213,58 +183,103 @@
                         <th>Đuôi</th>
                         <th>Tổng</th>
                     </tr>
-                    <tr>
-                        <td> Đầu 0: <span class="clred">5</span> lần</td>
-                        <td> Đuôi 0: <span class="clred">3</span> lần</td>
-                        <td> Tổng 0: <span class="clred">5</span> lần</td>
-                    </tr>
-                    <tr>
-                        <td> Đầu 1: <span class="clred">5</span> lần</td>
-                        <td> Đuôi 1: <span class="clred">2</span> lần</td>
-                        <td> Tổng 1: <span class="clred">1</span> lần</td>
-                    </tr>
-                    <tr>
-                        <td> Đầu 2: <span class="clred">2</span> lần</td>
-                        <td> Đuôi 2: <span class="clred">3</span> lần</td>
-                        <td> Tổng 2: <span class="clred">4</span> lần</td>
-                    </tr>
-                    <tr>
-                        <td> Đầu 3: <span class="clred">1</span> lần</td>
-                        <td> Đuôi 3: <span class="clred">7</span> lần</td>
-                        <td> Tổng 3: <span class="clred">4</span> lần</td>
-                    </tr>
-                    <tr>
-                        <td> Đầu 4: <span class="clred">0</span> lần</td>
-                        <td> Đuôi 4: <span class="clred">1</span> lần</td>
-                        <td> Tổng 4: <span class="clred">6</span> lần</td>
-                    </tr>
-                    <tr>
-                        <td> Đầu 5: <span class="clred">4</span> lần</td>
-                        <td> Đuôi 5: <span class="clred">4</span> lần</td>
-                        <td> Tổng 5: <span class="clred">1</span> lần</td>
-                    </tr>
-                    <tr>
-                        <td> Đầu 6: <span class="clred">2</span> lần</td>
-                        <td> Đuôi 6: <span class="clred">3</span> lần</td>
-                        <td> Tổng 6: <span class="clred">1</span> lần</td>
-                    </tr>
-                    <tr>
-                        <td> Đầu 7: <span class="clred">2</span> lần</td>
-                        <td> Đuôi 7: <span class="clred">4</span> lần</td>
-                        <td> Tổng 7: <span class="clred">2</span> lần</td>
-                    </tr>
-                    <tr>
-                        <td> Đầu 8: <span class="clred">3</span> lần</td>
-                        <td> Đuôi 8: <span class="clred">1</span> lần</td>
-                        <td> Tổng 8: <span class="clred">3</span> lần</td>
-                    </tr>
-                    <tr>
-                        <td> Đầu 9: <span class="clred">6</span> lần</td>
-                        <td> Đuôi 9: <span class="clred">2</span> lần</td>
-                        <td> Tổng 9: <span class="clred">3</span> lần</td>
-                    </tr>
+                    @php
+                        $dauDB = $numResult->getDauDB();
+                        $duoiDB = $numResult->getDuoiDB();
+                        $tongDB = $numResult->getTongDB();
+                    @endphp
+                    @for ($i = 0; $i < 10; $i++)
+                        <tr>
+                            <td> Đầu {{ $i }}: <span class="clred">{{ $dauDB[$i] }}</span> lần</td>
+                            <td> Đuôi {{ $i }}: <span class="clred">{{ $duoiDB[$i] }}</span> lần</td>
+                            <td> Tổng {{ $i }}: <span class="clred">{{ $tongDB[$i] }}</span> lần</td>
+                        </tr>
+                    @endfor
+
                 </tbody>
             </table>
         </div>
+        <div class="box clearfix">
+            <h2 class="tit-mien bold">Thống kê lô tô {{ $numOfDay }} ngày về nhiều nhất</h2>
+            <div class="clearfix">
+                <table class="fl tbl50">
+                    <tbody>
+                        <tr>
+                            <th>Bộ số</th>
+                            <th>Số lượt về</th>
+                        </tr>
+                        @php
+                            $dbs = $numResult->getLotto();
+                            $dbKeys = array_keys($dbs);
+                            
+                        @endphp
+                        @for ($i = 0; $i < 5; $i++)
+                            <tr>
+                                <td>
+                                    <div class="bold"><span class="clred bold">{{ $key = array_shift($dbKeys) }}</span>
+                                    </div>
+                                </td>
+                                <td> về {{ $dbs[$key]['count'] }} lần</td>
+                            </tr>
+                        @endfor
+
+                    </tbody>
+                </table>
+                <table class="fl tbl50">
+                    <tbody>
+                        <tr>
+                            <th>Bộ số</th>
+                            <th>Số lượt về</th>
+                        </tr>
+                        @for ($i = 5; $i < 10; $i++)
+                            <tr>
+                                <td>
+                                    <div class="bold"><span class="clred bold">{{ $key = array_shift($dbKeys) }}</span>
+                                    </div>
+                                </td>
+                                <td> về {{ $dbs[$key]['count'] }} lần</td>
+                            </tr>
+                        @endfor
+                    </tbody>
+                </table>
+            </div>
+            <h2 class="tit-mien bold">Thống kê đầu đuôi lô tô, tổng lô tô trong {{ $numOfDay }} ngày</h2>
+            <table class="mag0">
+                <tbody>
+                    <tr>
+                        <th>Đầu</th>
+                        <th>Đuôi</th>
+                        <th>Tổng</th>
+                    </tr>
+                    @php
+                        $dauDB = $numResult->getDauLotto();
+                        $duoiDB = $numResult->getDuoiLotto();
+                        $tongDB = $numResult->getTongLotto();
+                    @endphp
+                    @for ($i = 0; $i < 10; $i++)
+                        <tr>
+                            <td> Đầu {{ $i }}: <span class="clred">{{ $dauDB[$i] }}</span> lần</td>
+                            <td> Đuôi {{ $i }}: <span class="clred">{{ $duoiDB[$i] }}</span> lần</td>
+                            <td> Tổng {{ $i }}: <span class="clred">{{ $tongDB[$i] }}</span> lần</td>
+                        </tr>
+                    @endfor
+
+                </tbody>
+            </table>
+
+            @php
+                $viewSeeMore = 'xoso.statical.' . $lottoCategory->view_path . '_seemore';
+            @endphp
+            @if (View::exists($viewSeeMore))
+                @include($viewSeeMore)
+            @endif
+
+        </div>
+        <div class="box box-html">
+            {!! $currentItem->content !!}
+        </div>
     </div>
+@endsection
+@section('js')
+    <script src="theme/frontend/js/num_result.js" defer></script>
 @endsection

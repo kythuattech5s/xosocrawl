@@ -26,7 +26,9 @@ class CrawlResultMt extends CrawlResultMb
     }
     public function crawlOne($lottoItem)
     {
-        $dates = $this->getDates($lottoItem);
+        $now  = now();
+        $now->day = 14;
+        $dates = [$now]; // $this->getDates($lottoItem);
         $dates = array_reverse($dates);
         $xsmb = new XoSoMienNam($lottoItem);
 
