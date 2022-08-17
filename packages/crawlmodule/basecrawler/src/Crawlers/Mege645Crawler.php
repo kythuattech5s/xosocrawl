@@ -26,7 +26,7 @@ class Mege645Crawler extends BaseCrawler
         $listItems = $htmlDom->find('.box.mega645');
         $countItemAdd = $this->crawlItems($listItems);
         $nextLink = $htmlDom->find('.loading-page a.primary');
-        while (count($nextLink) > 0 && $countItemAdd) {
+        while (count($nextLink) > 0 && $countItemAdd > 0) {
             $html = $this->exeCurl($nextLink[0]->href);
             $htmlDom = str_get_html($html);
             if (!$htmlDom) return false;

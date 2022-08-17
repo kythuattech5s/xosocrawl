@@ -79,3 +79,14 @@ Breadcrumbs::for('so_dau_duoi', function ($trail,$currentItem) {
     $trail->parent('home');
     $trail->push($currentItem->short_name, Support::show($currentItem, 'slug'));
 });
+Breadcrumbs::for('tin-tuc', function ($trail,$currentItem) {
+    $trail->parent('home');
+    $trail->push('Tin tức','tin-tuc');
+    $trail->push($currentItem->name, Support::show($currentItem, 'slug'));
+});
+Breadcrumbs::for('max4d', function ($trail,$currentItem = null) {
+    $trail->parent('vietlott_child','Xổ số Max 4D','kqxs-max4d-ket-qua-xo-so-dien-toan-tu-chon-so-max-4d-vietlott-ngay-hom-nay');
+    if (isset($currentItem)) {
+        $trail->push($currentItem->name,$currentItem->slug);
+    }
+});

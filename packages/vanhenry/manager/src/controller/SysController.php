@@ -4,6 +4,7 @@ namespace vanhenry\manager\controller;
 
 use DB;
 use Illuminate\Http\Request;
+use ResponseCache;
 
 class SysController extends BaseAdminController
 {
@@ -192,6 +193,7 @@ class SysController extends BaseAdminController
 
     public function deleteCache()
     {
+        ResponseCache::clear();
         \Artisan::call('cache:clear');
         \Artisan::call('view:clear');
         return redirect()->back();

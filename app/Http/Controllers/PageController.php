@@ -7,7 +7,9 @@ use App\Models\DienToanThanTai;
 use App\Models\DreamNumberDecoding;
 use App\Models\Max3dProVietlott;
 use App\Models\Max3dVietlott;
+use App\Models\Max4dVietlott;
 use App\Models\Mega645VietlottNow;
+use App\Models\News;
 use App\Models\Page;
 use App\Models\Power655VietlottNow;
 use App\Models\PredictLotteryResultCategory;
@@ -61,6 +63,15 @@ class PageController extends Controller
         }
         if ($currentItem->layout_show == 'dien_toan_636') {
             return $this->dienToan636($request,$currentItem);
+        }
+        if ($currentItem->layout_show == 'all_tin_tuc') {
+            return $this->allNews($request,$currentItem);
+        }
+        if ($currentItem->layout_show == 'max_4d_vietlott') {
+            return $this->max4d($request,$currentItem);
+        }
+        if ($currentItem->layout_show == 'max_4d_vietlott_thu_3' || $currentItem->layout_show == 'max_4d_vietlott_thu_5' || $currentItem->layout_show == 'max_4d_vietlott_thu_7') {
+            return $this->baseMax4d($request,$currentItem);
         }
         return view('pages.'.$currentItem->layout_show, compact('currentItem'));
     }
@@ -175,5 +186,20 @@ class PageController extends Controller
             return view('pages.dien_toan.all_dien_toan', compact('activeTime','firstItem','secondItem','lastItem'));
         }
         abort(404);
+    }
+    public function allNews($request,$currentItem)
+    {
+        $listItems = News::act()->orderBy('created_at','desc')->paginate(10);
+        return view('pages.all_tin_tuc', compact('currentItem','listItems'));
+    }
+    public function baseMax4d($request,$currentItem)
+    {
+        $listItems = Max4dVietlott::act()->where('type',$currentItem->layout_show)->orderBy('time','desc')->paginate(10);
+        return view('pages.base_max4d', compact('currentItem','listItems'));
+    }
+    public function max4d($request,$currentItem)
+    {
+        $listItems = Max4dVietlott::act()->orderBy('time','desc')->paginate(10);
+        return view('pages.base_max4d', compact('currentItem','listItems'));
     }
 }

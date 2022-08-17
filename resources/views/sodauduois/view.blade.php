@@ -51,7 +51,42 @@
                 @endforeach
             </tbody>
         </table>
+    @else
+        <table class="l2d-table">
+            <tbody>
+                @foreach ($listItems as $item)
+                    @if (isset($arrData[$item->fullcode]))
+                        <tr>
+                            <td class="date">
+                                {{$dayOfWeekNameMap[$item->created_at->dayOfWeek]}}, {{Support::showDateTime($item->created_at,'d/m/Y')}}
+                            </td>
+                            @php
+                                $count = 0;
+                            @endphp
+                            @foreach ($arrData[$item->fullcode] as $itemChild)
+                                @php
+                                    $gdbs = $itemChild->lottoResultDetails->where('no_prize',0)->first();
+                                    $g8 = $itemChild->lottoResultDetails->where('no_prize',8)->first();
+                                    $count++;
+                                @endphp
+                                <td>
+                                    {{Support::show($itemChild->lottoItem,'name')}} <br>
+                                    <b>{{substr($g8->number ?? '',0,2)}}</b>−<b class="red">{{substr($gdbs->number ?? '',-2)}}</b>
+                                </td>
+                            @endforeach
+                            @if ($count < $numberTd)
+                                @for ($i = 0; $i < $numberTd - $count; $i++)
+                                    <td></td>
+                                @endfor
+                            @endif
+                        </tr>
+                        <tr></tr>
+                    @endif
+                @endforeach
+            </tbody>
+        </table>
     @endif
+    {{ $listItems->withQueryString()->links('vendor.pagination.pagination_default') }}
     <div class="see-more">
         {!!Support::show($currentItem,'see_more')!!}
     </div>

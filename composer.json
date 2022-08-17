@@ -26,7 +26,8 @@
         "mcamara/laravel-localization": "^1.6",
         "pbmedia/laravel-ffmpeg": "^7.5",
         "pusher/pusher-php-server": "^7.0",
-        "rosell-dk/webp-convert": "^2.6"
+        "rosell-dk/webp-convert": "^2.6",
+        "spatie/laravel-responsecache": "^6.6"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.6",

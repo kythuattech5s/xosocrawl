@@ -96,4 +96,59 @@ class StaticalCrawl extends BaseModel
         }
         return StaticalCrawlData::getItem($identify);
     }
+    public function getItemDataDirect($param = [])
+    {
+        $methodRequest = 'GET';
+        $link = $this->target_link;
+        if (isset(request()->page)) {
+            $param['page'] = request()->page;
+        }
+        if (request()->isMethod('post')) {
+            $methodRequest = 'POST';
+        }
+        $baseCrawler = new BaseCrawler;
+        $html = $baseCrawler->exeCurl($link,$methodRequest,$param);
+        $htmlDom = str_get_html($html);
+        if (!$htmlDom) return null;
+        $dataHtml = '';
+        foreach (Support::extractJson($this->content_map) as $item) {
+            $contentBox = $htmlDom->find($item['target']);
+            if (count($contentBox) == 0) continue;
+            $resultBooks = $contentBox[0]->find('#result-book');
+            foreach ($resultBooks as $resultBook) {
+                $resultBook->outertext = '';
+            }
+            $dataHtmlAdd = $baseCrawler->convertContent($contentBox[0],false);
+            if (isset($item['cover'])) {
+                $dataHtmlAdd = vsprintf($item['cover'],[$dataHtmlAdd]);
+            }
+            $dataHtml .= $dataHtmlAdd;
+        }
+        return $dataHtml;
+    }
+    public static function getBoxVietlottContentHome()
+    {
+        $itemActive = static::where('type','kq_xs_vietlott_hom_nay')->orderBy('id','desc')->first();
+        $baseCrawler = new BaseCrawler;
+        if (!isset($itemActive)) return '';
+        $itemData = $itemActive->getItemData([]);
+        if (!isset($itemData)) return '';
+        $htmlDom = str_get_html($itemData->value);
+        if (!$htmlDom) return null;
+        $tabPanel = $htmlDom->find('.tab-panel');
+        foreach ($tabPanel as $item) {
+            $item->outertext = '';
+        }
+        $seeMore = $htmlDom->find('.see-more');
+        foreach ($seeMore as $item) {
+            $item->outertext = '';
+        }
+        $htmlBox = $htmlDom->find('.box');
+        foreach ($htmlBox as $key => $item) {
+            if ($key > 5) {
+                $item->outertext = '';
+            }
+        }
+        return (string)$htmlDom;
+    }
 }

@@ -1,6 +1,8 @@
 <?php
 namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use ResponseCache;
+
 class StaticalCrawlData extends BaseModel
 {
     use HasFactory;
@@ -16,6 +18,7 @@ class StaticalCrawlData extends BaseModel
     }
     public static function createItem($staticalCrawlId,$identify,$value,$time,$param = null)
     {
+        ResponseCache::clear();
         $newItem = new StaticalCrawlData;
         $newItem->statical_craw_id = $staticalCrawlId;
         $newItem->identify = $identify;

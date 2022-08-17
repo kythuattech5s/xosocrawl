@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/clear', function () {
     $exitCode = Artisan::call('cache:clear');
     $exitCode = Artisan::call('view:clear');
+    ResponseCache::clear();
     echo '<pre>';
     var_dump(__LINE__);
     die();

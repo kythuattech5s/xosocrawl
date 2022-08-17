@@ -36,7 +36,9 @@ class HomeController extends Controller
         $baseCrawler = new BaseCrawler;
         $pages = Page::where('convert_contented',0)->get();
         foreach ($pages as $page) {
-            $page->content = $baseCrawler->convertContent(str_get_html($page->content));
+            if ($page->content != '') {
+                $page->content = $baseCrawler->convertContent(str_get_html($page->content));
+            }
             if ($page->seemore_box != '') {
                 $page->seemore_box = $baseCrawler->convertContent(str_get_html($page->seemore_box));
             }

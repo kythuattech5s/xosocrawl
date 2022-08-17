@@ -17,7 +17,7 @@ class Max3dProCrawler extends BaseCrawler
         $listItems = $htmlDom->find('.tit-mien.clearfix');
         $countItemAdd = $this->crawlItems($listItems,$htmlDom);
         $nextLink = $htmlDom->find('.loading-page a.primary');
-        while (count($nextLink) > 0 && $countItemAdd) {
+        while (count($nextLink) > 0 && $countItemAdd > 0) {
             $html = $this->exeCurl($nextLink[0]->href);
             $htmlDom = str_get_html($html);
             if (!$htmlDom) return false;

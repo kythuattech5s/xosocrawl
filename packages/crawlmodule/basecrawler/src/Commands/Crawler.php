@@ -3,6 +3,7 @@ namespace crawlmodule\basecrawler\Commands;
 use Illuminate\Console\Command;
 use App\Models\CrawlType;
 use crawlmodule\basecrawler\Crawlers\Factory\CrawlerFactory;
+use ResponseCache;
 
 class Crawler extends Command
 {
@@ -27,6 +28,7 @@ class Crawler extends Command
             }else{
                 $this->info('Kết thúc Crawl '.$crawlType->name.' với một lỗi gì đó.');
             }
+            ResponseCache::clear();
         }else{
             $this->info('Không có phương thức nào');
         }

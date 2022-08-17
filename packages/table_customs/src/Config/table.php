@@ -6,13 +6,13 @@ return [
     'add' => [''],
     // 
     'checkExit' => [
-        'news' => []
+        // 'news' => []
     ],
     'checkEdit' => [
-        'news' => [
-            'time' => 5000,
-            'class' => '\CustomTable\Controllers\CheckController',
-            'method' => 'checkTimeEdit'
-        ]
+        // 'news' => [
+        //     'time' => 5000,
+        //     'class' => '\CustomTable\Controllers\CheckController',
+        //     'method' => 'checkTimeEdit'
+        // ]
     ]
 ];

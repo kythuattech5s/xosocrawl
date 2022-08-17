@@ -234,7 +234,7 @@ class BaseCrawler implements CrawlerInterface
         $vRouter->vi_seo_des = $item->seo_des ?? $vRouter->vi_name;
         $vRouter->save();
     }
-    public function convertContent($contentDom)
+    public function convertContent($contentDom,$clearCsrfInput = true)
     {
         // remove widget-toc
         $widgetTocs = $contentDom->find('.widget-toc');
@@ -266,9 +266,11 @@ class BaseCrawler implements CrawlerInterface
         foreach ($adsBoxs as $itemAdsBox) {
             $itemAdsBox->outertext = '';
         }
-        $inputCsrf = $contentDom->find('input[name=_csrf]');
-        foreach ($inputCsrf as $itemInputCsrf) {
-            $itemInputCsrf->outertext = '';
+        if ($clearCsrfInput) {
+            $inputCsrf = $contentDom->find('input[name=_csrf]');
+            foreach ($inputCsrf as $itemInputCsrf) {
+                $itemInputCsrf->outertext = '';
+            }
         }
         $listDaterangePicker = $contentDom->find('#statisticform-fromdate');
         foreach ($listDaterangePicker as $itemDaterangePicker) {
@@ -286,6 +288,10 @@ class BaseCrawler implements CrawlerInterface
         $listFormTag = $contentDom->find('form');
         foreach ($listFormTag as $itemForm) {
             $itemForm->action  = $this->clearLink($itemForm->action);
+        }
+        $listCpsmsBox = $contentDom->find('.cp-sms');
+        foreach ($listCpsmsBox as $itemBox) {
+            $itemBox->outertext = '';
         }
         $listFaceBookComment = $contentDom->find('#comment');
         foreach ($listFaceBookComment as $itemFaceBookComment) {

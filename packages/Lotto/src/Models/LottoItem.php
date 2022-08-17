@@ -83,6 +83,9 @@ class LottoItem extends BaseModel
         $days = array_filter($dayOfWeeks, function ($item) use ($currentDayOfWeek) {
             return $item['dayofweek'] == $currentDayOfWeek;
         });
+        if (!isset($days[0])) {
+            return false;
+        }
         $day = $days[0];
         $hourFrom = (int)$day['hour_from'];
         $hourTo = (int)$day['hour_to'];

@@ -18,7 +18,7 @@ class DienToanThanTaiCrawler extends BaseCrawler
         $listItems = $htmlDom->find('.dientoan-ball.clearfix .box');
         $countItemAdd = $this->crawlItems($listItems,$htmlDom);
         $page = 1;
-        while (count($listItems) > 0 && $countItemAdd) {
+        while (count($listItems) > 0 && $countItemAdd > 0) {
             $page++;
             $html = $this->exeCurl(vsprintf($this->nextlLink,[$page]));
             $htmlDom = str_get_html($html);

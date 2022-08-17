@@ -10,6 +10,9 @@ class StaticalCrawlController extends Controller
         $currentItem = StaticalCrawl::slug($link)->act()->first();
         if ($currentItem == null) { abort(404); }
         $currentItem->updateCountView();
+        if ($currentItem->type == 'xoso_keno') {
+            return $this->xosoKenoContentDirect($request,$currentItem);
+        }
         if (request()->isMethod('post')) {
             if ($currentItem->type == 'tk_logan_category') {
                 if (isset($request->StatisticForm) && isset($request->StatisticForm['provinceId'])) {
@@ -24,6 +27,11 @@ class StaticalCrawlController extends Controller
         $itemData = $currentItem->getItemData($request->all());
         $dataHtml = isset($itemData) ? $itemData->value:'';
         $dataHtml = str_replace('data-href="','data-href="'.url()->to('/').'/',$dataHtml);
+        return view('staticals.view',compact('currentItem','dataHtml'));
+    }
+    public function xosoKenoContentDirect($request,$currentItem)
+    {
+        $dataHtml = $currentItem->getItemDataDirect($request->all());
         return view('staticals.view',compact('currentItem','dataHtml'));
     }
     public function staticalLoganProvince()
