@@ -3,8 +3,11 @@
 namespace Lotto\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\BannerGdn;
+use App\Models\BannerGdnCategory;
 use Illuminate\Http\Request;
 use Lotto\Dtos\LottoItemMnCollection;
+use Lotto\Dtos\NumResult;
 use Lotto\Enums\DayOfWeek;
 use Lotto\Enums\LottoTypeRelate;
 use Lotto\Helpers\LottoHelper;
@@ -12,6 +15,9 @@ use Lotto\Helpers\SeoHelper;
 use Lotto\Models\LottoCategory;
 use Lotto\Models\LottoItem;
 use Lotto\Models\LottoRecord;
+use Lotto\Models\LottoResultDetail;
+use Lotto\Models\LottoYesterday;
+use Lotto\Models\StaticalByDay;
 use Support;
 
 class XoSoController extends Controller
@@ -335,6 +341,92 @@ class XoSoController extends Controller
             return response()->json(['code' => 200, 'link' => $link]);
         } catch (\Throwable $th) {
             abort(404);
+        }
+    }
+    public function lottoYesterday(Request $request, $route, $link)
+    {
+        $currentItem = LottoYesterday::find($route->map_id);
+        $typeRelated = LottoTypeRelate::DOW;
+        $now = now();
+        $now->hour = 0;
+        $now->minute = 0;
+        $now->second = 0;
+        $lottoCategory = $currentItem->lottoCategory;
+        $lottoRecord = LottoRecord::where('lotto_category_id', $lottoCategory->id)->where('created_at', '<', $now)->orderBy('created_at', 'desc')->limit(1)->first();
+        $lottoItem = $lottoRecord->lottoItem;
+
+        $lottoItemMnCollection = collect();
+        if ($lottoCategory->id > 1) {
+            $lottoItemMnCollection = $lottoRecord->toLottoItemMnCollection();
+            // dd($lottoItemMnCollection);
+        }
+        $viewPath = $lottoCategory->id == 1 ? 'mien_bac' : 'mien_nam';
+        return view('xoso.yesterday', compact('currentItem', 'typeRelated', 'lottoCategory', 'lottoItem', 'lottoRecord', 'lottoItemMnCollection', 'viewPath'));
+    }
+    public function staticalByDay(Request $request, $route, $link)
+    {
+
+        $currentItem = StaticalByDay::find($route->map_id);
+        if (!$currentItem) abort(404);
+        if ($request->isMethod('post')) {
+            $numOfDay = (int)$request->input('numOfDay', 0);
+            $item = StaticalByDay::where('lotto_category_id', $currentItem->lotto_category_id)->where('num_day', $numOfDay)->first();
+
+            if ($item) {
+                return \redirect($item->slug);
+            } else {
+                abort(404);
+            }
+        }
+        $numOfDay = $currentItem->num_day;
+        $lottoCategory =  $currentItem->lottoCategory;
+
+        $records = $lottoCategory->lottoRecords()->select('created_at', 'id')->orderBy('created_at', 'desc')->limit($numOfDay + 1)->get();
+        $createdAt = $records[count($records) - 1]->created_at;
+
+        $numResult = new NumResult($lottoCategory, $createdAt, $numOfDay);
+        $numResult->analytic();
+
+
+        $staticals = $lottoCategory->lottoRecords()->where('created_at', '>', $createdAt)->orderBy('created_at', 'desc')->paginate(10);
+        $staticalItems = StaticalByDay::where('lotto_category_id', $lottoCategory->id)->get();
+
+        return view('xoso.statical.by_day', compact('currentItem', 'staticals', 'lottoCategory', 'staticalItems', 'numOfDay', 'numResult'));
+    }
+    public function staticalByDayMienX(Request $request, $route, $link)
+    {
+
+        $currentItem = StaticalByDay::find($route->map_id);
+        if (!$currentItem) abort(404);
+        if ($request->isMethod('post')) {
+            $type = (int)$request->input('type', 0);
+            $provinceId = (int)$request->input('provinceId', 0);
+            $item = StaticalByDay::find($provinceId);
+            $request->session()->put('num_result_type', $type);
+            if ($item) {
+                return \redirect($item->slug);
+            } else {
+                abort(404);
+            }
+        }
+        $lottoCategory =  $currentItem->lottoCategory;
+        $statical_by_day_id = $currentItem->statical_by_day_id;
+        if ($statical_by_day_id == 0) {
+            $tmpRecords = LottoRecord::select('id')->groupBy('fullcode')->where('lotto_category_id', $currentItem->lotto_category_id)->orderBy('created_at', 'desc')->limit(30)->get();
+            $strIds = $tmpRecords->implode('id', ',');
+            $staticals = LottoRecord::whereIn('id', explode(',', $strIds))->orderBy('created_at', 'desc')->paginate(10);
+            $provinces = StaticalByDay::where('statical_by_day_id', $currentItem->id)->orderBy('name')->get();
+            return view('xoso.statical.by_day_mienx', compact('currentItem',  'lottoCategory', 'staticals', 'provinces'));
+        } else {
+            $numResultType = $request->session()->get('num_result_type', 0);
+            $numResultType = in_array($numResultType, [0, 2, 3]) ? $numResultType : 0;
+            $numOfDay = 30;
+            $records = $lottoCategory->lottoRecords()->select('created_at', 'id')->where('lotto_item_id', $currentItem->lotto_item_id)->orderBy('created_at', 'desc')->limit($numOfDay + 1)->get();
+            $createdAt = $records[count($records) - 1]->created_at;
+
+            $staticals = $lottoCategory->lottoRecords()->where('created_at', '>', $createdAt)->where('lotto_item_id', $currentItem->lotto_item_id)->orderBy('created_at', 'desc')->paginate(10);
+            $staticalItems = StaticalByDay::where('lotto_category_id', $lottoCategory->id)->get();
+            return view('xoso.statical.by_day_detail_mienx', compact('currentItem', 'staticals', 'lottoCategory', 'staticalItems', 'numOfDay', 'numResultType'));
         }
     }
 }

@@ -15,14 +15,29 @@ class HomeController extends Controller
     {
         $isHome = 1;
         // dump(LottoCategory::find(1)->lottoTodayItems());
-        return view('home', compact('isHome'));
+        $lottoCategoryMb = LottoCategory::find(1);
+        $lottoItemMb = $lottoCategoryMb->lottoNearestItem()->first();
+        $lottoRecordMb =  $lottoItemMb->lottoRecords()->orderBy('created_at', 'desc')->limit(1)->first();
+
+        $lottoCategoryMn = LottoCategory::find(3);
+        $lottoItemMn = $lottoCategoryMn->lottoNearestItem()->first();
+        $lottoRecordMn =  $lottoItemMn->lottoRecords()->orderBy('created_at', 'desc')->limit(1)->first();
+        $lottoItemMnCollectionMn = $lottoRecordMn->toLottoItemMnCollection();
+
+        $lottoCategoryMt = LottoCategory::find(4);
+        $lottoItemMt = $lottoCategoryMt->lottoNearestItem()->first();
+        $lottoRecordMt =  $lottoItemMt->lottoRecords()->orderBy('created_at', 'desc')->limit(1)->first();
+        $lottoItemMnCollectionMt = $lottoRecordMt->toLottoItemMnCollection();
+
+
+        return view('home', compact('isHome', 'lottoCategoryMb', 'lottoItemMb', 'lottoRecordMb', 'lottoCategoryMn', 'lottoItemMn', 'lottoRecordMn', 'lottoItemMnCollectionMn', 'lottoCategoryMt', 'lottoItemMt', 'lottoRecordMt', 'lottoItemMnCollectionMt'));
     }
 
     public function direction(Request $request, $link)
     {
         $lang = \App::getLocale();
         $link = \FCHelper::getSegment($request, 1);
-        $route = \vanhenry\manager\model\VRoute::select('*')->where($lang.'_link', $link)->first();
+        $route = \vanhenry\manager\model\VRoute::select('*')->where($lang . '_link', $link)->first();
         if ($route == null) {
             abort(404);
         }

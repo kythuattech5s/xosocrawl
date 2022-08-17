@@ -53,7 +53,7 @@ class CrawlResultMb extends Command
     }
     protected function crawlSingle($lottoItem)
     {
-        $dates = $this->getDates($lottoItem);
+        $dates = [now()->addDays(-1), now()->addDays(-2)]; //$this->getDates($lottoItem);
         $dates = array_reverse($dates);
         $xsmb = new XoSoMienBac($lottoItem);
         $this->info('Start ' . $lottoItem->name);
@@ -63,6 +63,7 @@ class CrawlResultMb extends Command
             if ($record && $record->status == CrawlStatus::SUCCESS) {
                 continue;
             }
+            if (!$record) continue;
 
             $xsmb->setDateCrawl($date);
             $result = $xsmb->parseTableResult();
@@ -105,7 +106,7 @@ class CrawlResultMb extends Command
             $minus = $this->getMinusByCount($count, $times);
             $date = $date->addDays($minus);
             $count++;
-        } while ($date->year > $this->year && $date->month > $this->month);
+        } while ($date->year > $this->year); // && $date->month > $this->month
         return $dates;
     }
     protected function getMinusByCount($count, $times)

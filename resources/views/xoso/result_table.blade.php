@@ -1,5 +1,6 @@
 <div data-id="kq" class="one-city" data-region="1">
-    <table class="kqmb extendable {{ isset($prefixPath) && $prefixPath == 'mien-bac' ? '' : 'kqtinh' }}">
+    <table
+        class="custom kqmb extendable  {{ !isset($prefixPath) || ($prefixPath == 'mien-bac' || $prefixPath == 'mien_bac') ? '' : 'kqtinh' }}">
         <tbody>
             @if ($lottoRecord->description)
                 <tr>

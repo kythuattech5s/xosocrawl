@@ -26,7 +26,7 @@ class CrawlResultMn extends CrawlResultMb
     }
     public function crawlOne($lottoItem)
     {
-        $dates = $this->getDates($lottoItem);
+        $dates = [now()->addDays(-1)]; //$this->getDates($lottoItem);
         $dates = array_reverse($dates);
         $xsmb = new XoSoMienNam($lottoItem);
 
@@ -37,6 +37,7 @@ class CrawlResultMn extends CrawlResultMb
             $result = $xsmb->parseTableResult();
 
             $record = LottoRecord::getRecordByDate($lottoItem, $date);
+            if (!$record) continue;
             $record->description = $result->getDescription();
             $record->status = $result->getStatus();
             $record->crawl_response = $result->getNote();

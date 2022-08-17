@@ -21,7 +21,8 @@ $count = $lottoItemMnCollection->countItems();
                         @foreach ($items as $item)
                             <td>
                                 @foreach ($item['numbers'] as $number)
-                                    <div class="v-g{{ $idx == 0 ? 'db' : $idx }} ">{{ $number->number }}</div>
+                                    <div class="v-g{{ $idx == 0 ? 'db' : $idx }} v-giai number ">
+                                        <span>{{ $number->number }}</span></div>
                                 @endforeach
                             </td>
                         @endforeach

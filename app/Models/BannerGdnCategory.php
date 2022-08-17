@@ -11,4 +11,5 @@ class BannerGdnCategory extends BaseModel
     const BANNER_BOTTOM_LEFT_SIDEBAR = 5;
     const BANNER_TOP_RIGHT_SIDEBAR = 6;
     const BANNER_BOTTOM_RIGHT_SIDEBAR = 7;
+    const BANNER_BETWEEN_RESULT_TABLE = 8;
 }
