@@ -48,20 +48,21 @@ class HomeController extends Controller
     }
     public function convertThuCongDuLieuCrawl()
     {
-        $baseCrawler = new BaseCrawler;
-        $pages = Page::where('convert_contented',0)->get();
-        foreach ($pages as $page) {
-            if ($page->content != '') {
-                $page->content = $baseCrawler->convertContent(str_get_html($page->content));
-            }
-            if ($page->seemore_box != '') {
-                $page->seemore_box = $baseCrawler->convertContent(str_get_html($page->seemore_box));
-            }
-            $page->seo_title = $baseCrawler->clearContent($page->seo_title);
-            $page->seo_key = $baseCrawler->clearContent($page->seo_key);
-            $page->seo_des = $baseCrawler->clearContent($page->seo_des);
-            $page->convert_contented = 1;
-            $page->save();
-        }
+        dd(LottoCategory::find(1)->buildDataDirect(now()));
+        // $baseCrawler = new BaseCrawler;
+        // $pages = Page::where('convert_contented',0)->get();
+        // foreach ($pages as $page) {
+        //     if ($page->content != '') {
+        //         $page->content = $baseCrawler->convertContent(str_get_html($page->content));
+        //     }
+        //     if ($page->seemore_box != '') {
+        //         $page->seemore_box = $baseCrawler->convertContent(str_get_html($page->seemore_box));
+        //     }
+        //     $page->seo_title = $baseCrawler->clearContent($page->seo_title);
+        //     $page->seo_key = $baseCrawler->clearContent($page->seo_key);
+        //     $page->seo_des = $baseCrawler->clearContent($page->seo_des);
+        //     $page->convert_contented = 1;
+        //     $page->save();
+        // }
     }
 }

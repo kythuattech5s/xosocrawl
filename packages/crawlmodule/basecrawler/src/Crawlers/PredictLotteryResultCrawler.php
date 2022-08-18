@@ -86,6 +86,7 @@ class PredictLotteryResultCrawler extends BaseCrawler
         }
 
         $itemPredictLotteryResult->content = count($itemContents) > 0 ? $this->convertContent($itemContents[0]):'';
+
         $itemPredictLotteryResult->act = 1;
         $itemPredictLotteryResult->count = 0;
         $itemPredictLotteryResult->seo_title = count($itemTitles) > 0 ? $itemTitles[0]->plaintext:$itemPredictLotteryResult->name;

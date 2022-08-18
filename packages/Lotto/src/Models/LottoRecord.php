@@ -169,4 +169,47 @@ class LottoRecord extends BaseModel
         $logan->save();
         return $boxHtml;
     }
+    public static function getLotteDataMbFormat() {
+        $ret = [
+            1 => 1,
+            2 => 2,
+            3 => 6,
+            4 => 4,
+            5 => 6,
+            6 => 3,
+            7 => 4,
+            'DB'=> 1
+        ];
+        return $ret;
+    }
+    public static function getLotteDataMnFormat() {
+        $ret = [
+            1 => 1,
+            2 => 1,
+            3 => 2,
+            4 => 7,
+            5 => 1,
+            6 => 3,
+            7 => 1,
+            8 => 1,
+            'DB' => 1
+        ];
+        return $ret;
+    }
+    public function buildLottoDirectData()
+    {
+        $listItemDetail = $this->lottoResultDetails()->orderBy('no_prize','desc')->get()->groupBy('no_prize');
+        if ($this->lotto_category_id == 1) {
+            $ret = [];
+            $addDot = false;
+            foreach (self::getLotteDataMbFormat() as $no => $item) {
+                $noPrize = $no == 'DB' ? 0:$no;
+                if (isset($listItemDetail[$no])) {
+                    dd($listItemDetail[$no]);
+                }else{
+                    
+                }
+            }
+        }
+    }
 }

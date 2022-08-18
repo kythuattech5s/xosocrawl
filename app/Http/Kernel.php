@@ -39,7 +39,6 @@ class Kernel extends HttpKernel
             // \Illuminate\View\Middleware\ShareErrorsFromSession::class,
             \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
-            \Spatie\ResponseCache\Middlewares\CacheResponse::class,
         ],
 
         'api' => [
@@ -74,6 +73,5 @@ class Kernel extends HttpKernel
 
         'h_users' => \vanhenry\manager\middleware\HUserAuthenticate::class,
         'h_guest' => \vanhenry\manager\middleware\RedirectIfAuthenticated::class,
-        'doNotCacheResponse' => \Spatie\ResponseCache\Middlewares\DoNotCacheResponse::class,
     ];
 }

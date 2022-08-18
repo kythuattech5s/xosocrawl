@@ -18,6 +18,7 @@ use App\Models\TestSpin;
 use App\Models\TestSpinCategory;
 use DB;
 use Cache;
+use Lotto\Models\LottoCategory;
 
 class PageController extends Controller
 {
@@ -72,6 +73,9 @@ class PageController extends Controller
         }
         if ($currentItem->layout_show == 'max_4d_vietlott_thu_3' || $currentItem->layout_show == 'max_4d_vietlott_thu_5' || $currentItem->layout_show == 'max_4d_vietlott_thu_7') {
             return $this->baseMax4d($request,$currentItem);
+        }
+        if ($currentItem->layout_show == 'xo_so_truc_tiep') {
+            return $this->xoSoTrucTiep($request,$currentItem);
         }
         return view('pages.'.$currentItem->layout_show, compact('currentItem'));
     }
@@ -201,5 +205,31 @@ class PageController extends Controller
     {
         $listItems = Max4dVietlott::act()->orderBy('time','desc')->paginate(10);
         return view('pages.base_max4d', compact('currentItem','listItems'));
+    }
+    public function xoSoTrucTiep($request,$currentItem)
+    {
+        $lottoCategories = LottoCategory::whereIn('id',[1,3,4])->get();
+        $arrData = [];
+        foreach ($lottoCategories as $key => $lottoCategory) {
+            $dataAdd = [];
+            $dataAdd['lottoCategory'] = $lottoCategory;
+            $listLottoItems = $lottoCategory->lottoNearestItem(4)->groupBy('dow');
+            $lottoItems = $listLottoItems->first();
+            foreach ($listLottoItems as $tmp) {
+                if (count($tmp) > count($lottoItems)) {
+                    $lottoItems = $tmp;
+                }
+            }
+            $dataAdd['lottoItem'] = $lottoItem = $lottoItems->first();
+            $dataAdd['lottoRecord'] =  $lottoRecord = $lottoItem->lottoRecords()->orderBy('created_at', 'desc')->first();
+            $dataAdd['linkFormat'] = $linkFormat = [
+                'slug' => $lottoCategory->slug_with_date,
+                'format' => 'j-n-Y'
+            ];
+    
+            $dataAdd['lottoItemMnCollection'] = $lottoItemMnCollection = $lottoRecord->toLottoItemMnCollection();
+            array_push($arrData,$dataAdd);
+        }
+        return view('pages.'.$currentItem->layout_show, compact('currentItem','arrData'));
     }
 }

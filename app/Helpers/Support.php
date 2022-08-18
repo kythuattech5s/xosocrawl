@@ -303,4 +303,25 @@ class Support
     {
         return $time->day.'-'.$time->month.'-'.$time->year;
     }
+    public static function createShortCode($time)
+    {
+        return $time->year.$time->month.$time->day;
+    }
+    public static function timeToFullCode($time)
+    {
+        return $time->year.$time->format('m').$time->format('d');
+    }
+    public static function getDayOfWeekName($time)
+    {
+        $dayOfWeekNameMap = [
+            0 => 'Chủ nhật',
+            1 => 'Thứ hai',
+            2 => 'Thứ ba',
+            3 => 'Thứ bốn',
+            4 => 'Thứ năm',
+            5 => 'Thứ sáu',
+            6 => 'Thứ bảy'
+        ];
+        return $dayOfWeekNameMap[$time->dayOfWeek];
+    }
 }

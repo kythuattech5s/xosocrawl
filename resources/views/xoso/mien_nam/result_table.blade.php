@@ -34,7 +34,7 @@ $count = $lottoItemMnCollection->countItems();
     <div class="control-panel">
         <form class="digits-form">
             <label class="radio" data-value="0">
-                <input type="radio" name="showed-digits" value="0">
+                <input type="radio" name="showed-digits" value="0" checked>
                 <b></b>
                 <span></span>
             </label>

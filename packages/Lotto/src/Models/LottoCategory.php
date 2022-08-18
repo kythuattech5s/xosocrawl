@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Lotto\Enums\CrawlStatus;
 use Lotto\Enums\DayOfWeek;
 use Lotto\Helpers\LottoHelper;
+use stdClass;
 
 class LottoCategory extends BaseModel
 {
@@ -97,5 +98,22 @@ class LottoCategory extends BaseModel
     public function getPredictNews()
     {
         return PredictLotteryResult::where('predict_lottery_result_category_id', $this->predict_lottery_result_category_id)->limit(3)->orderBy('id', 'desc')->get();
+    }
+    public function buildDataDirect($time)
+    {
+        if ($this->id == 1) {
+            $lottoRecord = LottoRecord::where('lotto_category_id',$this->id)->where('fullcode',\Support::timeToFullCode($time))->first();
+            $ret = new stdClass;
+            $ret->provinceCode = "MB";
+            $ret->provinceName = "";
+            $ret->rawData = "";
+            $ret->tuong_thuat = true;
+            $ret->isRolling = 0;
+            $ret->resultDate = (int)floor(microtime(true) * 1000);
+            $ret->dau = new stdClass;
+            $ret->duoi = new stdClass;
+            $ret->lotData = $lottoRecord->buildLottoDirectData();
+            $ret->loto = [];
+        }
     }
 }

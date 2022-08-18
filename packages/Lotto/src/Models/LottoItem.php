@@ -112,4 +112,55 @@ class LottoItem extends BaseModel
     {
         return StaticalCrawl::where('type', 'tk_logan')->where('province_id', $this->province_map_id)->first();
     }
+    public function createDataDirect($data,$time)
+    {
+        $fullcode = Support::timeToFullCode($time);
+        $code = Support::createShortCode($time);
+        $lottoRecord = LottoRecord::where('fullcode',$fullcode)
+                                ->where('lotto_item_id',$this->id)
+                                ->where('lotto_category_id',$this->lotto_category_id)
+                                ->first();
+        if (!isset($lottoRecord)) {
+            $lottoRecord = new LottoRecord;
+            $lottoRecord->fullcode = $fullcode;
+            $lottoRecord->code = $code;
+            $lottoRecord->created_at = $time;
+            $lottoRecord->updated_at = $time;
+            $lottoRecord->lotto_item_id = $this->id;
+            $lottoRecord->lotto_category_id = $this->lotto_category_id;
+            $lottoRecord->status = 1;
+            $lotoTime = LottoTime::where('dayofweek',$time->dayOfWeek == 0 ? 8:$time->dayOfWeek+1)
+                                ->where('lotto_item_id',$this->id)
+                                ->where('lotto_category_id',$this->lotto_category_id)
+                                ->first();
+            if (isset($lotoTime)) {
+                $lottoRecord->lotto_time_id = $lotoTime->id;
+            }
+            $lottoRecord->save();
+        }
+        $listItemDetail = $lottoRecord->lottoResultDetails()->get();
+        foreach ($data as $no => $itemData) {
+            if ($no == 'MaDb') {
+                $lottoRecord->description = implode('-',$itemData);
+                $lottoRecord->save();
+            }else{
+                $noPrize = $no == 'DB' ? 0:(int)$no;
+                foreach ($itemData as $item) {
+                    if ($item != '' && $item != '.') {
+                        if (count($listItemDetail->where('no_prize',$noPrize)->where('number',$item)) == 0) {
+                            $lottoResultDetail = new LottoResultDetail;
+                            $lottoResultDetail->lotto_record_id = $lottoRecord->id;
+                            $lottoResultDetail->lotto_item_id = $this->id;
+                            $lottoResultDetail->created_at = $time;
+                            $lottoResultDetail->updated_at = $time;
+                            $lottoResultDetail->no_prize = $noPrize;
+                            $lottoResultDetail->number = $item;
+                            $lottoResultDetail->lotto_category_id = $this->lotto_category_id;
+                            $lottoResultDetail->save();
+                        }
+                    }
+                }
+            }
+        }
+    }
 }

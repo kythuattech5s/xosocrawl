@@ -151,4 +151,27 @@ class StaticalCrawl extends BaseModel
         }
         return (string)$htmlDom;
     }
+    public static function getBoxShortContentLoganMienBac()
+    {
+        $itemActive = static::find(6);
+        $baseCrawler = new BaseCrawler;
+        if (!isset($itemActive)) return '';
+        $itemData = $itemActive->getItemData([]);
+        if (!isset($itemData)) return '';
+        $htmlDom = str_get_html($itemData->value);
+        if (!$htmlDom) return null;
+        $listItem = $htmlDom->find('.box.tbl-row-hover');
+        $ret = '';
+        foreach ($listItem as $key => $item) {
+            if ($key == 1 || $key == 2) {
+                $itemBoxNotes = $item->find('.box.box-note');
+                foreach ($itemBoxNotes as $itemBoxNote) {
+                    $itemBoxNote->outertext = '';
+                }
+                $ret .= $item->innertext;   
+            }
+        }
+        $ret .= '<div class="txt-right pad5"><a title="Thống kê lô gan" href="thong-ke-lo-gan-xo-so-mien-bac-xsmb">Xem thêm..</a></div>';
+        return $ret;
+    }
 }
