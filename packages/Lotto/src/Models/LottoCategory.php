@@ -103,17 +103,28 @@ class LottoCategory extends BaseModel
     {
         if ($this->id == 1) {
             $lottoRecord = LottoRecord::where('lotto_category_id',$this->id)->where('fullcode',\Support::timeToFullCode($time))->first();
+            if (!isset($lottoRecord)) {
+                return [];
+            }
             $ret = new stdClass;
             $ret->provinceCode = "MB";
             $ret->provinceName = "";
             $ret->rawData = "";
             $ret->tuong_thuat = true;
-            $ret->isRolling = 0;
+            $ret->isRolling = 1;
             $ret->resultDate = (int)floor(microtime(true) * 1000);
             $ret->dau = new stdClass;
             $ret->duoi = new stdClass;
             $ret->lotData = $lottoRecord->buildLottoDirectData();
             $ret->loto = [];
+            return $ret;
         }
+        $timeShow = $time->dayOfWeek == 0 ? 8:$time->dayOfWeek+1;
+        $lottoItems= LottoItem::where('lotto_category_id',$this->id)->whereRaw('FIND_IN_SET(?,time_show)', [$timeShow])->get();
+        $ret = [];
+        foreach ($lottoItems as $lottoItem) {
+            array_push($ret,$lottoItem->buildDataDirect($time));
+        }
+        return $ret;
     }
 }

@@ -184,14 +184,14 @@ class LottoRecord extends BaseModel
     }
     public static function getLotteDataMnFormat() {
         $ret = [
-            1 => 1,
-            2 => 1,
-            3 => 2,
-            4 => 7,
-            5 => 1,
-            6 => 3,
-            7 => 1,
             8 => 1,
+            7 => 1,
+            6 => 3,
+            5 => 1,
+            4 => 7,
+            3 => 2,
+            2 => 1,
+            1 => 1,
             'DB' => 1
         ];
         return $ret;
@@ -199,17 +199,33 @@ class LottoRecord extends BaseModel
     public function buildLottoDirectData()
     {
         $listItemDetail = $this->lottoResultDetails()->orderBy('no_prize','desc')->get()->groupBy('no_prize');
-        if ($this->lotto_category_id == 1) {
-            $ret = [];
-            $addDot = false;
-            foreach (self::getLotteDataMbFormat() as $no => $item) {
-                $noPrize = $no == 'DB' ? 0:$no;
-                if (isset($listItemDetail[$no])) {
-                    dd($listItemDetail[$no]);
-                }else{
-                    
+        $dataFormatConfig = $this->lotto_category_id == 1 ? self::getLotteDataMbFormat():self::getLotteDataMnFormat();
+        $ret = [];
+        $addDot = false;
+        foreach ($dataFormatConfig as $no => $item) {
+            if ($no == 'DB' && $this->lotto_category_id == 1) {
+                $ret['MaDb'] = explode(',',$this->description);
+            }
+            $ret[$no] = [];
+            $noPrize = $no == 'DB' ? 0:$no;
+            $countItemEmpty = $item;
+            if (isset($listItemDetail[$noPrize])) {
+                foreach ($listItemDetail[$noPrize] as $itemDetail) {
+                    array_push($ret[$no],$itemDetail->number);
+                }
+                $countItemEmpty = $item - count($listItemDetail[$noPrize]);
+            }
+            if ($countItemEmpty > 0) {
+                for ($i=0; $i < $countItemEmpty;$i++) { 
+                    if (!$addDot) {
+                        array_push($ret[$no],'.');
+                        $addDot = true;
+                    }else{
+                        array_push($ret[$no],'');
+                    }
                 }
             }
         }
+        return $ret;
     }
 }

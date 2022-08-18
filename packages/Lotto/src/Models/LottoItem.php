@@ -9,6 +9,7 @@ use crawlmodule\basecrawler\Crawlers\BaseCrawler;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Support\Str;
 use Lotto\Helpers\LottoHelper;
+use stdClass;
 use Support;
 
 class LottoItem extends BaseModel
@@ -162,5 +163,33 @@ class LottoItem extends BaseModel
                 }
             }
         }
+    }
+    public function provinceMap()
+    {
+        return $this->belongsTo(ProvinceMap::class);
+    }
+    public function buildDataDirect($time)
+    {
+        if ($this->lotto_category_id == 1) {
+            return $this->lottoCategory->buildDataDirect($time);
+        }
+
+        $lottoRecord = LottoRecord::where('lotto_category_id',$this->lotto_category_id)
+                                ->where('lotto_item_id',$this->id)
+                                ->where('fullcode',\Support::timeToFullCode($time))
+                                ->first();
+        $provinceMap = $this->provinceMap ?? null;
+        $ret = new stdClass;
+        $ret->provinceCode = Str::upper(isset($provinceMap) ? $provinceMap->province_short_code:'');
+        $ret->provinceName = isset($provinceMap) ? $provinceMap->name:'';
+        $ret->rawData = "";
+        $ret->tuong_thuat = true;
+        $ret->isRolling = 1;
+        $ret->resultDate = (int)floor(microtime(true) * 1000);
+        $ret->dau = new stdClass;
+        $ret->duoi = new stdClass;
+        $ret->lotData = $lottoRecord->buildLottoDirectData();
+        $ret->loto = [];
+        return $ret;
     }
 }
