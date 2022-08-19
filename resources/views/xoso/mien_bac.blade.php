@@ -44,6 +44,7 @@
             @include($viewBreadcrumb)
         @endif
         <div id="load_kq_tinh_0">
+            @include('xoso.mien_bac.result_table_rolling')
             @include('xoso.result_table')
             <div class="txt-center">
                 <div class="center">
