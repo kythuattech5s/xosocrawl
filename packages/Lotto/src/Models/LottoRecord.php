@@ -196,9 +196,16 @@ class LottoRecord extends BaseModel
         ];
         return $ret;
     }
+    public function isFull()
+    {
+        if ($this->lotto_category_id == 1) {
+            return count($this->lottoResultDetails) >= array_sum(LottoRecord::getLotteDataMbFormat()) && count(explode('-',$this->description)) >= 6;
+        }
+        return count($this->lottoResultDetails) >= array_sum(LottoRecord::getLotteDataMnFormat());
+    }
     public function buildLottoDirectData()
     {
-        $listItemDetail = $this->lottoResultDetails()->orderBy('no_prize','desc')->get()->groupBy('no_prize');
+        $listItemDetail = $this->lottoResultDetails()->orderBy('no_prize','desc')->orderBy('created_at','asc')->get()->groupBy('no_prize');
         $dataFormatConfig = $this->lotto_category_id == 1 ? self::getLotteDataMbFormat():self::getLotteDataMnFormat();
         $ret = [];
         $addDot = false;

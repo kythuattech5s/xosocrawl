@@ -8,6 +8,8 @@ use crawlmodule\basecrawler\Crawlers\BaseCrawler;
 use Illuminate\Http\Request;
 use Lotto\LottoServiceProvider;
 use Lotto\Models\LottoCategory;
+use Lotto\Models\LottoItem;
+use ResponseCache;
 
 class HomeController extends Controller
 {
@@ -48,7 +50,7 @@ class HomeController extends Controller
     }
     public function convertThuCongDuLieuCrawl()
     {
-        dd(LottoCategory::find(4)->buildDataDirect(now()));
+        dd(LottoCategory::find(3)->buildDataDirect(now()));die();
         // $baseCrawler = new BaseCrawler;
         // $pages = Page::where('convert_contented',0)->get();
         // foreach ($pages as $page) {
@@ -56,7 +58,7 @@ class HomeController extends Controller
         //         $page->content = $baseCrawler->convertContent(str_get_html($page->content));
         //     }
         //     if ($page->seemore_box != '') {
-        //         $page->seemore_box = $baseCrawler->convertContent(str_get_html($page->seemore_box));
+        //         $page->seemore_box = $baseCrawler->convertContent(str_get_html($page-    >seemore_box));
         //     }
         //     $page->seo_title = $baseCrawler->clearContent($page->seo_title);
         //     $page->seo_key = $baseCrawler->clearContent($page->seo_key);

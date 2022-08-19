@@ -1,6 +1,6 @@
 <?php
 	$admincp = \Config::get('manager.admincp');
-	Route::group(['prefix'=>$admincp,'middleware' => 'web','namespace'=>'vanhenry\manager\controller'],function(){
+	Route::group(['prefix'=>$admincp,'middleware' => ['web','doNotCacheResponse'],'namespace'=>'vanhenry\manager\controller'],function(){
 		Route::get('/','Admin@index');
 		Route::get('table-lang/{table}/{locale}',array( 'uses'=>"Admin@tableLang"));
 		Route::get('view/{table}',array( 'uses'=>"Admin@view"));

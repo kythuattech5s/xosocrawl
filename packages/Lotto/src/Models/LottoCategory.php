@@ -102,7 +102,9 @@ class LottoCategory extends BaseModel
     public function buildDataDirect($time)
     {
         if ($this->id == 1) {
-            $lottoRecord = LottoRecord::where('lotto_category_id',$this->id)->where('fullcode',\Support::timeToFullCode($time))->first();
+            $lottoRecord = LottoRecord::where('lotto_category_id',$this->id)
+                                    ->where('fullcode',\Support::timeToFullCode($time))
+                                    ->first();
             if (!isset($lottoRecord)) {
                 return [];
             }
@@ -111,6 +113,7 @@ class LottoCategory extends BaseModel
             $ret->provinceName = "";
             $ret->rawData = "";
             $ret->tuong_thuat = true;
+            $ret->isFull = $lottoRecord->isFull();
             $ret->isRolling = 1;
             $ret->resultDate = (int)floor(microtime(true) * 1000);
             $ret->dau = new stdClass;
@@ -120,7 +123,9 @@ class LottoCategory extends BaseModel
             return $ret;
         }
         $timeShow = $time->dayOfWeek == 0 ? 8:$time->dayOfWeek+1;
-        $lottoItems= LottoItem::where('lotto_category_id',$this->id)->whereRaw('FIND_IN_SET(?,time_show)', [$timeShow])->get();
+        $lottoItems= LottoItem::where('lotto_category_id',$this->id)
+                                ->whereRaw('FIND_IN_SET(?,time_show)', [$timeShow])
+                                ->get();
         $ret = [];
         foreach ($lottoItems as $lottoItem) {
             array_push($ret,$lottoItem->buildDataDirect($time));

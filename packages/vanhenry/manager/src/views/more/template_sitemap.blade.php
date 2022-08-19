@@ -6,7 +6,13 @@
       <lastmod>{{date_create_from_format("Y-m-d H:i:s",$sitemap->created_at)->format("Y-m-d\TH:i:sP")}}</lastmod>
    </sitemap>
 @endforeach
-<sitemap>
+@foreach (\App\Helpers\SpecialSiteMap::buildListSpecialSitemapLink() as $item)
+   <sitemap>
+      <loc>{{url('sitemap/'.$item)}}.xml</loc>
+      <lastmod>{{now()->format("Y-m-d\TH:i:sP")}}</lastmod>
+   </sitemap>
+@endforeach
+   <sitemap>
       <loc>{{url('sitemap/static.xml')}}</loc>
       <lastmod>{{(new \DateTime())->format("Y-m-d\TH:i:sP")}}</lastmod>
    </sitemap>

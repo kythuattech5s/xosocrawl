@@ -48,37 +48,23 @@ trait LoginSocial
             $infos['id'] = $results->user['id'];
             $infos['verified_email'] = $results->user['verified_email'];
         }
-
         $user = User::where('email', $infos['email'])->first();
 
         if ($user == null) {
             $user = new User;
-            $user->name = $infos['name'];
+            $user->fullname = $infos['name'];
             if ($infos['picture'] != null) {
-                $user->img = \App\Helpers\MediaHelper::insertFileFromUrl('users', $infos['picture']);
+                $user->image_social = $infos['picture'];
             }
             $user->email = $infos['email'];
             $user->banned = 0;
-            $user->act = 0;
+            $user->act = 1;
+            $user->is_social_account = 1;
+            $user->use_image_social = 1;
+            $user->social_method = 'google';
             $user->created_at = new \DateTime;
             $user->updated_at = new \DateTime;
-            $code = \Str::random(6);
-            $user->token = Hash::make($code);
             $user->save();
-            event('sendmail.static', [[
-                'title' => 'Tạo tài khoàn thành công và mã xác nhận kích hoạt tài khoản',
-                'data' => [
-                    'link' => url('kich-hoat-tai-khoan') . "?token=$code&email=$user->email",
-                    'user' => $user,
-                ],
-                'email' => $user->email,
-                'type' => 'user_create',
-            ]]);
-            $user->save();
-            event(new Registered($user));
-            session()->put('EMAIL_CURRENT_REGISTER', $user->email);
-            session()->put('REGISTER_SOCIAL_NOW', '1');
-            return redirect()->to('xac-nhan-tai-khoan?token=' . $code)->with('messageNotify', 'Tài khoản của bạn đã được tạo vui lòng kiểm tra địa chỉ Email để xác nhận tại khoản')->with('typeNotify', 200);
         } else {
             if ($user->banned == 1) {
                 return redirect()->to('/')->with('messageNotify', 'Tài khoản của bạn đã bị khóa')->with('typeNotify', 100);
@@ -86,12 +72,12 @@ trait LoginSocial
             if ($user->act == 0) {
                 return redirect()->to('/')->with('messageNotify', 'Tài khoản của bạn chưa được kích hoạt vui lòng liên hệ với quản trị viên')->with('typeNotify', 100);
             }
-            auth()->login($user, true);
         }
+        auth()->login($user, true);
         if ($request->ajax()) {
-            return response(['code' => 200, 'message' => 'Đăng nhập thành công', 'redirect' => RSCustom::URLPrevious(false)]);
+            return response(['code' => 200, 'message' => 'Đăng nhập thành công', 'redirect' => 'dien-dan-xo-so']);
         } else {
-            return redirect(RSCustom::URLPrevious(false))->with('typeNotify', 200)->with('messageNotify', 'Đăng nhập thành công');
+            return redirect('dien-dan-xo-so')->with('typeNotify', 200)->with('messageNotify', 'Đăng nhập thành công');
         }
     }
 

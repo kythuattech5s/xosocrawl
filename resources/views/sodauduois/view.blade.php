@@ -43,7 +43,7 @@
                         <td class="blue bold">{{$strG7}}</td>
                         <td class="blue">
                             @if (count($gdbs) > 0)
-                                <i>{{substr($gdbs[0]->number,0,3)}}</i><i class="red">{{substr($gdbs[0]->number,-2)}}</i>
+                                <i>{{substr($gdbs->first()->number,0,3)}}</i><i class="red">{{substr($gdbs->first()->number,-2)}}</i>
                             @endif
                         </td>
                     </tr>

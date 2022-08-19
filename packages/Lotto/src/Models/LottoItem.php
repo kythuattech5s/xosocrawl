@@ -129,7 +129,7 @@ class LottoItem extends BaseModel
             $lottoRecord->updated_at = $time;
             $lottoRecord->lotto_item_id = $this->id;
             $lottoRecord->lotto_category_id = $this->lotto_category_id;
-            $lottoRecord->status = 1;
+            $lottoRecord->status = 3;
             $lotoTime = LottoTime::where('dayofweek',$time->dayOfWeek == 0 ? 8:$time->dayOfWeek+1)
                                 ->where('lotto_item_id',$this->id)
                                 ->where('lotto_category_id',$this->lotto_category_id)
@@ -163,6 +163,18 @@ class LottoItem extends BaseModel
                 }
             }
         }
+        $isFull = false;
+        if ($this->lotto_category_id == 1) {
+            $isFull = count($listItemDetail) >= array_sum(LottoRecord::getLotteDataMbFormat()) && count(explode('-',$lottoRecord->description)) >= 6;
+        }else{
+            $isFull = count($listItemDetail) >= array_sum(LottoRecord::getLotteDataMnFormat());
+        }
+        $newLottoRecordStatus = $isFull ? 1:3;
+        if ($lottoRecord->status != $newLottoRecordStatus) {
+            $lottoRecord->status = $newLottoRecordStatus;
+            $lottoRecord->save();
+        }
+        return $isFull;
     }
     public function provinceMap()
     {
@@ -178,12 +190,16 @@ class LottoItem extends BaseModel
                                 ->where('lotto_item_id',$this->id)
                                 ->where('fullcode',\Support::timeToFullCode($time))
                                 ->first();
+        if (!isset($lottoRecord)) {
+            return [];
+        }
         $provinceMap = $this->provinceMap ?? null;
         $ret = new stdClass;
         $ret->provinceCode = Str::upper(isset($provinceMap) ? $provinceMap->province_short_code:'');
         $ret->provinceName = isset($provinceMap) ? $provinceMap->name:'';
         $ret->rawData = "";
         $ret->tuong_thuat = true;
+        $ret->isFull = $lottoRecord->isFull();
         $ret->isRolling = 1;
         $ret->resultDate = (int)floor(microtime(true) * 1000);
         $ret->dau = new stdClass;
