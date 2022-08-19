@@ -5,14 +5,14 @@ let MIEN_BAC = {
     },
     initPagination: function () {
         let self = this;
-        document
-            .querySelector("#result-see-more")
-            .addEventListener("click", async function (e) {
-                let nextLink = this.getAttribute("data-href");
-                if (nextLink) {
-                    self.loadMoreResult(nextLink);
-                }
-            });
+        let button = document.querySelector("#result-see-more");
+        if (!button) return;
+        button.addEventListener("click", async function (e) {
+            let nextLink = this.getAttribute("data-href");
+            if (nextLink) {
+                self.loadMoreResult(nextLink);
+            }
+        });
     },
     loadMoreResult: async function (link) {
         let content = await fetch(link, {

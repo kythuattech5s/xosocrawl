@@ -429,4 +429,5 @@ class XoSoController extends Controller
             return view('xoso.statical.by_day_detail_mienx', compact('currentItem', 'staticals', 'lottoCategory', 'staticalItems', 'numOfDay', 'numResultType'));
         }
     }
+    
 }

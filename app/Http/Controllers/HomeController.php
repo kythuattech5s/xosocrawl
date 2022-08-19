@@ -48,7 +48,7 @@ class HomeController extends Controller
     }
     public function convertThuCongDuLieuCrawl()
     {
-        dd(LottoCategory::find(4)->buildDataDirect(now()));
+        return response()->json(LottoCategory::find(request()->input('cate', 0))->buildDataDirect(now()));
         // $baseCrawler = new BaseCrawler;
         // $pages = Page::where('convert_contented',0)->get();
         // foreach ($pages as $page) {

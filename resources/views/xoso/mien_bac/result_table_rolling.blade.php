@@ -1,22 +1,25 @@
-<div data-id="kq" class="one-city" data-region="1">
+<?php
+use Lotto\Helpers\RollingHelper;
+?>
+
+<div data-id="kq" class="one-city rolling-table" data-region="1">
     <table
         class="custom kqmb extendable  {{ !isset($prefixPath) || ($prefixPath == 'mien-bac' || $prefixPath == 'mien_bac') ? '' : 'kqtinh' }}">
         <tbody>
-            @if ($lottoRecord->description)
-                <tr>
-                    <td colspan="13" class="v-giai madb">
-                        <span class="v-madb"> {{ $lottoRecord->description }} </span>
-                    </td>
-                </tr>
-            @endif
-            @foreach ($lottoRecord->lottoResultDetails->groupBy('no_prize') as $no => $details)
-                <tr class="{{ \Lotto\Enums\NoPrize::getClassTr($no, $prefixPath ?? '') }}">
-                    <td class="txt-giai">{{ $no == 0 ? 'ĐB' : 'Giải ' . $no }}</td>
-                    <td class="v-giai number ">
-                        @foreach ($details as $idx => $detail)
-                            <span data-nc="5"
-                                class="v-g{{ $no }}-{{ $idx }} {{ strlen($detail->number) == 0 ? 'imgloadig' : '' }}">{{ $detail->number }}</span>
-                        @endforeach
+            <tr>
+                <td colspan="13" class="v-giai madb">
+                    <span class="v-madb"> </span>
+                </td>
+            </tr>
+            @foreach (RollingHelper::getMBPrizes() as $prize)
+                <tr
+                    class="{{ $prize->getIndex() % 2 == 0 ? 'bg_ef' : '' }} g{{ $prize->getClassCss() }} {{ $prize->getClassCss() }}">
+                    <td class="txt-giai">{{ $prize->getName() }}</td>
+                    <td class="v-giai number " data-code="MB">
+                        @for ($i = 0; $i < $prize->getNumPrize(); $i++)
+                            <span data-nc="5" data-nonum="{{ $prize->getNoNumber() }}"
+                                class="v-g{{ $prize->getIndex() }}-{{ $i }} imgloadig"></span>
+                        @endfor
                     </td>
                 </tr>
             @endforeach

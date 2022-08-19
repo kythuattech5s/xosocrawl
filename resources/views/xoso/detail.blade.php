@@ -26,7 +26,7 @@
     <div class="box">
         @include('xoso.breadcrumbs.base')
         <div id="load_kq_tinh_0">
-
+            @include('xoso.mien_bac.result_table_rolling')
             @include('xoso.result_table')
 
             <div class="txt-center">

@@ -9,6 +9,7 @@ use Lotto\Dtos\HeadTail;
 use Lotto\Dtos\LottoItemMnCollection;
 use Lotto\Enums\CrawlStatus;
 use Lotto\Enums\DayOfWeek;
+use Session;
 
 class LottoRecord extends BaseModel
 {
@@ -169,7 +170,8 @@ class LottoRecord extends BaseModel
         $logan->save();
         return $boxHtml;
     }
-    public static function getLotteDataMbFormat() {
+    public static function getLotteDataMbFormat()
+    {
         $ret = [
             1 => 1,
             2 => 2,
@@ -178,11 +180,12 @@ class LottoRecord extends BaseModel
             5 => 6,
             6 => 3,
             7 => 4,
-            'DB'=> 1
+            'DB' => 1
         ];
         return $ret;
     }
-    public static function getLotteDataMnFormat() {
+    public static function getLotteDataMnFormat()
+    {
         $ret = [
             8 => 1,
             7 => 1,
@@ -198,30 +201,31 @@ class LottoRecord extends BaseModel
     }
     public function buildLottoDirectData()
     {
-        $listItemDetail = $this->lottoResultDetails()->orderBy('no_prize','desc')->get()->groupBy('no_prize');
-        $dataFormatConfig = $this->lotto_category_id == 1 ? self::getLotteDataMbFormat():self::getLotteDataMnFormat();
+
+        $listItemDetail = $this->lottoResultDetails()->orderBy('no_prize', 'desc')->get()->groupBy('no_prize');
+        $dataFormatConfig = $this->lotto_category_id == 1 ? self::getLotteDataMbFormat() : self::getLotteDataMnFormat();
         $ret = [];
         $addDot = false;
         foreach ($dataFormatConfig as $no => $item) {
             if ($no == 'DB' && $this->lotto_category_id == 1) {
-                $ret['MaDb'] = explode(',',$this->description);
+                $ret['MaDb'] = explode(',', $this->description);
             }
             $ret[$no] = [];
-            $noPrize = $no == 'DB' ? 0:$no;
+            $noPrize = $no == 'DB' ? 0 : $no;
             $countItemEmpty = $item;
             if (isset($listItemDetail[$noPrize])) {
                 foreach ($listItemDetail[$noPrize] as $itemDetail) {
-                    array_push($ret[$no],$itemDetail->number);
+                    array_push($ret[$no], $itemDetail->number);
                 }
                 $countItemEmpty = $item - count($listItemDetail[$noPrize]);
             }
             if ($countItemEmpty > 0) {
-                for ($i=0; $i < $countItemEmpty;$i++) { 
+                for ($i = 0; $i < $countItemEmpty; $i++) {
                     if (!$addDot) {
-                        array_push($ret[$no],'.');
+                        array_push($ret[$no], '.');
                         $addDot = true;
-                    }else{
-                        array_push($ret[$no],'');
+                    } else {
+                        array_push($ret[$no], '');
                     }
                 }
             }

@@ -166,3 +166,167 @@ let MAIN = {
     },
 };
 MAIN.init();
+
+let ROLLING_RESULT = (function () {
+    let interval = null;
+    let fullPrize = false;
+    let count = 0;
+    let getLink = function () {
+        count++;
+        let link =
+            "convert-thu-cong-du-lieu-crawl?" +
+            new URLSearchParams({
+                cate: LOTTO_CATEGORY,
+                count: count,
+                t: Date.now(),
+            }).toString();
+        return link;
+    };
+
+    let init = function () {
+        initFetch();
+    };
+    let initFetch = function () {
+        let allow = checkAllow();
+        interval = setInterval(
+            async function () {
+                await intervalFetch();
+                if (fullPrize) {
+                    clearInterval(interval);
+                }
+            },
+            allow ? 4000 : 10000
+        );
+    };
+    let checkAllow = function () {
+        let currentDate = new Date(Date.parse(CURRENT_TIME));
+        let hour = currentDate.getHours();
+        let minute = currentDate.getMinutes();
+        let allow =
+            allowMienBac(hour, minute) ||
+            allowMienNam(hour, minute) ||
+            allowMienTrung(hour, minute);
+        return allow;
+    };
+
+    let intervalFetch = async function (allow) {
+        if (checkAllow()) {
+            let link = getLink();
+            let content = await fetch(link, {
+                headers: {
+                    "X-Requested-With": "XMLHttpRequest",
+                },
+            });
+            let json = await content.json();
+            if (!Array.isArray(json)) {
+                json = [json];
+            }
+            fillHtml(json);
+        }
+    };
+    let fillHtml = function (json) {
+        let currentDate = new Date(Date.parse(CURRENT_TIME));
+        let tmpFull = false;
+        for (let i = 0; i < json.length; i++) {
+            const item = json[i];
+            tmpFull &= item.isFull || false;
+            let provinceCode = item.provinceCode.toUpperCase();
+            let lotData = item.lotData;
+            let resultDate = new Date(item.resultDate);
+            if (
+                currentDate.getDate() == resultDate.getDate() &&
+                currentDate.getMonth() == resultDate.getMonth()
+            ) {
+                for (const [key, values] of Object.entries(lotData)) {
+                    for (let j = 0; j < values.length; j++) {
+                        const value = values[j];
+                        if (value == "") {
+                            continue;
+                        }
+                        let tr = document.querySelector(
+                            `.rolling-table tr.g${key.toLowerCase()}`
+                        );
+                        if (!tr) continue;
+                        let loadig = tr.querySelector(
+                            `[data-code="${provinceCode}"] .imgloadig`
+                        );
+                        if (!loadig) continue;
+                        if (value == ".") {
+                            loadig.classList.add("cl-rl");
+                            rollingNumber(loadig);
+                        }
+                        let clrl = tr.querySelector(
+                            `[data-code="${provinceCode}"] .cl-rl`
+                        );
+                        if (!clrl) continue;
+
+                        if (value != "." && value != "") {
+                            clrl.innerText = value;
+                            clrl.classList.remove("imgloadig");
+                            clrl.classList.remove("cl-rl");
+                        }
+                    }
+                }
+            }
+        }
+        fullPrize = tmpFull;
+    };
+    let lastTimestamp = 0;
+    let rollingNumber = function (element) {
+        window.requestAnimFrame = (function () {
+            return (
+                window.requestAnimationFrame ||
+                window.webkitRequestAnimationFrame ||
+                window.mozRequestAnimationFrame ||
+                window.oRequestAnimationFrame ||
+                window.msRequestAnimationFrame ||
+                function (callback) {
+                    window.setTimeout(callback, 1000 / 60);
+                }
+            );
+        })();
+        (function animloop() {
+            if (Date.now() - lastTimestamp < 1000 / 2) return;
+            if (!element.classList.contains("cl-rl")) {
+                cancelAnimationFrame(animloop);
+                return;
+            }
+            requestAnimFrame(animloop);
+            let no = element.getAttribute("data-nonum");
+            let str = "";
+            for (let i = 0; i < no; i++) {
+                str += Math.floor(Math.random() * 10);
+            }
+            element.innerText = str;
+        })();
+    };
+    let allowMienBac = function (hour, minute) {
+        return (
+            LOTTO_CATEGORY &&
+            LOTTO_CATEGORY == 1 &&
+            hour == 18 &&
+            minute > 10 &&
+            minute < 40
+        );
+    };
+    let allowMienNam = function (hour, minute) {
+        return true;
+        return (
+            LOTTO_CATEGORY &&
+            LOTTO_CATEGORY == 1 &&
+            hour == 16 &&
+            minute > 10 &&
+            minute < 40
+        );
+    };
+    let allowMienTrung = function (hour, minute) {
+        return (
+            LOTTO_CATEGORY &&
+            LOTTO_CATEGORY == 1 &&
+            hour == 17 &&
+            minute > 10 &&
+            minute < 40
+        );
+    };
+    init();
+})();
