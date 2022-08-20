@@ -29,6 +29,7 @@ Route::group([
     'middleware' => ['web', 'localeSessionRedirect', 'localizationRedirect', 'localeViewPath'],
     'namespace' => 'App\Http\Controllers'
 ], function () {
+    ResponseCache::clear();
     Route::get('/', 'HomeController@index')->name('home');
     Route::get('convert-thu-cong-du-lieu-crawl', 'HomeController@convertThuCongDuLieuCrawl');
     Route::get('cronimg', array('uses' => 'CronImgController@convertImg'));
@@ -46,6 +47,7 @@ Route::group([
     Route::get('thong-ke-dau-duoi-dac-biet.html', 'StaticalCrawlController@headAndTailDacbietRedirect');
     Route::get('thong-ke-nhanh.html', 'StaticalCrawlController@tkNhanhRedirect');
     Route::get('xo-so-truc-tiep/{prefix}', 'XosoTrucTiepController@view');
+    Route::get('tin-tuc/{prefix}', 'NewsController@_view');
     Route::post('ajax/see-more-result', 'StaticalCrawlController@ajaxSeeMoreResult');
     Route::get('ket-qua-xo-so-dien-toan-ngay-{id}', 'PageController@xoSoDienToanTheoNgay')->where(['id' => '\d{1,2}\-\d{1,2}\-\d{4}']);
     Route::match(['get', 'post'], '/thong-tin-thanh-vien-c{id}', array('uses' => 'Auth\AccountController@userShowProfile'))->where('id', '^((?!esystem)[0-9\?\.\-/])*$');

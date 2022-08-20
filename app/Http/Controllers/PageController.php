@@ -5,6 +5,7 @@ use App\Models\DienToan123;
 use App\Models\DienToan636;
 use App\Models\DienToanThanTai;
 use App\Models\DreamNumberDecoding;
+use App\Models\KenoVietlott;
 use App\Models\Max3dProVietlott;
 use App\Models\Max3dVietlott;
 use App\Models\Max4dVietlott;
@@ -76,6 +77,9 @@ class PageController extends Controller
         }
         if ($currentItem->layout_show == 'xo_so_truc_tiep') {
             return $this->xoSoTrucTiep($request,$currentItem);
+        }
+        if ($currentItem->layout_show == 'keno_vietlott') {
+            return $this->kenoVietlott($request,$currentItem);
         }
         return view('pages.'.$currentItem->layout_show, compact('currentItem'));
     }
@@ -231,5 +235,10 @@ class PageController extends Controller
             array_push($arrData,$dataAdd);
         }
         return view('pages.'.$currentItem->layout_show, compact('currentItem','arrData'));
+    }
+    public function kenoVietlott($request,$currentItem)
+    {
+        $listItems = KenoVietlott::act()->orderBy('time','desc')->orderBy('time_spin','desc')->paginate(10);
+        return view('pages.'.$currentItem->layout_show, compact('currentItem','listItems'));
     }
 }

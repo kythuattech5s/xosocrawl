@@ -222,7 +222,7 @@ class SysController extends BaseAdminController
         $inputs = $request->input();
         $type = isset($inputs["type"]) ? $inputs["type"] : 0;
         $table_map = isset($inputs["from"]) ? $inputs["from"] : 0;
-        \App\Helpers\SpecialSiteMap::buildListSpecialSitemap();
+        
         $listSitemaps = \DB::select("select created_at, `table`, month(created_at)m,year(created_at) y from v_routes where is_static <> 1 or is_static is null group by month(created_at),year(created_at),`table`");
         if ($type == 1) {
             $tmp = \DB::select("select created_at, `table`, month(created_at)m,year(created_at) y from v_routes where is_static <> 1 or is_static is null and `table`=:tb group by month(created_at),year(created_at),`table`", ["tb" => $table_map]);
@@ -240,7 +240,7 @@ class SysController extends BaseAdminController
             }
             $this->updateSitemapStatic();
         }
-        
+        \App\Helpers\SpecialSiteMap::buildListSpecialSitemap();
         $html = \View::make('vh::more.template_sitemap', compact("listSitemaps"))->render();
         file_put_contents(public_path("sitemap.xml"), $html);
         return redirect()->back()->with("status", "Cập nhật thành công");

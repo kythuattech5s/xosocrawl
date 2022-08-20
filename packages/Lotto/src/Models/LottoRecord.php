@@ -208,13 +208,13 @@ class LottoRecord extends BaseModel
     }
     public function buildLottoDirectData()
     {
-        $listItemDetail = $this->lottoResultDetails()->orderBy('no_prize','desc')->orderBy('created_at','asc')->get()->groupBy('no_prize');
+        $listItemDetail = $this->lottoResultDetails()->orderBy('no_prize',$this->lotto_category_id == 1 ? 'asc':'desc')->orderBy('created_at','asc')->limit(request()->count)->get()->groupBy('no_prize');
         $dataFormatConfig = $this->lotto_category_id == 1 ? self::getLotteDataMbFormat():self::getLotteDataMnFormat();
         $ret = [];
         $addDot = false;
         foreach ($dataFormatConfig as $no => $item) {
             if ($no == 'DB' && $this->lotto_category_id == 1) {
-                $ret['MaDb'] = explode(',', $this->description);
+                $ret['MaDb'] = explode(' - ', $this->description);
             }
             $ret[$no] = [];
             $noPrize = $no == 'DB' ? 0 : $no;

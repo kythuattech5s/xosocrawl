@@ -36,12 +36,13 @@ class NewsCrawler extends BaseCrawler
             $itemLink = $item->find('a')[0];
             $itemTimeName = $item->find('span')[0]->plaintext;
             $imgSrc = str_replace('_120x120','',$item->find('img')[0]->src);
-            $this->crawlItem($itemLink,$itemTimeName,$imgSrc);
+            $this->crawlItem($itemLink->href,$imgSrc);
         }
     }
-    public function crawlItem($itemLink,$itemTimeName,$imgSrc)
+
+    public function crawlItem($itemLink,$imgSrc = null)
     {
-        $html = $this->exeCurl($itemLink->href);
+        $html = $this->exeCurl($itemLink);
         $htmlDom = str_get_html($html);
         if (!$htmlDom) return false;
 
@@ -53,9 +54,12 @@ class NewsCrawler extends BaseCrawler
         $itemContents = $htmlDom->find('.cont-detail.paragraph');
 
         $itemNews = new News;
-        $itemNews->name = count($itemNames) > 0 ? $itemNames[0]->plaintext:$itemLink->plaintext;
-        $itemNews->slug = $this->processSlug($this->clearLink(str_replace('https://xoso.me/tin-tuc/','',$itemLink->href)));
+        $itemNews->name = count($itemNames) > 0 ? $itemNames[0]->plaintext:'';
+        $itemNews->slug = $this->processSlug($this->clearLink(str_replace('https://xoso.me/tin-tuc/','',$itemLink)));
 
+        if (!isset($imgSrc)) {
+            $imgSrc = count($itemMetaimgs) > 0 ? $itemMetaimgs[0]->content:'';
+        }
         if (\Str::contains($imgSrc,'http')) {
             $itemNews->img = $this->saveImg($imgSrc,$this->imageSaveDir);
         }
@@ -71,7 +75,8 @@ class NewsCrawler extends BaseCrawler
         $itemNews->seo_key = $this->clearContent($itemNews->seo_key);
         $itemNews->seo_des = $this->clearContent($itemNews->seo_des);
 
-        preg_match('/(\d{1,2})-(\d{1,2})-(\d{4})/', $itemTimeName, $dates);
+        $timeBox = $htmlDom->find('.box.box-detail.pad10 .date');
+        preg_match('/(\d{1,2})-(\d{1,2})-(\d{4})/', count($timeBox) > 0 ? $timeBox[0]->plaintext:'', $dates);
         if (count($dates) == 4) {
             $day = $dates[1];
             $month = $dates[2];

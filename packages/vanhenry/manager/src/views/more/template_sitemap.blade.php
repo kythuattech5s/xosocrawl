@@ -8,8 +8,8 @@
 @endforeach
 @foreach (\App\Helpers\SpecialSiteMap::buildListSpecialSitemapLink() as $item)
    <sitemap>
-      <loc>{{url('sitemap/'.$item)}}.xml</loc>
-      <lastmod>{{now()->format("Y-m-d\TH:i:sP")}}</lastmod>
+      <loc>{{url('sitemap/'.$item['link'])}}.xml</loc>
+      <lastmod>{{$item['time']->format("Y-m-d\TH:i:sP")}}</lastmod>
    </sitemap>
 @endforeach
    <sitemap>

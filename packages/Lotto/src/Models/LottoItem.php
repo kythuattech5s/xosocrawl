@@ -142,7 +142,7 @@ class LottoItem extends BaseModel
         $listItemDetail = $lottoRecord->lottoResultDetails()->get();
         foreach ($data as $no => $itemData) {
             if ($no == 'MaDb') {
-                $lottoRecord->description = implode('-',$itemData);
+                $lottoRecord->description = implode(' - ',$itemData);
                 $lottoRecord->save();
             }else{
                 $noPrize = $no == 'DB' ? 0:(int)$no;
