@@ -128,8 +128,31 @@ class LottoCategory extends BaseModel
                                 ->get();
         $ret = [];
         foreach ($lottoItems as $lottoItem) {
-            array_push($ret,$lottoItem->buildDataDirect($time));
+            array_push($ret, $lottoItem->buildDataDirect($time));
         }
         return $ret;
+    }
+    public function isInRollingTime()
+    {
+        $now = now();
+        $second = $now->hour * 3600 + $now->minute * 60;
+        $hour = 0;
+        if ($this->id = 1) {
+            $hour = 18;
+        }
+        if ($this->id = 3) {
+            $hour = 16;
+        }
+        if ($this->id = 4) {
+            $hour = 17;
+        }
+        $mb = $hour * 3600 + 10 * 60;
+        $add = 30 * 60;
+        if ($hour == 0) return false;
+        if ($second > $mb && $second < $mb + $add) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }
