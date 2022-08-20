@@ -102,7 +102,7 @@ class LottoCategory extends BaseModel
     public function buildDataDirect($time)
     {
         if ($this->id == 1) {
-            $lottoRecord = LottoRecord::where('lotto_category_id',$this->id)->where('fullcode',\Support::timeToFullCode($time))->first();
+            $lottoRecord = LottoRecord::where('lotto_category_id', $this->id)->where('fullcode', \Support::timeToFullCode($time))->first();
             if (!isset($lottoRecord)) {
                 return [];
             }
@@ -119,12 +119,35 @@ class LottoCategory extends BaseModel
             $ret->loto = [];
             return $ret;
         }
-        $timeShow = $time->dayOfWeek == 0 ? 8:$time->dayOfWeek+1;
-        $lottoItems= LottoItem::where('lotto_category_id',$this->id)->whereRaw('FIND_IN_SET(?,time_show)', [$timeShow])->get();
+        $timeShow = $time->dayOfWeek == 0 ? 8 : $time->dayOfWeek + 1;
+        $lottoItems = LottoItem::where('lotto_category_id', $this->id)->whereRaw('FIND_IN_SET(?,time_show)', [$timeShow])->get();
         $ret = [];
         foreach ($lottoItems as $lottoItem) {
-            array_push($ret,$lottoItem->buildDataDirect($time));
+            array_push($ret, $lottoItem->buildDataDirect($time));
         }
         return $ret;
+    }
+    public function isInRollingTime()
+    {
+        $now = now();
+        $second = $now->hour * 3600 + $now->minute * 60;
+        $hour = 0;
+        if ($this->id = 1) {
+            $hour = 18;
+        }
+        if ($this->id = 3) {
+            $hour = 16;
+        }
+        if ($this->id = 4) {
+            $hour = 17;
+        }
+        $mb = $hour * 3600 + 10 * 60;
+        $add = 30 * 60;
+        if ($hour == 0) return false;
+        if ($second > $mb && $second < $mb + $add) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

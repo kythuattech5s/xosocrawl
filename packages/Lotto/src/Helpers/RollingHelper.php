@@ -23,7 +23,7 @@ class RollingHelper
     }
     public static function getMXPrizes($categoryId)
     {
-        $dayOfWeek = DayOfWeek::fromDate(now());
+        $dayOfWeek = DayOfWeek::fromDate(now()); //->addDays(-1));
         $day = $dayOfWeek->getValue();
         $lottoItems = LottoItem::select('*')->whereHas('lottoTimes', function ($q) use ($categoryId, $day) {
             $q->where('lotto_category_id', $categoryId)->where('dayofweek', $day);

@@ -183,6 +183,8 @@ class LottoRecord extends BaseModel
             'DB' => 1
         ];
         return $ret;
+        // 1 2 3 4 5 6 7 0
+        // 1 2 3 4 5 6 7 'DB'
     }
     public static function getLotteDataMnFormat()
     {
@@ -202,13 +204,19 @@ class LottoRecord extends BaseModel
     public function buildLottoDirectData()
     {
 
-        $listItemDetail = $this->lottoResultDetails()->orderBy('no_prize', 'desc')->get()->groupBy('no_prize');
-        $dataFormatConfig = $this->lotto_category_id == 1 ? self::getLotteDataMbFormat() : self::getLotteDataMnFormat();
+        $dataFormatConfig = self::getLotteDataMbFormat();
+        $orderRaw = '(case when no_prize = 0 then 8 else no_prize end)';
+        if ($this->lotto_category_id != 1) {
+            $dataFormatConfig = self::getLotteDataMnFormat();
+            $orderRaw = 'no_prize desc';
+        }
+
+        $listItemDetail = $this->lottoResultDetails()->orderByRaw($orderRaw)->orderBy('created_at', 'asc')->get()->groupBy('no_prize'); //->limit(request()->input('count'))
         $ret = [];
         $addDot = false;
         foreach ($dataFormatConfig as $no => $item) {
             if ($no == 'DB' && $this->lotto_category_id == 1) {
-                $ret['MaDb'] = explode(',', $this->description);
+                $ret['MaDb'] = explode(' - ', $this->description);
             }
             $ret[$no] = [];
             $noPrize = $no == 'DB' ? 0 : $no;

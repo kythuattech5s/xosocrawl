@@ -238,32 +238,36 @@ let ROLLING_RESULT = (function () {
                 currentDate.getMonth() == resultDate.getMonth()
             ) {
                 for (const [key, values] of Object.entries(lotData)) {
+                    if (key == "MaDb") {
+                        let mdb = document.querySelector(
+                            ".rolling-table .madb .v-madb"
+                        );
+                        if (mdb) {
+                            mdb.innerText = values.join(" - ");
+                        }
+                        continue;
+                    }
+                    let tr = document.querySelector(
+                        `.rolling-table tr.g${key.toLowerCase()}`
+                    );
+                    let tds = tr.querySelectorAll(
+                        `[data-code="${provinceCode}"] [class^="v-g"]`
+                    );
+                    if (tds.length != values.length) continue;
+
                     for (let j = 0; j < values.length; j++) {
                         const value = values[j];
+                        let itemTd = tds[j];
                         if (value == "") {
                             continue;
-                        }
-                        let tr = document.querySelector(
-                            `.rolling-table tr.g${key.toLowerCase()}`
-                        );
-                        if (!tr) continue;
-                        let loadig = tr.querySelector(
-                            `[data-code="${provinceCode}"] .imgloadig`
-                        );
-                        if (!loadig) continue;
-                        if (value == ".") {
-                            loadig.classList.add("cl-rl");
-                            rollingNumber(loadig);
-                        }
-                        let clrl = tr.querySelector(
-                            `[data-code="${provinceCode}"] .cl-rl`
-                        );
-                        if (!clrl) continue;
-
-                        if (value != "." && value != "") {
-                            clrl.innerText = value;
-                            clrl.classList.remove("imgloadig");
-                            clrl.classList.remove("cl-rl");
+                        } else if (value == ".") {
+                            itemTd.classList.add("cl-rl");
+                            itemTd.classList.remove("imgloadig");
+                            rollingNumber(itemTd);
+                        } else {
+                            itemTd.innerText = value;
+                            itemTd.classList.remove("imgloadig");
+                            itemTd.classList.remove("cl-rl");
                         }
                     }
                 }

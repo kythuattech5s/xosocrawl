@@ -26,20 +26,24 @@
     <div class="box">
         @include('xoso.breadcrumbs.base')
         <div id="load_kq_tinh_0">
-            @include('xoso.mien_bac.result_table_rolling')
-            @include('xoso.result_table')
+            @if ($lottoCategory->isInRollingTime())
+                @include('xoso.mien_bac.result_table_rolling')
+            @else
+                @include('xoso.result_table')
 
-            <div class="txt-center">
-                <div class="center">
-                    @include('xoso.ads.banner_between_result_table')
+
+                <div class="txt-center">
+                    <div class="center">
+                        @include('xoso.ads.banner_between_result_table')
+                    </div>
                 </div>
-            </div>
-            @include('xoso.head_tail')
-            <div class="clearfix"></div>
-            <div class="bg_brown clearfix">
-                <a rel="nofollow" class="conect_out " title="In vé dò" href="in-ve-do">In
-                    vé dò</a>
-            </div>
+                @include('xoso.head_tail')
+                <div class="clearfix"></div>
+                <div class="bg_brown clearfix">
+                    <a rel="nofollow" class="conect_out " title="In vé dò" href="in-ve-do">In
+                        vé dò</a>
+                </div>
+            @endif
         </div>
         @php
             $prefixPath = $prefixPath ?? 'mien_bac';
