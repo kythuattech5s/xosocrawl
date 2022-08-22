@@ -2,15 +2,12 @@
 namespace crawlmodule\basecrawler\Crawlers;
 use App\Models\PredictLotteryProvinceResult;
 use App\Models\PredictLotteryResultCategory;
-use vanhenry\manager\model\VRoute as ModelVRoute;
 class PredictLotteryProvinceResultCrawler extends BaseCrawler
 {
     protected $imageSaveDir = 'old/predict-lottery-province-result';
     protected $linkCrawl = "https://xoso.me/";
     public function startCrawl()
     {
-        // PredictLotteryProvinceResult::truncate();
-        // ModelVRoute::where('table','predict_lottery_province_results')->delete();
         set_time_limit(-1);
         $html = $this->exeCurl($this->linkCrawl);
         $htmlDom = str_get_html($html);
